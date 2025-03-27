@@ -10,7 +10,7 @@ export default function LoginPage(): JSX.Element {
         <div className='text-[50px] text-[#04447c] text-center mt-[90px]'>
           로그인
         </div>
-        <div className='mt-16 px-[56px] flex flex-col gap-4'>
+        <div className='w-[393px] h-[852px] mt-16 px-[56px] flex flex-col gap-4 mx-auto'>
           <div className=''>
             <div className='text-[15px]'>학번</div>
             <input

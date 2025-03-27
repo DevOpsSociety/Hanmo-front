@@ -1,5 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
+// import localFont from 'next/font/local';
+
+// const manSehFont = localFont({
+//   src: '../public/fonts/ManSeh.ttf',
+//   variable: '--font-manSeh',
+//   display: 'swap',
+// });
 
 export const metadata: Metadata = {
   title: 'Create Next App',

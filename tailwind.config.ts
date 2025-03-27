@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         angduk: ['116angduk_honesty1'],
+        manSeh: ['var(--font-manSeh)'],
       },
       colors: {
         background: 'var(--background)',
