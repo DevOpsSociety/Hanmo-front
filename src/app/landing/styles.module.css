@@ -1,0 +1,74 @@
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.hanmo {
+  font-size: 100px;
+  height: 125px;
+  margin-top: 130px;
+}
+.han {
+  color: #04447c;
+}
+.mo {
+  color: #9eccf3;
+}
+
+.hanmoSlogan {
+  font-size: 35px;
+  writing-mode: vertical-rl;
+  color: #04447c;
+}
+
+.여봐요 {
+  color: #9eccf3;
+}
+
+.sloganContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.mainchar {
+  display: flex;
+  width: 160px;
+  height: 125px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 145px;
+}
+
+.btnsContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+.btns {
+  width: 90px;
+  height: 90px;
+  border: 1px white solid;
+  border-radius: 5px;
+}
+
+.btn_l {
+  color: #04447c;
+  background-color: white;
+  border: 1px #04447c solid;
+}
+.btn_l:hover {
+  color: white;
+  background-color: #04447c;
+}
+
+.btn_r {
+  color: white;
+  background-color: #04447c;
+}
+.btn_r:hover {
+  background-color: white;
+  color: #04447c;
+  border: 1px #04447c solid;
+}
