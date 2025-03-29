@@ -1,65 +1,225 @@
-export default function SignUpStepTwo(): JSX.Element {
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { Gender, MBTI, Department } from '../../app/enums';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import { resetForm } from '../../app/store/signUpSlice';
+import {
+  enumToOptions,
+  objectEnumToOptions,
+} from '../../app/utils/enumToOptions';
+import { RootState } from '../../app/store';
+
+// ✅ zod schema 정의
+const stepTwoSchema = z.object({
+  studentNumber: z.string().min(5, '학번을 입력해주세요'),
+  gender: z
+    .string()
+    .refine((val) => Object.values(Gender).includes(Number(val)), {
+      message: '성별을 선택해주세요',
+    }),
+  mbti: z.string().refine((val) => Object.values(MBTI).includes(Number(val)), {
+    message: 'MBTI를 선택해주세요',
+  }),
+  department: z
+    .string()
+    .refine(
+      (val) =>
+        Object.values(Department).some(
+          (dept) => dept.hasOwnProperty('id') && dept.id === Number(val)
+        ),
+      {
+        message: '학과를 선택해주세요',
+      }
+    ),
+  instagramId: z.string().optional(),
+});
+
+type StepTwoForm = z.infer<typeof stepTwoSchema>;
+
+export default function SignUpStepTwo() {
+  const dispatch = useAppDispatch();
+  const formData = useAppSelector((state: RootState) => state.signUp.formData);
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<StepTwoForm>({
+    resolver: zodResolver(stepTwoSchema),
+  });
+
+  const selectedGender = watch('gender');
+
+  const onSubmit = async (data: StepTwoForm) => {
+    const payload = {
+      ...formData,
+      ...data,
+      gender: Number(data.gender),
+      mbti: Number(data.mbti),
+      department: Number(data.department),
+    };
+
+    console.log('payload : ', payload);
+
+    try {
+      setLoading(true);
+      toast.loading('가입 중...');
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error('서버 오류');
+
+      toast.dismiss();
+      toast.success('가입 완료!');
+      dispatch(resetForm());
+    } catch (err) {
+      toast.dismiss();
+      toast.error('가입에 실패했습니다.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className='flex flex-col'>
-      <div className='text-center border-b border-solid border-#E7E7E7 h-[73px] flex items-center justify-center'>
+    <div className='flex flex-col h-screen'>
+      <div className='text-center border-b h-[73px] flex items-center justify-center'>
         <span className='text-[38px] text-[#04447C]'>정보입력</span>
       </div>
 
-      <div className='flex flex-col gap-5'>
-        <div className='w-[200px] flex flex-col gap-4 mx-auto'>
-          <div className='mt-20'>
-            <div className='text-[15px] mb-2'>학번</div>
-            <input
-              type='text'
-              placeholder='ex)202010955'
-              className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3'
-            />
-            <div className='text-[red] text-[9px] mt-3 text-center'>
-              학번은 아이디로 사용되니 정확히 입력해주세요.
-            </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center'
+      >
+        <div className='w-full flex flex-col'>
+          <label className='text-[15px] mb-2 text-black text-opacity-70'>
+            학번
+          </label>
+          <input
+            {...register('studentNumber')}
+            placeholder='ex)202010955'
+            className='border rounded-[10px] w-full h-11 px-3'
+          />
+          {errors.studentNumber && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.studentNumber.message}
+            </p>
+          )}
+          <div className='text-[red] text-[9px] mt-2 text-center'>
+            학번은 아이디로 사용되니 정확히 입력해주세요.
           </div>
-
-          <div className=''>
-            <div className='text-[15px] mb-2'>성별</div>
-            <div className='flex justify-between gap-5'>
-              <button className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-[43px] text-[24px]'>
-                남
-              </button>
-              <button className=' bg-[#04447C] text-white rounded-[10px] w-full h-[43px] text-[24px]'>
-                여
-              </button>
-            </div>
-          </div>
-
-          <div className=''>
-            <div className='text-[15px] mb-2'>MBTI</div>
-            <input
-              type='text'
-              placeholder='select option 변경예정'
-              className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3'
-            />
-          </div>
-          <div className=''>
-            <div className='text-[15px] mb-2'>학과</div>
-            <input
-              type='text'
-              placeholder='select option 변경예정'
-              className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3'
-            />
-          </div>
-          <div className=''>
-            <div className='text-[15px] mb-2'>인스타</div>
-            <input
-              type='text'
-              placeholder='hsu_it_zzang'
-              className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3'
-            />
-          </div>
-          <button className=' bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto'>
-            가입하기
-          </button>
         </div>
-      </div>
+
+        <div className='w-full flex flex-col'>
+          <label className='text-[15px] mb-2 text-black text-opacity-70'>
+            성별
+          </label>
+          <div className='flex justify-between gap-5'>
+            {enumToOptions(Gender).map((opt) => {
+              const isSelected = selectedGender === String(opt.id);
+
+              return (
+                <label
+                  key={opt.id}
+                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer
+        ${
+          isSelected
+            ? 'bg-[#04447C] bg-opacity-90 text-white'
+            : 'text-[#2D2D2D] text-opacity-70'
+        }
+      `}
+                >
+                  <input
+                    type='radio'
+                    value={opt.id}
+                    {...register('gender')}
+                    className='hidden'
+                  />
+                  {opt.label === 'MALE' ? '남' : '여'}
+                </label>
+              );
+            })}
+          </div>
+          {errors.gender && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.gender.message}
+            </p>
+          )}
+        </div>
+
+        <div className='w-full flex flex-col'>
+          <label className='text-[15px] mb-2 text-black text-opacity-70'>
+            MBTI
+          </label>
+          <select
+            {...register('mbti')}
+            className='border rounded-[10px] w-full h-11 px-3 font-bold'
+          >
+            <option value=''>선택</option>
+            {enumToOptions(MBTI).map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          {errors.mbti && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.mbti.message}
+            </p>
+          )}
+        </div>
+
+        <div className='w-full flex flex-col text-black text-opacity-70'>
+          <label className='text-[15px] mb-2'>학과</label>
+          <select
+            {...register('department')}
+            className='border rounded-[10px] w-full h-11 px-3 font-bold'
+          >
+            <option value=''>선택</option>
+            {objectEnumToOptions(Department).map((opt) => (
+              <option key={opt.id} value={opt.id} className=''>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          {errors.department && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.department.message}
+            </p>
+          )}
+        </div>
+
+        <div className='w-full flex flex-col'>
+          <label className='text-[15px] mb-2 text-black text-opacity-70'>
+            인스타
+          </label>
+          <input
+            {...register('instagramId')}
+            placeholder='hsu_it_zzang'
+            className='border rounded-[10px] w-full h-11 px-3'
+          />
+        </div>
+
+        <button
+          type='submit'
+          disabled={loading}
+          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto ${
+            loading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
+          {loading ? '가입 중...' : '가입하기'}
+        </button>
+      </form>
     </div>
   );
 }

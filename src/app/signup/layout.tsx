@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import SignUpProviders from '../../components/provider/SignUpProviders';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,7 +13,9 @@ export default function SignupLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='mx-auto'>{children}</body>
+      <body className='mx-auto'>
+        <SignUpProviders>{children}</SignUpProviders>
+      </body>
     </html>
   );
 }
