@@ -97,9 +97,9 @@ export default function SignUpStepOne(): JSX.Element {
     }
   };
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col h-screen font-[Pretendard]'>
       <div className='text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] text-[#04447C]'>회원가입</span>
+        <span className='text-[38px] font-[manSeh]'>회원가입</span>
       </div>
 
       <div className='flex flex-col h-full justify-center'>
@@ -153,7 +153,7 @@ export default function SignUpStepOne(): JSX.Element {
               type='submit'
               className={`border border-solid border-black ${
                 verificationVisible ? 'bg-gray-400' : 'bg-[#04447C]'
-              } text-white rounded-[10px] h-[43px] text-[24px]`}
+              } text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh]`}
               disabled={verificationVisible}
             >
               인증하기
@@ -174,7 +174,7 @@ export default function SignUpStepOne(): JSX.Element {
               />
               <button
                 type='submit'
-                className={`border border-solid text-white rounded-[10px] h-[43px] text-[24px] ${
+                className={`border border-solid text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh] ${
                   verificationVisible
                     ? 'bg-[#04447C]'
                     : 'bg-gray-400 cursor-not-allowed'

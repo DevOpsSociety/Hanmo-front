@@ -91,7 +91,8 @@ export default function SignUpStepTwo() {
         toast.success('가입 완료!');
         dispatch(resetForm());
         alert('회원 가입 완료!');
-        router.push('/nickname');
+        // router.push('/nickname');
+        router.push('/');
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다!!!!');
@@ -111,12 +112,12 @@ export default function SignUpStepTwo() {
   return (
     <div className='flex flex-col h-screen'>
       <div className='text-center border-b h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] text-[#04447C]'>정보입력</span>
+        <span className='text-[38px] font-[manSeh]'>정보입력</span>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center'
+        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center border'
       >
         <div className='w-full flex flex-col'>
           <label className='text-[15px] mb-2 text-black text-opacity-70'>
@@ -148,7 +149,7 @@ export default function SignUpStepTwo() {
               return (
                 <label
                   key={opt.id}
-                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer
+                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer font-[manSeh]
         ${
           isSelected
             ? 'bg-[#04447C] bg-opacity-90 text-white'
@@ -230,7 +231,7 @@ export default function SignUpStepTwo() {
         <button
           type='submit'
           disabled={loading}
-          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto ${
+          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto font-[manSeh] ${
             loading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
