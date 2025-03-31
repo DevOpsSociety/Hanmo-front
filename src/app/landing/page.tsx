@@ -7,15 +7,20 @@ export default function LandingPage() {
   return (
     <div className={styles.Container}>
       <div className={styles.hanmo}>
-        <span className={styles.han}>한</span>
-        <span className={styles.mo}>모</span>
+        <Image
+          src="/images/landingPage/landingPage1.png"
+          alt="logo"
+          width={0}
+          className={styles.logo}
+          height={0}
+          sizes="100vw"
+        />
       </div>
-      <div className={styles.sloganContainer}>
-        <div className={styles.hanmoSlogan}>세에서</div>
-        <div className={`${styles.hanmoSlogan} ${styles.여봐요}`}>여봐요 </div>
+      <div className={`${styles.sloganContainer} ${styles.pretendardFont}`}>
+        한세에서 모여봐요!
       </div>
       <Image
-        src="/images/mainchar.png"
+        src="/images/landingPage/landingPage2.png"
         alt="한모"
         className={styles.mainchar}
         width={0}
@@ -23,12 +28,16 @@ export default function LandingPage() {
         sizes="100vw"
       />
       <div className={styles.btnsContainer}>
-        <button className={`${styles.btns} ${styles.btn_l}`}>
+        <button
+          className={`${styles.btns} ${styles.btn_l} ${styles.mansehFont}`}
+        >
           매칭
           <br />
           확인
         </button>
-        <button className={`${styles.btns} ${styles.btn_r}`}>
+        <button
+          className={`${styles.btns} ${styles.btn_r} ${styles.mansehFont}`}
+        >
           회원
           <br />
           가입
