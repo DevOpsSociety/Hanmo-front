@@ -5,14 +5,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
-import { Gender, MBTI, Department } from '../../app/enums';
-import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
-import { resetForm } from '../../app/store/signUpSlice';
-import {
-  enumToOptions,
-  objectEnumToOptions,
-} from '../../app/utils/enumToOptions';
-import { RootState } from '../../app/store';
+import { Gender, MBTI, Department } from '../../enums';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { resetForm } from '../../store/signUpSlice';
+import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
+import { RootState } from '../../store';
 
 // ✅ zod schema 정의
 const stepTwoSchema = z.object({

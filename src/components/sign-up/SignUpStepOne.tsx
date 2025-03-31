@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import LogoImg from '../../../public/logo.png';
-import { useAppDispatch } from '../../app/store/hooks';
-import { updateFormData } from '../../app/store/signUpSlice';
+import { useAppDispatch } from '../../store/hooks';
+import { updateFormData } from '../../store/signUpSlice';
 import { useState } from 'react';
 
 // ✅ 유효성 검사 스키마
