@@ -1,0 +1,88 @@
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.hanmo {
+  height: 57px;
+  width: 116px;
+  margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.여봐요 {
+  color: #9eccf3;
+}
+
+.sloganContainer {
+  display: flex;
+  flex-direction: row;
+  font-size: 25px;
+  color: #04447c;
+}
+
+.logo {
+  display: flex;
+  width: 393px;
+  height: 57px;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainchar {
+  display: flex;
+  width: 286px;
+  height: 222px;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 100px; */
+}
+
+.btnsContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+  font-size: 28px;
+  justify-content: center;
+  align-items: center;
+}
+.btns {
+  width: 90px;
+  height: 90px;
+  border: 1px white solid;
+  border-radius: 5px;
+}
+
+.btn_l {
+  color: #04447c;
+  background-color: white;
+  border: 1px #04447c solid;
+}
+.btn_l:hover {
+  color: white;
+  background-color: #04447c;
+}
+
+.btn_r {
+  color: white;
+  background-color: #04447c;
+}
+.btn_r:hover {
+  background-color: white;
+  color: #04447c;
+  border: 1px #04447c solid;
+}
+
+.pretendardFont {
+  font-family: var(--font-pretendard);
+  font-weight: 800;
+}
+
+.mansehFont {
+  font-family: var(--font-manseh);
+}
