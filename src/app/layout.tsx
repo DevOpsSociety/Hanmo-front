@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { geistMono, geistSans, Pretendard, Manseh } from "./font";
+import { geistMono, geistSans, Pretendard, Manseh } from "../font";
 
 export const metadata: Metadata = {
   title: "Create Next App",

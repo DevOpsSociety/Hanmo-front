@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 import Image from "next/image";
-import HanmoHeader from "../components/HanmoHeader/HanmoHeader";
+import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
 import Link from "next/link";
 export default function mainPage() {
   return (
