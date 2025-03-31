@@ -25,7 +25,6 @@ export default function LoginPage(): JSX.Element {
       console.log('response :', res);
 
       if (res.status === 200) {
-        toast.dismiss();
         toast.success('로그인 성공!');
         // 예: localStorage 저장, 전역 상태 저장, 페이지 이동
         localStorage.setItem('token', res.data.token);

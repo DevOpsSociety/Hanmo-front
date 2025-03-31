@@ -91,7 +91,7 @@ export default function SignUpStepTwo() {
         toast.success('가입 완료!');
         dispatch(resetForm());
         alert('회원 가입 완료!');
-        router.push('/');
+        router.push('/nickname');
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다!!!!');
