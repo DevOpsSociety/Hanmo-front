@@ -12,6 +12,7 @@ export default function RootLayout(props) {
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${Pretendard.variable} ${Manseh.variable} antialiased`}
       >
         {props.children}
