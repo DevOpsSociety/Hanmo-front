@@ -9,6 +9,8 @@ import LogoImg from '../../../public/logo.png';
 import { useAppDispatch } from '../../store/hooks';
 import { updateFormData } from '../../store/signUpSlice';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { sendCode, verifyCode } from '../../api/sms';
 
 // ✅ 유효성 검사 스키마
 const stepOneSchema = z.object({
@@ -27,18 +29,73 @@ export default function SignUpStepOne(): JSX.Element {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<StepOneForm>({
     resolver: zodResolver(stepOneSchema),
   });
+  // 인증하기 버튼 클릭 시시
+  const handleSendCodeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // 인증완료 후 다음 페이지 이동
-  const handleVerifySubmit = (data: StepOneForm) => {
-    dispatch(updateFormData(data));
-    console.log('인증완료:', data);
-    router.push('/signup/2');
+    const phoneNumber = getValues('phoneNumber');
+
+    console.log('[인증하기 버튼 클릭됨]');
+    console.log('입력된 전화번호:', phoneNumber);
+
+    if (!phoneNumber) {
+      toast.error('휴대전화 번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      toast.loading('인증번호 전송 중...');
+      await sendCode(phoneNumber);
+      toast.dismiss();
+      toast.success('인증번호가 전송되었습니다.');
+      setVerificationVisible(true);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      toast.dismiss();
+      toast.error('인증번호 전송에 실패했습니다.');
+    }
   };
 
+  // 인증완료 후 다음 페이지 이동
+  const handleVerifySubmit = async (data: StepOneForm) => {
+    const { name, phoneNumber, authNumber } = data;
+
+    console.log('[인증확인 버튼 클릭됨]');
+    console.log('입력된 이름:', name);
+    console.log('입력된 전화번호:', phoneNumber);
+    console.log('입력된 인증번호:', authNumber);
+
+    if (!authNumber) {
+      toast.error('인증번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      toast.loading('인증번호 확인 중...');
+      const res = await verifyCode(authNumber);
+
+      console.log('[인증번호 확인 응답]', res);
+
+      if (res.status === 200) {
+        toast.dismiss();
+        toast.success('인증 성공!');
+        dispatch(updateFormData({ name, phoneNumber }));
+        router.push('/signup/2');
+      } else {
+        toast.dismiss();
+        toast.error('인증 실패: 올바르지 않은 인증번호입니다.');
+      }
+    } catch (err) {
+      toast.dismiss();
+      toast.error('서버 오류로 인증에 실패했습니다.');
+      console.error(err);
+    }
+  };
   return (
     <div className='flex flex-col h-screen'>
       <div className='text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center'>
@@ -51,11 +108,8 @@ export default function SignUpStepOne(): JSX.Element {
         <form
           onSubmit={
             verificationVisible
-              ? handleSubmit(handleVerifySubmit) // 인증완료 버튼 누르면 제출
-              : (e) => {
-                  e.preventDefault(); // 인증 전은 기본 제출 막고
-                  setVerificationVisible(true); // 인증창 활성화
-                }
+              ? handleSubmit(handleVerifySubmit)
+              : handleSendCodeSubmit
           }
           className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'
         >

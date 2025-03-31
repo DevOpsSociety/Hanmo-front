@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
+import { signUpUser } from '../../api/user';
+import router from 'next/router';
 
 // ✅ zod schema 정의
 const stepTwoSchema = z.object({
@@ -55,12 +57,24 @@ export default function SignUpStepTwo() {
   const selectedGender = watch('gender');
 
   const onSubmit = async (data: StepTwoForm) => {
+    console.log('formData : ', formData);
+    console.log('data : ', data);
+
+    if (!formData.name || !formData.phoneNumber) {
+      toast.error('필수 정보가 누락되었습니다.');
+      return;
+    }
+
     const payload = {
       ...formData,
       ...data,
-      gender: Number(data.gender),
-      mbti: Number(data.mbti),
-      department: Number(data.department),
+      studentNumber: data.studentNumber,
+      gender: data.gender,
+      mbti: data.mbti,
+      department: data.department,
+      instagramId: data.instagramId || '',
+      name: formData.name,
+      phoneNumber: formData.phoneNumber,
     };
 
     console.log('payload : ', payload);
@@ -68,21 +82,27 @@ export default function SignUpStepTwo() {
     try {
       setLoading(true);
       toast.loading('가입 중...');
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const res = await signUpUser(payload);
 
-      if (!res.ok) throw new Error('서버 오류');
+      console.log('response :', res);
 
-      toast.dismiss();
-      toast.success('가입 완료!');
-      dispatch(resetForm());
+      if (res.status === 200) {
+        toast.dismiss();
+        toast.success('가입 완료!');
+        dispatch(resetForm());
+        alert('회원 가입 완료!');
+        router.push('/');
+      } else if (res.status === 409) {
+        toast.dismiss();
+        toast.error('이미 등록된 회원입니다!!!!');
+      } else {
+        toast.dismiss();
+        toast.error('STATUS CODE : ' + res.status);
+      }
     } catch (err) {
       toast.dismiss();
       toast.error('가입에 실패했습니다.');
-      console.error(err);
+      console.error('가입 실패:', err);
     } finally {
       setLoading(false);
     }
