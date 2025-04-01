@@ -9,6 +9,8 @@ import { deleteUser } from '../../api/user';
 import styles from './styles.module.css';
 import axios from 'axios';
 import { delay } from '../../utils/delay';
+import Image from 'next/image';
+import withdrawImg from '../../../public/withdraw.png';
 
 // ✅ zod 스키마
 const withdrawSchema = z.object({
@@ -68,6 +70,8 @@ export default function WithdrawPage(): JSX.Element {
         onSubmit={handleSubmit(onSubmit)}
         className='w-[393px] h-[852px] px-[56px] flex flex-col justify-center gap-4 mx-auto'
       >
+        <Image src={withdrawImg} alt='로고' className='mx-auto' priority />
+
         {/* 휴대전화 */}
         <div>
           <div className='text-[15px]'>휴대전화</div>
