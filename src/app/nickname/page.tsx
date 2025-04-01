@@ -7,7 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function nicknamePage() {
+export default function NicknamePage() {
   const [nicknamePageData, setNicknamePageData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {

@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 
 // import fetchUserProfile from "@/api/usersProfile";
 
-export default function mainPage() {
+export default function MainPage() {
   const [mainPageData, setMainPageData] = useState(null);
 
   useEffect(() => {
