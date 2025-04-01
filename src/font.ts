@@ -13,13 +13,23 @@ export const geistMono = localFont({
 });
 
 export const Pretendard = localFont({
-  src: "./fonts/PretendardVariable.ttf",
+  src: [
+    {
+      path: "./fonts/PretendardVariable.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+  ],
   variable: "--font-pretendard",
-  weight: "100 900",
 });
 
 export const Manseh = localFont({
-  src: "./fonts/YoonChildfundkoreaManSeh.ttf",
+  src: [
+    {
+      path: "./fonts/YoonChildfundkoreaManSeh.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+  ],
   variable: "--font-manseh",
-  weight: "100 900",
 });

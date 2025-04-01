@@ -29,8 +29,10 @@ export default function LoginPage(): JSX.Element {
       if (res.status === 200) {
         toast.success("로그인 성공!");
         // 예: localStorage 저장, 전역 상태 저장, 페이지 이동
-        localStorage.setItem("token", res.data.token);
-        router.push("/");
+        localStorage.setItem("token", res.headers.temptoken);
+        const storedToken = localStorage.getItem("token");
+        console.log("로그인 페이지 토큰: ", storedToken);
+        router.push("/main");
       } else {
         setError("로그인 실패: 정보를 확인해주세요.");
         toast.error("로그인 실패");

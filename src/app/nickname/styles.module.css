@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.charContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 90px;
+  gap: 10px;
+}
+
+.speechBubble {
+  width: 351px;
+  height: 114px;
+}
+
+.mainchar {
+  width: 144px;
+  height: 114px;
+}
+
+.userNickname {
+  font-size: 25px;
+  margin-top: 25px;
+}
+
+.btnsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 150px;
+}
+.btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 43px;
+  border-radius: 10px;
+  border: 1px #04447c solid;
+  font-size: 24px;
+}
+.btn_l {
+  width: 85px;
+  background-color: white;
+  color: #04447c;
+}
+
+.btn_r {
+  width: 170px;
+  background-color: #04447c;
+  color: white;
+}
+
+.pretendardFont {
+  font-family: var(--font-pretendard);
+  font-weight: 900;
+}
+
+.mansehFont {
+  font-family: var(--font-manseh);
+}

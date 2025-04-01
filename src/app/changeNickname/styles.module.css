@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.charContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 90px;
+  gap: 10px;
+}
+
+.speechBubble {
+  width: 351px;
+  height: 114px;
+}
+
+.mainchar {
+  width: 144px;
+  height: 114px;
+}
+
+.userNickname {
+  font-size: 25px;
+  margin-top: 25px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+}
+
+.btn {
+  height: 43px;
+  border-radius: 10px;
+  border: 1px #04447c solid;
+  font-size: 24px;
+  width: 280px;
+  background-color: #04447c;
+  color: white;
+}
+
+/* 폰트 */
+.pretendardFont {
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+}
+.mansehFont {
+  font-family: var(--font-manseh);
+}
