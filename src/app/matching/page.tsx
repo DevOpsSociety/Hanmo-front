@@ -1,7 +1,10 @@
+"use client";
+
 import styles from "./styles.module.css";
 import Image from "next/image";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-export default function mainPage() {
+
+export default function MatchingPage() {
   return (
     <div className={styles.container}>
       <HanmoHeader />
@@ -16,8 +19,7 @@ export default function mainPage() {
         />
       </div>
       <div className={`${styles.contents} ${styles.pretendardFont}`}>
-        <div>"api에서 받은 닉네임"님</div>
-        <div>좋은 하루 보내세요</div>
+        <div>매칭을 시작하세요!</div>
       </div>
       <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
         <button className={styles.btns}>랜덤 친구 뽑기(1:1)</button>

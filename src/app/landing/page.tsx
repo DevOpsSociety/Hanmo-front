@@ -2,6 +2,7 @@
 
 import styles from "./styles.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
@@ -28,20 +29,22 @@ export default function LandingPage() {
         sizes="100vw"
       />
       <div className={styles.btnsContainer}>
-        <button
+        <Link
+          href="/main"
           className={`${styles.btns} ${styles.btn_l} ${styles.mansehFont}`}
         >
           매칭
           <br />
           확인
-        </button>
-        <button
+        </Link>
+        <Link
+          href="/signup/1"
           className={`${styles.btns} ${styles.btn_r} ${styles.mansehFont}`}
         >
           회원
           <br />
           가입
-        </button>
+        </Link>
       </div>
     </div>
   );
