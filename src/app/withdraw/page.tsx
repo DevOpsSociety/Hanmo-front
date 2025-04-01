@@ -1,0 +1,114 @@
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { deleteUser } from '../../api/user';
+import styles from './styles.module.css';
+import axios from 'axios';
+import { delay } from '../../utils/delay';
+
+// ✅ zod 스키마
+const withdrawSchema = z.object({
+  phoneNumber: z.string().min(10, '휴대전화 번호를 입력해주세요'),
+  deleteCheck: z.string().refine((val) => val === 'DELETE', {
+    message: '"DELETE"를 정확히 입력해주세요',
+  }),
+});
+
+type WithdrawForm = z.infer<typeof withdrawSchema>;
+
+export default function WithdrawPage(): JSX.Element {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<WithdrawForm>({
+    resolver: zodResolver(withdrawSchema),
+  });
+
+  const onSubmit = async ({ phoneNumber }: WithdrawForm) => {
+    try {
+      toast.loading('탈퇴 중...');
+
+      await delay(1000);
+
+      const res = await deleteUser(phoneNumber);
+
+      if (res.status === 200) {
+        toast.dismiss();
+        toast.success('탈퇴 완료!');
+        localStorage.removeItem('token');
+        router.push('/');
+      } else {
+        toast.error('탈퇴 실패: 정보를 확인해주세요.');
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.error('axios error status :', err.response?.status);
+        if (err.response?.status === 404) {
+          toast.dismiss();
+          toast.error('존재하지 않는 사용자입니다.');
+        }
+      }
+    }
+  };
+
+  return (
+    <div className={`flex flex-col ${styles.pretendardFont}`}>
+      <div className='text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center'>
+        <span className='text-[38px] font-[manSeh]'>회원탈퇴</span>
+      </div>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='w-[393px] h-[852px] px-[56px] flex flex-col justify-center gap-4 mx-auto'
+      >
+        {/* 휴대전화 */}
+        <div>
+          <div className='text-[15px]'>휴대전화</div>
+          <input
+            type='text'
+            {...register('phoneNumber')}
+            placeholder='01011112222'
+            className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
+          />
+          {errors.phoneNumber && (
+            <p className='text-red-500 text-xs mt-1'>
+              {errors.phoneNumber.message}
+            </p>
+          )}
+        </div>
+
+        {/* DELETE 체크 */}
+        <div className='mt-4'>
+          <div className=''>탈퇴하시려면 {`"DELETE"`}를 입력해주세요</div>
+          <input
+            type='text'
+            {...register('deleteCheck')}
+            placeholder='DELETE'
+            className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
+          />
+          {errors.deleteCheck && (
+            <p className='text-red-500 text-xs mt-1'>
+              {errors.deleteCheck.message}
+            </p>
+          )}
+        </div>
+
+        <div className={`flex flex-col gap-3 mt-4 ${styles.mansehFont}`}>
+          <button
+            type='submit'
+            className='border border-solid border-black bg-[#04447C] text-white rounded-[10px] h-[43px] text-[24px]'
+          >
+            탈퇴하기
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}

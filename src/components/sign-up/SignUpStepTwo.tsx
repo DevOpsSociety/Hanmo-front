@@ -12,6 +12,7 @@ import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
 import { signUpUser } from '../../api/user';
 import router from 'next/router';
+import { delay } from '../../utils/delay';
 
 // ✅ zod schema 정의
 const stepTwoSchema = z.object({
@@ -82,6 +83,9 @@ export default function SignUpStepTwo() {
     try {
       setLoading(true);
       toast.loading('가입 중...');
+
+      await delay(1000);
+
       const res = await signUpUser(payload);
 
       console.log('response :', res);
@@ -90,7 +94,7 @@ export default function SignUpStepTwo() {
         toast.dismiss();
         toast.success('가입 완료!');
         dispatch(resetForm());
-        alert('회원 가입 완료!');
+        // alert('회원 가입 완료!');
         // router.push('/nickname');
         router.push('/');
       } else if (res.status === 409) {

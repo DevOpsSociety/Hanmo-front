@@ -60,8 +60,7 @@ export default function LoginPage(): JSX.Element {
 
   const handleWithdrawPage = async () => {
     await handleLogin(); // login 성공 여부 체크
-    // router.push('/withdraw');
-    router.push('/');
+    router.push('/withdraw');
   };
 
   return (
