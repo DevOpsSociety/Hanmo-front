@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { loginUser } from '../../api/user';
 import styles from './styles.module.css';
 import HanmoHeader from '@/components/HanmoHeader/HanmoHeader';
+import axios from 'axios';
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -29,8 +30,10 @@ export default function LoginPage(): JSX.Element {
       if (res.status === 200) {
         toast.success('로그인 성공!');
         // 예: localStorage 저장, 전역 상태 저장, 페이지 이동
-        localStorage.setItem('token', res.data.token);
-        router.push('/');
+        localStorage.setItem('token', res.headers.temptoken);
+        const storedToken = localStorage.getItem('token');
+        console.log('로그인 페이지 토큰: ', storedToken);
+        router.push('/main');
       } else {
         setError('로그인 실패: 정보를 확인해주세요.');
         toast.error('로그인 실패');
@@ -39,7 +42,19 @@ export default function LoginPage(): JSX.Element {
       toast.dismiss();
       toast.error('서버 오류가 발생했습니다.');
       setError('로그인 중 오류 발생');
-      console.error(err);
+
+      if (err instanceof Error) {
+        console.error('err :', err.message);
+      }
+
+      // axios 에러라면 응답 객체 접근
+      if (axios.isAxiosError(err)) {
+        console.error('axios error status :', err.response?.status);
+
+        if (err.response?.status === 404) {
+          setError('존재하지 않는 사용자입니다.');
+        }
+      }
     }
   };
 

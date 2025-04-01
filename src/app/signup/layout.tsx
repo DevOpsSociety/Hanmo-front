@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import SignUpProviders from '../../components/provider/SignUpProviders';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,7 +15,10 @@ export default function SignupLayout({
   return (
     <html lang='en'>
       <body className='mx-auto'>
-        <SignUpProviders>{children}</SignUpProviders>
+        <SignUpProviders>
+          <Toaster position='bottom-center' reverseOrder={false} />
+          {children}
+        </SignUpProviders>
       </body>
     </html>
   );
