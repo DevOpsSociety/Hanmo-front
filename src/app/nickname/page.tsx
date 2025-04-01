@@ -96,7 +96,9 @@ export default function nicknamePage() {
         >
           변경
         </button>
-        <button className={`${styles.btns} ${styles.btn_r}`}>좋아</button>
+        <Link href="/main" className={`${styles.btns} ${styles.btn_r}`}>
+          좋아
+        </Link>
       </div>
     </div>
   );

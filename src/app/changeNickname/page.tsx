@@ -4,6 +4,7 @@ import HanmoHeader from "@/components/HanmoHeader/HanmoHeader";
 import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 export default function changeNicknamePage() {
   const [changeNicknamePageData, setChangeNicknamePageData] = useState(null);
@@ -67,9 +68,9 @@ export default function changeNicknamePage() {
         "{changeNicknamePageData?.nickname || "닉네임을 불러오는중..."}"
       </div>
       <div className={`${styles.btnContainer} `}>
-        <button className={`${styles.mansehFont} ${styles.btn}`}>
+        <Link href="/main" className={`${styles.mansehFont} ${styles.btn}`}>
           완전좋아
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -43,6 +43,9 @@
   width: 280px;
   background-color: #04447c;
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 폰트 */
