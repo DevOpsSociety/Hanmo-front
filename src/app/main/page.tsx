@@ -1,8 +1,46 @@
+"use client";
+
 import styles from "./styles.module.css";
 import Image from "next/image";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
 import Link from "next/link";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
+// import fetchUserProfile from "@/api/usersProfile";
+
 export default function mainPage() {
+  const [mainPageData, setMainPageData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const temptoken = localStorage.getItem("token");
+
+      if (!temptoken) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
+
+      const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
+      console.log("API URL:", url);
+      console.log("토큰:", temptoken);
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            tempToken: temptoken,
+          },
+        });
+        setMainPageData(response.data);
+        console.log("Response:", response);
+      } catch (e) {
+        console.log("에러: ", e);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className={styles.container}>
       <HanmoHeader />
@@ -17,11 +55,17 @@ export default function mainPage() {
         />
       </div>
       <div className={`${styles.contents} ${styles.pretendardFont}`}>
-        <div className={`${styles.nickname}`}>"api에서 받은 닉네임"님</div>
+        <div className={`${styles.nickname}`}>"{mainPageData?.nickname}"님</div>
         <div>좋은 하루 보내세요</div>
       </div>
       <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
-        <Link href="/matching" className={styles.btns}>
+        <Link
+          href={{
+            pathname: "/matching",
+            query: { nickname: mainPageData?.nickname },
+          }}
+          className={styles.btns}
+        >
           매칭하러 가볼까~?
         </Link>
         <button className={`${styles.btns} ${styles.btns2}`}>
