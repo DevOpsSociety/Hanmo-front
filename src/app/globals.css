@@ -3,10 +3,20 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "116angduk_honesty1.5";
-  src: url("/src/app/fonts/116angduk_honesty1.5.ttf") format("woff2");
+  font-family: '116angduk_honesty1.5';
+  src: url('/src/app/fonts/116angduk_honesty1.5.ttf') format('woff2');
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../fonts/PretendardVariable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'manSeh';
+  src: url('../fonts/YoonChildfundkoreaManSeh.ttf') format('truetype');
 }
 
 :root {

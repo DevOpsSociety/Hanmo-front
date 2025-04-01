@@ -25,3 +25,10 @@ export const loginUser = (payload: {
 export const changeNickname = (nickname: string) => {
   return api.post('/users/nickname', { nickname });
 };
+
+// 4. 회원 탈퇴
+export const deleteUser = (phoneNumber: string) => {
+  return api.delete(`/users/withdraw`, {
+    params: { phoneNumber },
+  });
+};
