@@ -12,11 +12,12 @@ import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
 import { signUpUser } from '../../api/user';
 import router from 'next/router';
+import { delay } from '../../utils/delay';
 
 // ✅ zod schema 정의
 const stepTwoSchema = z.object({
-  studentNumber: z.string().min(5, '학번을 입력해주세요'),
-  gender: z
+  studentNumber: z.string().min(9, '학번을 입력해주세요'),
+  gender: z.coerce
     .string()
     .refine((val) => Object.values(Gender).includes(Number(val)), {
       message: '성별을 선택해주세요',
@@ -35,7 +36,7 @@ const stepTwoSchema = z.object({
         message: '학과를 선택해주세요',
       }
     ),
-  instagramId: z.string().optional(),
+  instagramId: z.string().min(1, '인스타그램 아이디를 입력해주세요'),
 });
 
 type StepTwoForm = z.infer<typeof stepTwoSchema>;
@@ -61,7 +62,7 @@ export default function SignUpStepTwo() {
     console.log('data : ', data);
 
     if (!formData.name || !formData.phoneNumber) {
-      toast.error('필수 정보가 누락되었습니다.');
+      toast.error(`필수 정보가 누락되었습니다.\n회원가입을 다시 시도해주세요.`);
       return;
     }
 
@@ -82,6 +83,9 @@ export default function SignUpStepTwo() {
     try {
       setLoading(true);
       toast.loading('가입 중...');
+
+      await delay(1000);
+
       const res = await signUpUser(payload);
 
       console.log('response :', res);
@@ -90,8 +94,9 @@ export default function SignUpStepTwo() {
         toast.dismiss();
         toast.success('가입 완료!');
         dispatch(resetForm());
-        alert('회원 가입 완료!');
-        router.push('/nickname');
+        // alert('회원 가입 완료!');
+        // router.push('/nickname');
+        router.push('/');
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다!!!!');
@@ -111,7 +116,7 @@ export default function SignUpStepTwo() {
   return (
     <div className='flex flex-col h-screen'>
       <div className='text-center border-b h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] text-[#04447C]'>정보입력</span>
+        <span className='text-[38px] font-[manSeh]'>정보입력</span>
       </div>
 
       <form
@@ -148,7 +153,7 @@ export default function SignUpStepTwo() {
               return (
                 <label
                   key={opt.id}
-                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer
+                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer font-[manSeh]
         ${
           isSelected
             ? 'bg-[#04447C] bg-opacity-90 text-white'
@@ -225,12 +230,17 @@ export default function SignUpStepTwo() {
             placeholder='hsu_it_zzang'
             className='border rounded-[10px] w-full h-11 px-3'
           />
+          {errors.instagramId && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.instagramId.message}
+            </p>
+          )}
         </div>
 
         <button
           type='submit'
           disabled={loading}
-          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto ${
+          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto font-[manSeh] ${
             loading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >

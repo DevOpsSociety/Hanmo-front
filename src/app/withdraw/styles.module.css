@@ -1,0 +1,13 @@
+.inputBox {
+  margin-top: 57px;
+  padding: 0 56px;
+}
+
+.mansehFont {
+  font-family: var(--font-manseh);
+}
+
+.pretendardFont {
+  font-family: var(--font-pretendard);
+  font-weight: 500;
+}
