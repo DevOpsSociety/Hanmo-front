@@ -15,8 +15,8 @@ import router from 'next/router';
 
 // ✅ zod schema 정의
 const stepTwoSchema = z.object({
-  studentNumber: z.string().min(5, '학번을 입력해주세요'),
-  gender: z
+  studentNumber: z.string().min(9, '학번을 입력해주세요'),
+  gender: z.coerce
     .string()
     .refine((val) => Object.values(Gender).includes(Number(val)), {
       message: '성별을 선택해주세요',
@@ -35,7 +35,7 @@ const stepTwoSchema = z.object({
         message: '학과를 선택해주세요',
       }
     ),
-  instagramId: z.string().optional(),
+  instagramId: z.string().min(1, '인스타그램 아이디를 입력해주세요'),
 });
 
 type StepTwoForm = z.infer<typeof stepTwoSchema>;
@@ -61,7 +61,7 @@ export default function SignUpStepTwo() {
     console.log('data : ', data);
 
     if (!formData.name || !formData.phoneNumber) {
-      toast.error('필수 정보가 누락되었습니다.');
+      toast.error(`필수 정보가 누락되었습니다.\n회원가입을 다시 시도해주세요.`);
       return;
     }
 
@@ -117,7 +117,7 @@ export default function SignUpStepTwo() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center border'
+        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center'
       >
         <div className='w-full flex flex-col'>
           <label className='text-[15px] mb-2 text-black text-opacity-70'>
@@ -226,6 +226,11 @@ export default function SignUpStepTwo() {
             placeholder='hsu_it_zzang'
             className='border rounded-[10px] w-full h-11 px-3'
           />
+          {errors.instagramId && (
+            <p className='text-red-500 text-xs mt-1 text-center'>
+              {errors.instagramId.message}
+            </p>
+          )}
         </div>
 
         <button
