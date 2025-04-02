@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { loginUser } from '../../api/user';
+import { handleLoginLogic } from '../../utils/authHandlers';
 import styles from './styles.module.css';
 import HanmoHeader from '@/components/HanmoHeader/HanmoHeader';
-import axios from 'axios';
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -15,52 +13,23 @@ export default function LoginPage(): JSX.Element {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    if (!studentNumber || !phoneNumber) {
-      toast.error('모든 항목을 입력해주세요.');
-      return;
-    }
-
-    try {
-      toast.loading('로그인 중...');
-      const res = await loginUser({ studentNumber, phoneNumber });
-      toast.dismiss();
-
-      console.log('response :', res);
-
-      if (res.status === 200) {
-        toast.success('로그인 성공!');
-        // 예: localStorage 저장, 전역 상태 저장, 페이지 이동
-        localStorage.setItem('token', res.headers.temptoken);
-        const storedToken = localStorage.getItem('token');
-        console.log('로그인 페이지 토큰: ', storedToken);
-        router.push('/main');
-      } else {
-        setError('로그인 실패: 정보를 확인해주세요.');
-        toast.error('로그인 실패');
-      }
-    } catch (err) {
-      toast.dismiss();
-      toast.error('서버 오류가 발생했습니다.');
-      setError('로그인 중 오류 발생');
-
-      if (err instanceof Error) {
-        console.error('err :', err.message);
-      }
-
-      // axios 에러라면 응답 객체 접근
-      if (axios.isAxiosError(err)) {
-        console.error('axios error status :', err.response?.status);
-
-        if (err.response?.status === 404) {
-          setError('존재하지 않는 사용자입니다.');
-        }
-      }
-    }
+    await handleLoginLogic(
+      studentNumber,
+      phoneNumber,
+      router,
+      '/main',
+      setError
+    );
   };
 
   const handleWithdrawPage = async () => {
-    await handleLogin(); // login 성공 여부 체크
-    router.push('/withdraw');
+    await handleLoginLogic(
+      studentNumber,
+      phoneNumber,
+      router,
+      '/withdraw',
+      setError
+    );
   };
 
   return (

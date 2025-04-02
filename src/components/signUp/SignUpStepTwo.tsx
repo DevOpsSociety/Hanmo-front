@@ -1,7 +1,6 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
@@ -10,36 +9,12 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
-import { loginUser, signUpUser } from '../../api/user';
-import { useRouter } from 'next/navigation';
+import { signUpUser } from '../../api/user';
 import { delay } from '../../utils/delay';
-
-// ✅ zod schema 정의
-const stepTwoSchema = z.object({
-  studentNumber: z.string().min(9, '학번을 입력해주세요'),
-  gender: z.coerce
-    .string()
-    .refine((val) => Object.values(Gender).includes(Number(val)), {
-      message: '성별을 선택해주세요',
-    }),
-  mbti: z.string().refine((val) => Object.values(MBTI).includes(Number(val)), {
-    message: 'MBTI를 선택해주세요',
-  }),
-  department: z
-    .string()
-    .refine(
-      (val) =>
-        Object.values(Department).some(
-          (dept) => dept.hasOwnProperty('id') && dept.id === Number(val)
-        ),
-      {
-        message: '학과를 선택해주세요',
-      }
-    ),
-  instagramId: z.string().min(1, '인스타그램 아이디를 입력해주세요'),
-});
-
-type StepTwoForm = z.infer<typeof stepTwoSchema>;
+import { handleToastError } from '../../utils/errorHandlers';
+import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
+import { handleLoginLogic } from '../../utils/authHandlers';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -93,19 +68,15 @@ export default function SignUpStepTwo() {
         toast.dismiss();
         toast.success('가입 완료! 🎉');
 
-        const loginRes = await loginUser({
-          phoneNumber: payload.phoneNumber,
-          studentNumber: payload.studentNumber,
-        });
+        await handleLoginLogic(
+          payload.studentNumber,
+          payload.phoneNumber,
+          router,
+          '/nickname',
+          (error) => toast.error(error)
+        );
 
-        if (loginRes.status === 200) {
-          localStorage.setItem('token', loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
-
-          dispatch(resetForm());
-          router.push('/nickname');
-        } else {
-          toast.error('로그인에 실패했습니다.');
-        }
+        dispatch(resetForm());
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다.');
@@ -115,8 +86,7 @@ export default function SignUpStepTwo() {
       }
     } catch (err) {
       toast.dismiss();
-      toast.error('가입 또는 로그인 중 오류가 발생했습니다.');
-      console.error('가입 실패:', err);
+      handleToastError(err);
     } finally {
       setLoading(false);
     }

@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import LogoImg from '../../../public/logo.png';
 import { useAppDispatch } from '../../store/hooks';
@@ -11,16 +10,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendCode, verifyCode } from '../../api/sms';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
-// ✅ 유효성 검사 스키마
-const stepOneSchema = z.object({
-  name: z.string().min(2, '이름을 입력해주세요'),
-  phoneNumber: z.string().min(10, '전화번호를 정확히 입력해주세요'),
-  authNumber: z.string().optional(), // 인증번호는 선택사항으로 설정
-});
-
-type StepOneForm = z.infer<typeof stepOneSchema>;
+import { handleToastError, handleAxiosError } from '../../utils/errorHandlers';
+import { StepOneForm, stepOneSchema } from '../../schemas/stepOneSchema';
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
@@ -56,7 +47,7 @@ export default function SignUpStepOne(): JSX.Element {
       setVerificationVisible(true);
     } catch (error) {
       toast.dismiss();
-      toast.error(error as string);
+      handleToastError(error);
     }
   });
 
@@ -90,21 +81,9 @@ export default function SignUpStepOne(): JSX.Element {
       }
     } catch (err) {
       toast.dismiss();
-
-      if (err instanceof Error) {
-        console.error('err :', err.message);
-      }
-
-      // axios 에러라면 응답 객체 접근
-      if (axios.isAxiosError(err)) {
-        console.error('axios error status :', err.response?.status);
-
-        if (err.response?.status === 400) {
-          toast.error('인증번호가 일치하지 않습니다.');
-          console.log('400');
-        }
-      }
-      console.error(err);
+      handleAxiosError(err, {
+        400: '인증번호가 일치하지 않습니다.',
+      });
     }
   };
   return (
