@@ -10,8 +10,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendCode, verifyCode } from '../../api/sms';
 import { useRouter } from 'next/navigation';
-import { handleToastError, handleAxiosError } from '../../utils/errorHandlers';
 import { StepOneForm, stepOneSchema } from '../../schemas/stepOneSchema';
+import { handleToastError, handleAxiosError } from '../../utils/errorHandlers';
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
