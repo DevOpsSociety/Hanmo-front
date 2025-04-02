@@ -27,7 +27,7 @@ export default function SignUpStepOne(): JSX.Element {
   } = useForm<StepOneForm>({
     resolver: zodResolver(stepOneSchema),
   });
-  // 인증하기 버튼 클릭 시시
+  // 인증하기 버튼 클릭 시
   const handleSendCodeSubmit = handleSubmit(async (data) => {
     const phoneNumber = data.phoneNumber;
 
@@ -146,40 +146,40 @@ export default function SignUpStepOne(): JSX.Element {
           <div className='flex flex-col gap-2 mt-4'>
             <button
               type='submit'
-              className={`border border-solid border-black ${
+              className={`border border-solid ${
                 verificationVisible ? 'bg-gray-400' : 'bg-[#04447C]'
-              } text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh]`}
+              } text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh] shadow-md`}
               disabled={verificationVisible}
             >
               인증하기
             </button>
 
             {/* 인증번호 영역 */}
-            <div className='flex flex-col gap-6 mt-5'>
-              <input
-                type='text'
-                {...register('authNumber')}
-                placeholder='인증번호를 입력해주세요'
-                className={`border-[1.5px] border-solid rounded-[10px] w-full h-11 px-3 ${
-                  verificationVisible
-                    ? 'border-[rgba(0,0,0,0.5)] bg-white'
-                    : 'border-[rgba(0,0,0,0.3)] bg-gray-100'
-                }`}
-                disabled={!verificationVisible}
-              />
-              <button
-                type='submit'
-                className={`border border-solid text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh] ${
-                  verificationVisible
-                    ? 'bg-[#04447C]'
-                    : 'bg-gray-400 cursor-not-allowed'
-                }`}
-                disabled={!verificationVisible}
-              >
-                인증확인
-              </button>
-              {error && <div className='text-[red] mt-3'>{error}</div>}
-            </div>
+            {verificationVisible && (
+              <div className='flex flex-col gap-6 mt-5'>
+                <input
+                  type='text'
+                  {...register('authNumber')}
+                  placeholder='인증번호를 입력해주세요'
+                  className={`border-[1.5px] border-solid rounded-[10px] w-full h-11 px-3 ${
+                    verificationVisible
+                      ? 'border-[rgba(0,0,0,0.5)] bg-white'
+                      : 'border-[rgba(0,0,0,0.3)] bg-gray-100'
+                  }`}
+                />
+                <button
+                  type='submit'
+                  className={`border border-solid text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh] ${
+                    verificationVisible
+                      ? 'bg-[#04447C]'
+                      : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+                >
+                  인증확인
+                </button>
+                {error && <div className='text-[red] mt-3'>{error}</div>}
+              </div>
+            )}
           </div>
         </form>
       </div>
