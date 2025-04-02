@@ -3,11 +3,8 @@
 import styles from "./styles.module.css";
 import Image from "next/image";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-// import { useRouter } from "next/navigation";
 
-export default function mainPage() {
-  // const router = useRouter();
-
+export default function MatchingPage() {
   return (
     <div className={styles.container}>
       <HanmoHeader />

@@ -26,12 +26,12 @@ export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [verificationVisible, setVerificationVisible] = useState(false);
-  const [error, setError] = useState('');
+  const [error] = useState('');
 
   const {
     register,
     handleSubmit,
-    getValues,
+    // getValues,
     formState: { errors },
   } = useForm<StepOneForm>({
     resolver: zodResolver(stepOneSchema),
@@ -54,9 +54,9 @@ export default function SignUpStepOne(): JSX.Element {
       toast.dismiss();
       toast.success('인증번호가 전송되었습니다.');
       setVerificationVisible(true);
-    } catch (err) {
+    } catch (error) {
       toast.dismiss();
-      toast.error('인증번호 전송에 실패했습니다.');
+      toast.error(error as string);
     }
   });
 

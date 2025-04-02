@@ -1,30 +1,34 @@
-"use client";
+'use client';
 
-import styles from "./styles.module.css";
-import Image from "next/image";
-import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-import Link from "next/link";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import styles from './styles.module.css';
+import Image from 'next/image';
+import HanmoHeader from '../../components/HanmoHeader/HanmoHeader';
+import Link from 'next/link';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+// import { useRouter } from "next/router";
 
 // import fetchUserProfile from "@/api/usersProfile";
 
-export default function mainPage() {
-  const [mainPageData, setMainPageData] = useState(null);
+type UserProfile = {
+  nickname: string;
+};
+
+export default function MainPage() {
+  const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const temptoken = localStorage.getItem("token");
+      const temptoken = localStorage.getItem('token');
 
       if (!temptoken) {
-        console.error("토큰이 없습니다.");
+        console.error('토큰이 없습니다.');
         return;
       }
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
-      console.log("API URL:", url);
-      console.log("토큰:", temptoken);
+      console.log('API URL:', url);
+      console.log('토큰:', temptoken);
 
       try {
         const response = await axios.get(url, {
@@ -33,9 +37,9 @@ export default function mainPage() {
           },
         });
         setMainPageData(response.data);
-        console.log("Response:", response);
+        console.log('Response:', response);
       } catch (e) {
-        console.log("에러: ", e);
+        console.log('에러: ', e);
       }
     };
     fetchData();
@@ -47,21 +51,23 @@ export default function mainPage() {
       <div className={styles.down}>
         <Image
           className={styles.logo}
-          src="/images/mainchar_wink.png"
-          alt="한모"
+          src='/images/mainchar_wink.png'
+          alt='한모'
           width={0}
           height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
+          sizes='100vw' // 이거 없으면 화질깨짐
         />
       </div>
       <div className={`${styles.contents} ${styles.pretendardFont}`}>
-        <div className={`${styles.nickname}`}>"{mainPageData?.nickname}"님</div>
+        <div className={`${styles.nickname}`}>
+          {`"${mainPageData?.nickname}"`}님
+        </div>
         <div>좋은 하루 보내세요</div>
       </div>
       <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
         <Link
           href={{
-            pathname: "/matching",
+            pathname: '/matching',
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
