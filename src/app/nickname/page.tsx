@@ -6,10 +6,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { set } from "react-hook-form";
+
+type UserProfile = {
+  nickname: string;
+};
 
 export default function NicknamePage() {
-  const [nicknamePageData, setNicknamePageData] = useState(null);
+  const [nicknamePageData, setNicknamePageData] = useState<UserProfile | null>(
+    null
+  );
   useEffect(() => {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
@@ -47,7 +52,16 @@ export default function NicknamePage() {
     const temptoken = localStorage.getItem("token");
     const url2 = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/nickname`;
     try {
-      const response = await axios.put(
+      // const response = await axios.put(
+      //   url2,
+      //   { nickname },
+      //   {
+      //     headers: {
+      //       tempToken: temptoken,
+      //     },
+      //   }
+      // );
+      await axios.put(
         url2,
         { nickname },
         {
@@ -59,10 +73,6 @@ export default function NicknamePage() {
       alert("닉네임 변경 성공!");
 
       localStorage.setItem("nickname", nickname);
-
-      setTimeout(() => {
-        router.push("/changeNickname");
-      }, 10000);
 
       router.push("/changeNickname");
     } catch (error) {
@@ -92,7 +102,7 @@ export default function NicknamePage() {
         />
       </div>
       <div className={`${styles.userNickname} ${styles.pretendardFont}`}>
-        "{nicknamePageData?.nickname}"
+        {`"${nicknamePageData?.nickname}"`}
       </div>
       <div className={`${styles.btnsContainer} ${styles.mansehFont}`}>
         <button

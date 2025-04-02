@@ -11,7 +11,7 @@ import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
 import { signUpUser } from '../../api/user';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { delay } from '../../utils/delay';
 
 // ✅ zod schema 정의
@@ -42,6 +42,7 @@ const stepTwoSchema = z.object({
 type StepTwoForm = z.infer<typeof stepTwoSchema>;
 
 export default function SignUpStepTwo() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state: RootState) => state.signUp.formData);
   const [loading, setLoading] = useState(false);
@@ -96,7 +97,7 @@ export default function SignUpStepTwo() {
         dispatch(resetForm());
         // alert('회원 가입 완료!');
         // router.push('/nickname');
-        router.push('/');
+        router.push('/login');
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다!!!!');

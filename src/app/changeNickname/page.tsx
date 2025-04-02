@@ -6,8 +6,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
+type ChangeNicknamePageData = {
+  nickname: string;
+};
+
 export default function ChangeNicknamePage() {
-  const [changeNicknamePageData, setChangeNicknamePageData] = useState(null);
+  const [changeNicknamePageData, setChangeNicknamePageData] =
+    useState<ChangeNicknamePageData | null>(null);
 
   useEffect(() => {
     const savedNickname = localStorage.getItem("nickname");
@@ -19,9 +24,8 @@ export default function ChangeNicknamePage() {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
       if (!temptoken) {
-        console.error("changeNicknamePage: 토큰이 없습니다.");
-      } else {
-        console.log("changeNicknamePage: 토큰 있음", temptoken);
+        console.error("토큰이 없습니다.");
+        return;
       }
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
@@ -30,6 +34,7 @@ export default function ChangeNicknamePage() {
         const response = await axios.get(url, {
           headers: {
             tempToken: temptoken,
+            "Content-Type": "application/json",
           },
         });
         console.log("토큰:", temptoken);
@@ -69,7 +74,7 @@ export default function ChangeNicknamePage() {
         />
       </div>
       <div className={`${styles.userNickname} ${styles.pretendardFont}`}>
-        "{changeNicknamePageData?.nickname || "닉네임을 불러오는중..."}"
+        {changeNicknamePageData?.nickname || "닉네임을 불러오는중..."}
       </div>
       <div className={`${styles.btnContainer} `}>
         <Link href="/main" className={`${styles.mansehFont} ${styles.btn}`}>
