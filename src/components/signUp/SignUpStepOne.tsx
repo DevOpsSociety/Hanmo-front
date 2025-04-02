@@ -93,7 +93,12 @@ export default function SignUpStepOne(): JSX.Element {
       </div>
 
       <div className='flex flex-col h-full justify-center'>
-        <Image src={LogoImg} alt='로고' className='mx-auto' priority />
+        <Image
+          src={LogoImg}
+          alt='로고'
+          className='mx-auto w-[113px] h-[134px]'
+          priority
+        />
 
         <form
           onSubmit={
