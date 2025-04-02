@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import LogoImg from '../../../public/logo.png';
+import LogoImg from '../../../public/signUpLogo.png';
 import { useAppDispatch } from '../../store/hooks';
 import { updateFormData } from '../../store/signUpSlice';
 import { useState } from 'react';
