@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
-import { signUpUser } from '../../api/user';
+import { loginUser, signUpUser } from '../../api/user';
 import { useRouter } from 'next/navigation';
 import { delay } from '../../utils/delay';
 
@@ -85,29 +85,37 @@ export default function SignUpStepTwo() {
       setLoading(true);
       toast.loading('가입 중...');
 
-      await delay(1000);
+      await delay(1000); // 1초 대기
 
       const res = await signUpUser(payload);
 
-      console.log('response :', res);
-
       if (res.status === 200) {
         toast.dismiss();
-        toast.success('가입 완료!');
-        dispatch(resetForm());
-        // alert('회원 가입 완료!');
-        // router.push('/nickname');
-        router.push('/login');
+        toast.success('가입 완료! 🎉');
+
+        const loginRes = await loginUser({
+          phoneNumber: payload.phoneNumber,
+          studentNumber: payload.studentNumber,
+        });
+
+        if (loginRes.status === 200) {
+          localStorage.setItem('token', loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
+
+          dispatch(resetForm());
+          router.push('/nickname');
+        } else {
+          toast.error('로그인에 실패했습니다.');
+        }
       } else if (res.status === 409) {
         toast.dismiss();
-        toast.error('이미 등록된 회원입니다!!!!');
+        toast.error('이미 등록된 회원입니다.');
       } else {
         toast.dismiss();
         toast.error('STATUS CODE : ' + res.status);
       }
     } catch (err) {
       toast.dismiss();
-      toast.error('가입에 실패했습니다.');
+      toast.error('가입 또는 로그인 중 오류가 발생했습니다.');
       console.error('가입 실패:', err);
     } finally {
       setLoading(false);
