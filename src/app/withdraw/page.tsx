@@ -45,7 +45,8 @@ export default function WithdrawPage(): JSX.Element {
         toast.dismiss();
         toast.success('탈퇴 완료!');
         localStorage.removeItem('token');
-        router.push('/');
+        // router.push('/');
+        router.push('/landing');
       } else {
         toast.error('탈퇴 실패: 정보를 확인해주세요.');
       }
