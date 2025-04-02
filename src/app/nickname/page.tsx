@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 export default function nicknamePage() {
   const [nicknamePageData, setNicknamePageData] = useState(null);
@@ -58,6 +59,10 @@ export default function nicknamePage() {
       alert("닉네임 변경 성공!");
 
       localStorage.setItem("nickname", nickname);
+
+      setTimeout(() => {
+        router.push("/changeNickname");
+      }, 10000);
 
       router.push("/changeNickname");
     } catch (error) {

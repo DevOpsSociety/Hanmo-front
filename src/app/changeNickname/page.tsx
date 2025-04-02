@@ -19,25 +19,29 @@ export default function changeNicknamePage() {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
       if (!temptoken) {
-        console.error("토큰이 없습니다.");
-        return;
+        console.error("changeNicknamePage: 토큰이 없습니다.");
+      } else {
+        console.log("changeNicknamePage: 토큰 있음", temptoken);
       }
+
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
 
       try {
         const response = await axios.get(url, {
           headers: {
             tempToken: temptoken,
-            "Content-Type": "application/json",
           },
         });
-        setChangeNicknamePageData(response.data);
+        console.log("토큰:", temptoken);
+        if (response.data.nickname) {
+          setChangeNicknamePageData(response.data);
+          localStorage.setItem("nickname", response.data.nickname);
+        }
+      } catch (error) {
+        console.error(error);
 
-        localStorage.setItem("nickname", response.data.nickname);
-
-        console.log("Response:", response);
-      } catch (e) {
-        console.log("에러: ", e);
+        // api 호출 실패시 localstorage 값 사용
+        const savedNickname = localStorage.getItem("nickname");
       }
     };
     fetchData();
