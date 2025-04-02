@@ -30,7 +30,7 @@ export default function LandingPage() {
       />
       <div className={styles.btnsContainer}>
         <Link
-          href="/main"
+          href="/login"
           className={`${styles.btns} ${styles.btn_l} ${styles.mansehFont}`}
         >
           매칭
