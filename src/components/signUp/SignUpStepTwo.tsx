@@ -9,12 +9,13 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
-import { signUpUser } from '../../api/user';
+import { loginUser, signUpUser } from '../../api/user';
+import { useRouter } from 'next/navigation';
 import { delay } from '../../utils/delay';
 import { handleToastError } from '../../utils/errorHandlers';
 import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
-import { handleLoginLogic } from '../../utils/authHandlers';
-import { useRouter } from 'next/navigation';
+import ErrorMessage from '../errorMessage';
+import { borderClass, labelClass } from '../../utils/classNames';
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -68,15 +69,19 @@ export default function SignUpStepTwo() {
         toast.dismiss();
         toast.success('가입 완료! 🎉');
 
-        await handleLoginLogic(
-          payload.studentNumber,
-          payload.phoneNumber,
-          router,
-          '/nickname',
-          (error) => toast.error(error)
-        );
+        const loginRes = await loginUser({
+          phoneNumber: payload.phoneNumber,
+          studentNumber: payload.studentNumber,
+        });
 
-        dispatch(resetForm());
+        if (loginRes.status === 200) {
+          localStorage.setItem('token', loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
+
+          dispatch(resetForm());
+          router.push('/nickname');
+        } else {
+          toast.error('로그인에 실패했습니다.');
+        }
       } else if (res.status === 409) {
         toast.dismiss();
         toast.error('이미 등록된 회원입니다.');
@@ -93,139 +98,100 @@ export default function SignUpStepTwo() {
   };
 
   return (
-    <div className='flex flex-col h-screen'>
-      <div className='text-center border-b h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] font-[manSeh]'>정보입력</span>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={`flex flex-col gap-5 w-[200px] mx-auto h-[calc(100vh-73px)] justify-center ${labelClass}`}
+    >
+      <div className='w-full flex flex-col'>
+        <label>학번</label>
+        <input
+          {...register('studentNumber')}
+          placeholder='ex)202010955'
+          className={borderClass}
+        />
+        <ErrorMessage message={errors.studentNumber?.message} />
+
+        <div className='text-[red] text-[9px] mt-2 text-center'>
+          학번은 아이디로 사용되니 정확히 입력해주세요.
+        </div>
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-5 w-[200px] mx-auto h-full justify-center'
-      >
-        <div className='w-full flex flex-col'>
-          <label className='text-[15px] mb-2 text-black text-opacity-70'>
-            학번
-          </label>
-          <input
-            {...register('studentNumber')}
-            placeholder='ex)202010955'
-            className='border rounded-[10px] w-full h-11 px-3'
-          />
-          {errors.studentNumber && (
-            <p className='text-red-500 text-xs mt-1 text-center'>
-              {errors.studentNumber.message}
-            </p>
-          )}
-          <div className='text-[red] text-[9px] mt-2 text-center'>
-            학번은 아이디로 사용되니 정확히 입력해주세요.
-          </div>
-        </div>
+      <div className='w-full flex flex-col'>
+        <label>성별</label>
+        <div className='flex justify-between gap-5'>
+          {enumToOptions(Gender).map((opt) => {
+            const isSelected = selectedGender === String(opt.id);
 
-        <div className='w-full flex flex-col'>
-          <label className='text-[15px] mb-2 text-black text-opacity-70'>
-            성별
-          </label>
-          <div className='flex justify-between gap-5'>
-            {enumToOptions(Gender).map((opt) => {
-              const isSelected = selectedGender === String(opt.id);
-
-              return (
-                <label
-                  key={opt.id}
-                  className={`w-full h-[43px] text-[24px] flex items-center justify-center rounded-[10px] border cursor-pointer font-[manSeh]
+            return (
+              <label
+                key={opt.id}
+                className={`flex-1 h-[43px] text-[24px] text-center rounded-[10px] border cursor-pointer font-[manSeh] ${borderClass}
         ${
           isSelected
-            ? 'bg-[#04447C] bg-opacity-90 text-white'
+            ? 'bg-[#04447C] bg-opacity-90 text-white border-none'
             : 'text-[#2D2D2D] text-opacity-70'
         }
       `}
-                >
-                  <input
-                    type='radio'
-                    value={opt.id}
-                    {...register('gender')}
-                    className='hidden'
-                  />
-                  {opt.label === 'MALE' ? '남' : '여'}
-                </label>
-              );
-            })}
-          </div>
-          {errors.gender && (
-            <p className='text-red-500 text-xs mt-1 text-center'>
-              {errors.gender.message}
-            </p>
-          )}
+              >
+                <input
+                  type='radio'
+                  value={opt.id}
+                  {...register('gender')}
+                  className='hidden'
+                />
+                {opt.label === 'MALE' ? '남' : '여'}
+              </label>
+            );
+          })}
         </div>
+        <ErrorMessage message={errors.gender?.message} />
+      </div>
 
-        <div className='w-full flex flex-col'>
-          <label className='text-[15px] mb-2 text-black text-opacity-70'>
-            MBTI
-          </label>
-          <select
-            {...register('mbti')}
-            className='border rounded-[10px] w-full h-11 px-3 font-bold'
-          >
-            <option value=''>선택</option>
-            {enumToOptions(MBTI).map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          {errors.mbti && (
-            <p className='text-red-500 text-xs mt-1 text-center'>
-              {errors.mbti.message}
-            </p>
-          )}
-        </div>
+      <div className='w-full flex flex-col'>
+        <label>MBTI</label>
+        <select {...register('mbti')} className={borderClass}>
+          <option value=''>선택</option>
+          {enumToOptions(MBTI).map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <ErrorMessage message={errors.mbti?.message} />
+      </div>
 
-        <div className='w-full flex flex-col text-black text-opacity-70'>
-          <label className='text-[15px] mb-2'>학과</label>
-          <select
-            {...register('department')}
-            className='border rounded-[10px] w-full h-11 px-3 font-bold'
-          >
-            <option value=''>선택</option>
-            {objectEnumToOptions(Department).map((opt) => (
-              <option key={opt.id} value={opt.id} className=''>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          {errors.department && (
-            <p className='text-red-500 text-xs mt-1 text-center'>
-              {errors.department.message}
-            </p>
-          )}
-        </div>
+      <div className='w-full flex flex-col text-black text-opacity-70'>
+        <label className='text-[15px] mb-2'>학과</label>
+        <select {...register('department')} className={borderClass}>
+          <option value=''>선택</option>
+          {objectEnumToOptions(Department).map((opt) => (
+            <option key={opt.id} value={opt.id} className=''>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <ErrorMessage message={errors.department?.message} />
+      </div>
 
-        <div className='w-full flex flex-col'>
-          <label className='text-[15px] mb-2 text-black text-opacity-70'>
-            인스타
-          </label>
-          <input
-            {...register('instagramId')}
-            placeholder='hsu_it_zzang'
-            className='border rounded-[10px] w-full h-11 px-3'
-          />
-          {errors.instagramId && (
-            <p className='text-red-500 text-xs mt-1 text-center'>
-              {errors.instagramId.message}
-            </p>
-          )}
-        </div>
+      <div className='w-full flex flex-col'>
+        <label>인스타</label>
+        <input
+          {...register('instagramId')}
+          placeholder='hsu_it_zzang'
+          className={borderClass}
+        />
+        <ErrorMessage message={errors.instagramId?.message} />
+      </div>
 
-        <button
-          type='submit'
-          disabled={loading}
-          className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto font-[manSeh] ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-        >
-          {loading ? '가입 중...' : '가입하기'}
-        </button>
-      </form>
-    </div>
+      <button
+        type='submit'
+        disabled={loading}
+        className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto font-[manSeh] ${
+          loading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+      >
+        {loading ? '가입 중...' : '가입하기'}
+      </button>
+    </form>
   );
 }

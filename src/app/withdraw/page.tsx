@@ -1,7 +1,5 @@
 'use client';
-
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -11,16 +9,7 @@ import axios from 'axios';
 import { delay } from '../../utils/delay';
 import Image from 'next/image';
 import withdrawImg from '../../../public/withdraw.png';
-
-// ✅ zod 스키마
-const withdrawSchema = z.object({
-  phoneNumber: z.string().min(10, '휴대전화 번호를 입력해주세요'),
-  deleteCheck: z.string().refine((val) => val === 'DELETE', {
-    message: '"DELETE"를 정확히 입력해주세요',
-  }),
-});
-
-type WithdrawForm = z.infer<typeof withdrawSchema>;
+import { WithdrawForm, withdrawSchema } from '../../schemas/withdrawSchema';
 
 export default function WithdrawPage(): JSX.Element {
   const router = useRouter();
@@ -62,14 +51,10 @@ export default function WithdrawPage(): JSX.Element {
   };
 
   return (
-    <div className={`flex flex-col ${styles.pretendardFont}`}>
-      <div className='text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] font-[manSeh]'>회원탈퇴</span>
-      </div>
-
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='w-[393px] h-[852px] px-[56px] flex flex-col justify-center gap-4 mx-auto'
+        className='w-[393px] px-[56px] flex flex-col justify-center gap-4 mx-auto h-[calc(100vh-73px)] font-[Pretendard]'
       >
         <Image src={withdrawImg} alt='로고' className='mx-auto' priority />
 

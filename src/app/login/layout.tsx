@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import PageHeader from '../../components/pageHeader';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,7 +13,10 @@ export default function LoginLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='mx-auto'>{children}</body>
+      <body className='mx-auto'>
+        <PageHeader title='로그인' />
+        {children}
+      </body>
     </html>
   );
 }
