@@ -15,7 +15,7 @@ import { delay } from '../../utils/delay';
 import { handleToastError } from '../../utils/errorHandlers';
 import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
 import ErrorMessage from '../errorMessage';
-import { borderClass, labelClass } from '../../utils/classNames';
+import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -125,7 +125,7 @@ export default function SignUpStepTwo() {
             return (
               <label
                 key={opt.id}
-                className={`flex-1 h-[43px] text-[24px] text-center rounded-[10px] border cursor-pointer font-[manSeh] ${borderClass}
+                className={`flex-1 text-[24px] text-center border cursor-pointer font-[manSeh] ${borderClass}
         ${
           isSelected
             ? 'bg-[#04447C] bg-opacity-90 text-white border-none'
@@ -186,12 +186,15 @@ export default function SignUpStepTwo() {
       <button
         type='submit'
         disabled={loading}
-        className={`bg-[#04447C] text-white rounded-[10px] w-[170px] h-[43px] text-[24px] mt-5 mx-auto font-[manSeh] ${
+        className={`${buttonClass} text-[20px] ${
           loading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
       >
-        {loading ? '가입 중...' : '가입하기'}
+        {loading ? '가입 중...' : '가입하고 별명짓기'}
       </button>
+      <p className='text-[10px] font-extrabold'>
+        ※ 회원정보는 일주일 후에 자동 삭제됩니다.
+      </p>
     </form>
   );
 }

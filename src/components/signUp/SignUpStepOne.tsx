@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { StepOneForm, stepOneSchema } from '../../schemas/stepOneSchema';
 import { handleToastError, handleAxiosError } from '../../utils/errorHandlers';
 import { labelClass, buttonClass, borderClass } from '../../utils/classNames';
+import { delay } from '../../utils/delay';
 import ErrorMessage from '../errorMessage';
 
 export default function SignUpStepOne(): JSX.Element {
@@ -22,22 +23,23 @@ export default function SignUpStepOne(): JSX.Element {
 
   const {
     register,
+    // getValues,
     handleSubmit,
+    // watch,
     formState: { errors },
   } = useForm<StepOneForm>({
     resolver: zodResolver(stepOneSchema),
   });
 
-  const handleSendCodeSubmit = handleSubmit(async (data) => {
-    const phoneNumber = data.phoneNumber;
+  console.log('폼 에러:', errors); // errors 객체 출력
+  console.log('name 에러 메시지:', errors.name?.message); // name 필드 에러 메시지 확인
+  console.log('phoneNumber 에러 메시지:', errors.phoneNumber?.message); // phoneNumber 필드 에러 메시지 확인
 
-    console.log('[인증하기 버튼 클릭됨]');
-    console.log('입력된 전화번호:', phoneNumber);
+  const onSendCode = async (data: StepOneForm) => {
+    const { name, phoneNumber } = data;
 
-    if (!phoneNumber) {
-      toast.error('휴대전화 번호를 입력해주세요.');
-      return;
-    }
+    console.log('name : ', name);
+    console.log('phoneNumber : ', phoneNumber);
 
     try {
       toast.loading('인증번호 전송 중...');
@@ -45,19 +47,14 @@ export default function SignUpStepOne(): JSX.Element {
       toast.dismiss();
       toast.success('인증번호가 전송되었습니다.');
       setVerificationVisible(true);
-    } catch (error) {
+    } catch (err) {
       toast.dismiss();
-      handleToastError(error);
+      handleToastError(err);
     }
-  });
+  };
 
-  const handleVerifySubmit = async (data: StepOneForm) => {
+  const onVerifyCode = async (data: StepOneForm) => {
     const { name, phoneNumber, authNumber } = data;
-
-    console.log('[인증확인 버튼 클릭됨]');
-    console.log('입력된 이름:', name);
-    console.log('입력된 전화번호:', phoneNumber);
-    console.log('입력된 인증번호:', authNumber);
 
     if (!authNumber) {
       toast.error('인증번호를 입력해주세요.');
@@ -66,9 +63,10 @@ export default function SignUpStepOne(): JSX.Element {
 
     try {
       toast.loading('인증번호 확인 중...');
-      const res = await verifyCode(authNumber);
 
-      console.log('[인증번호 확인 응답]', res);
+      await delay(1000); // 1초 대기
+
+      const res = await verifyCode(authNumber);
 
       if (res.status === 200) {
         toast.dismiss();
@@ -77,6 +75,7 @@ export default function SignUpStepOne(): JSX.Element {
         router.push('/signup/2');
       } else {
         toast.dismiss();
+        toast.error('인증 실패');
       }
     } catch (err) {
       toast.dismiss();
@@ -96,13 +95,10 @@ export default function SignUpStepOne(): JSX.Element {
       />
 
       <form
-        onSubmit={
-          verificationVisible
-            ? handleSubmit(handleVerifySubmit)
-            : handleSendCodeSubmit
-        }
         className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'
+        onSubmit={handleSubmit(verificationVisible ? onVerifyCode : onSendCode)}
       >
+        {/* 이름 */}
         <div className={`${labelClass} mt-12`}>
           <label>이름 입력</label>
           <input
@@ -111,11 +107,14 @@ export default function SignUpStepOne(): JSX.Element {
             placeholder='이름을 입력해주세요'
             className={borderClass}
           />
+
           <ErrorMessage message={errors.name?.message} />
+          {/* <div className='text-sm text-gray-500'>현재 입력값: {nameValue}</div> */}
         </div>
 
+        {/* 전화번호 */}
         <div className={labelClass}>
-          <label>휴대전화</label>
+          <label>전화번호</label>
           <input
             type='text'
             {...register('phoneNumber')}
@@ -125,15 +124,18 @@ export default function SignUpStepOne(): JSX.Element {
           <ErrorMessage message={errors.phoneNumber?.message} />
         </div>
 
+        {/* 인증 버튼 */}
         <div className='flex flex-col gap-2 mt-4'>
           <button
             type='submit'
+            // onClick={onSendCode}
             className={`${buttonClass} ${verificationVisible && 'bg-gray-400'}`}
             disabled={verificationVisible}
           >
             인증하기
           </button>
 
+          {/* 인증번호 입력 및 확인 */}
           {verificationVisible && (
             <div className='flex flex-col gap-6 mt-5'>
               <input
@@ -142,7 +144,11 @@ export default function SignUpStepOne(): JSX.Element {
                 placeholder='인증번호를 입력해주세요'
                 className={borderClass}
               />
-              <button type='submit' className={buttonClass}>
+              <button
+                type='submit'
+                // onClick={onVerifyCode}
+                className={buttonClass}
+              >
                 인증확인
               </button>
               <ErrorMessage message={errors.authNumber?.message} />

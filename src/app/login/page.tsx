@@ -1,40 +1,46 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleLoginLogic } from '../../utils/authHandlers';
 import styles from './styles.module.css';
 import HanmoHeader from '@/components/HanmoHeader/HanmoHeader';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+const loginSchema = z.object({
+  studentNumber: z.string().min(1, '학번을 입력해주세요.'),
+  phoneNumber: z.string().min(1, '전화번호를 입력해주세요.'),
+});
+
+type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
-  const [studentNumber, setStudentNumber] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [error, setError] = useState('');
-
+  const {
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+  });
   const handleLogin = async () => {
-    await handleLoginLogic(
-      studentNumber,
-      phoneNumber,
-      router,
-      '/main',
-      setError
-    );
+    const studentNumber = getValues('studentNumber');
+    const phoneNumber = getValues('phoneNumber');
+
+    await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
   };
 
   const handleWithdrawPage = async () => {
-    await handleLoginLogic(
-      studentNumber,
-      phoneNumber,
-      router,
-      '/withdraw',
-      setError
-    );
+    const studentNumber = getValues('studentNumber');
+    const phoneNumber = getValues('phoneNumber');
+
+    await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
   };
 
   return (
-    <div className={`flex flex-col ${styles.pretendardFont} ${labelClass}`}>
+    <form className={`flex flex-col ${styles.pretendardFont} ${labelClass}`}>
       {/* <div className="text-center border-b border-solid border-#E7E7E7">
         <span className="text-[38px] text-[#04447C]">한</span>
         <span className="text-[38px] text-[#9ECCF3]">모</span>
@@ -47,8 +53,7 @@ export default function LoginPage(): JSX.Element {
           <div className='text-[15px]'>학번</div>
           <input
             type='text'
-            value={studentNumber}
-            onChange={(e) => setStudentNumber(e.target.value)}
+            {...register('studentNumber')}
             placeholder='245151551'
             className={borderClass}
           />
@@ -58,9 +63,8 @@ export default function LoginPage(): JSX.Element {
           <div className=''>전화번호</div>
           <input
             type='text'
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder='01011112222'
+            {...register('phoneNumber')}
+            placeholder='01012345678'
             className={borderClass}
           />
         </div>
@@ -79,8 +83,12 @@ export default function LoginPage(): JSX.Element {
             회원탈퇴
           </button>
         </div>
-        {error && <div className='text-[red] mt-3'>{error}</div>}
+        {(errors.studentNumber?.message || errors.phoneNumber?.message) && (
+          <p className='text-red-500 font-[manSeh] text-[20px] '>
+            틀렸어요 ㅠㅡㅠ
+          </p>
+        )}
       </div>
-    </div>
+    </form>
   );
 }

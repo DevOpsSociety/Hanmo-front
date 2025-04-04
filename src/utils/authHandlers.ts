@@ -7,8 +7,7 @@ export async function handleLoginLogic(
   studentNumber: string,
   phoneNumber: string,
   router: AppRouterInstance,
-  onSuccessRedirect: string,
-  onError?: (error: string) => void
+  onSuccessRedirect: string
 ) {
   if (!studentNumber || !phoneNumber) {
     toast.error('모든 항목을 입력해주세요.');
@@ -26,16 +25,16 @@ export async function handleLoginLogic(
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
     } else {
       toast.error('로그인 실패');
-      onError?.('로그인 실패: 정보를 확인해주세요.');
+      // onError?.('로그인 실패: 정보를 확인해주세요.');
     }
   } catch (err) {
     toast.dismiss();
     toast.error('서버 오류가 발생했습니다.');
-    onError?.('로그인 중 오류 발생');
+    // onError?.('로그인 중 오류 발생');
 
     if (axios.isAxiosError(err)) {
       if (err.response?.status === 404) {
-        onError?.('존재하지 않는 사용자입니다.');
+        // onError?.('존재하지 않는 사용자입니다.');
       }
     }
   }

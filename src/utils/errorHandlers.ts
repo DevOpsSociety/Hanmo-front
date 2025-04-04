@@ -2,7 +2,15 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 
 export function handleToastError(error: unknown) {
-  if (error instanceof Error) {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+
+    if (status === 409) {
+      toast.error(`이미 가입된 사용자입니다`);
+    } else {
+      toast.error(`오류 상태 코드: ${status}`);
+    }
+  } else if (error instanceof Error) {
     toast.error(error.message);
   } else {
     toast.error('알 수 없는 오류가 발생했습니다.');

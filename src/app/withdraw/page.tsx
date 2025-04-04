@@ -64,7 +64,7 @@ export default function WithdrawPage(): JSX.Element {
           <input
             type='text'
             {...register('phoneNumber')}
-            placeholder='01011112222'
+            placeholder='01012345678'
             className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
           />
           {errors.phoneNumber && (
