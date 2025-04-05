@@ -19,12 +19,15 @@ export async function handleLoginLogic(
     const res = await loginUser({ studentNumber, phoneNumber });
     toast.dismiss();
 
+    console.log('로그인 응답:', res); // 응답 확인
+
     if (res.status === 200) {
       toast.success('로그인 성공!');
       localStorage.setItem('token', res.headers.temptoken);
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
     } else {
       toast.error('로그인 실패');
+      return res;
       // onError?.('로그인 실패: 정보를 확인해주세요.');
     }
   } catch (err) {

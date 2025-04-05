@@ -3,15 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { handleLoginLogic } from '../../utils/authHandlers';
 import styles from './styles.module.css';
-import HanmoHeader from '@/components/HanmoHeader/HanmoHeader';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 const loginSchema = z.object({
-  studentNumber: z.string().min(1, '학번을 입력해주세요.'),
-  phoneNumber: z.string().min(1, '전화번호를 입력해주세요.'),
+  studentNumber: z.string().min(9, '학번을 입력해주세요.'),
+  phoneNumber: z.string().min(10, '전화번호를 입력해주세요.'),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -21,11 +20,13 @@ export default function LoginPage(): JSX.Element {
   const {
     register,
     getValues,
+    handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
   const handleLogin = async () => {
+    console.log('로그인 버튼 클릭됨');
     const studentNumber = getValues('studentNumber');
     const phoneNumber = getValues('phoneNumber');
 
@@ -40,17 +41,20 @@ export default function LoginPage(): JSX.Element {
   };
 
   return (
-    <form className={`flex flex-col ${styles.pretendardFont} ${labelClass}`}>
+    <form
+      onSubmit={handleSubmit(handleLogin)}
+      className={`flex flex-col justify-center h-[calc(100vh-73px)] ${styles.pretendardFont} ${labelClass}`}
+    >
       {/* <div className="text-center border-b border-solid border-#E7E7E7">
         <span className="text-[38px] text-[#04447C]">한</span>
         <span className="text-[38px] text-[#9ECCF3]">모</span>
       </div> */}
 
-      <HanmoHeader />
+      {/* <HanmoHeader /> */}
 
-      <div className='w-[393px] h-[852px] mt-16 px-[56px] flex flex-col gap-4 mx-auto'>
-        <div>
-          <div className='text-[15px]'>학번</div>
+      <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
+        <div className={labelClass}>
+          <label>학번</label>
           <input
             type='text'
             {...register('studentNumber')}
@@ -59,8 +63,8 @@ export default function LoginPage(): JSX.Element {
           />
         </div>
 
-        <div className='mt-4'>
-          <div className=''>전화번호</div>
+        <div className={labelClass}>
+          <label>전화번호</label>
           <input
             type='text'
             {...register('phoneNumber')}
@@ -70,15 +74,13 @@ export default function LoginPage(): JSX.Element {
         </div>
 
         <div className={`flex flex-col gap-3 mt-4 ${styles.mansehFont} `}>
-          <button
-            onClick={handleLogin}
-            className={`${buttonClass} bg-[#04447C]`}
-          >
+          <button type='submit' className={`${buttonClass} bg-[#04447C]`}>
             로그인
           </button>
           <button
+            type='button'
             onClick={handleWithdrawPage}
-            className='border border-solid border-black rounded-[10px] h-[43px] text-[24px]'
+            className='border border-solid border-[#04447C] border-opacity-60 rounded-[10px] h-[43px] text-[24px]'
           >
             회원탈퇴
           </button>
