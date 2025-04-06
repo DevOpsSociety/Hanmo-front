@@ -45,13 +45,6 @@ export default function LoginPage(): JSX.Element {
       onSubmit={handleSubmit(handleLogin)}
       className={`flex flex-col justify-center h-[calc(100vh-73px)] ${styles.pretendardFont} ${labelClass}`}
     >
-      {/* <div className="text-center border-b border-solid border-#E7E7E7">
-        <span className="text-[38px] text-[#04447C]">한</span>
-        <span className="text-[38px] text-[#9ECCF3]">모</span>
-      </div> */}
-
-      {/* <HanmoHeader /> */}
-
       <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
         <div className={labelClass}>
           <label>학번</label>
