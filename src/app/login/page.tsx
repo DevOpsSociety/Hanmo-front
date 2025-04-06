@@ -33,12 +33,12 @@ export default function LoginPage(): JSX.Element {
     await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
   };
 
-  const handleWithdrawPage = async () => {
-    const studentNumber = getValues('studentNumber');
-    const phoneNumber = getValues('phoneNumber');
+  // const handleWithdrawPage = async () => {
+  //   const studentNumber = getValues('studentNumber');
+  //   const phoneNumber = getValues('phoneNumber');
 
-    await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
-  };
+  //   await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
+  // };
 
   return (
     <form
@@ -66,13 +66,13 @@ export default function LoginPage(): JSX.Element {
           />
         </div>
 
-        <div className={`flex flex-col gap-3 mt-4 ${styles.mansehFont} `}>
+        <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
           <button type='submit' className={`${buttonClass} bg-[#04447C]`}>
             로그인
           </button>
           <button
             type='button'
-            onClick={handleWithdrawPage}
+            onClick={() => router.push('/withdraw')}
             className='border border-solid border-[#04447C] border-opacity-60 rounded-[10px] h-[43px] text-[24px]'
           >
             회원탈퇴
