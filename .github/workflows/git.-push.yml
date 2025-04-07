@@ -15,7 +15,7 @@ jobs:
         with: 
           token: ${{ secrets.AUTO_ACTIONS }}
           fetch-depth: 0
-          ref: main
+          ref: develop
 
       - name: Add remote-url
         run: |
