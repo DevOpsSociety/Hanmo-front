@@ -1,30 +1,33 @@
-name: Deploy
+name: Vercel Production Deployment
 
 on:
   push:
-    branches: [develop]
+    branches:
+      - develop
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    container: pandoc/latex
+    name: Deploy to Vercel
     steps:
-      - uses: actions/checkout@v2
-      - name: Install mustache (to update the date)
-        run: apk add ruby && gem install mustache
-      - name: creates output
-        run: sh ./src/web/build.sh
-      - name: Pushes to another repository
-        id: push_directory
-        uses: cpina/github-action-push-to-another-repository@v2
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          source-directory: 'output'
-          destination-github-username: tnemnorivnelee
-          destination-repository-name: Hanmo-front
-          user-email: ${{ secrets.EMAIL }}
-          commit-message: ${{ github.event.commits[0].message }}
-          target-branch: develop
-      - name: Test get variable exported by push-to-another-repository
-        run: echo $DESTINATION_CLONED_DIRECTORY
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+        
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.AUTO_ACTIONS }}
+        
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.AUTO_ACTIONS }}
+        
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.AUTO_ACTIONS }}
