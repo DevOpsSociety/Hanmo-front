@@ -16,7 +16,7 @@ jobs:
         run: sh ./src/web/build.sh
       - name: Pushes to another repository
         id: push_directory
-        uses: cpina/github-action-push-to-another-repository@develop
+        uses: cpina/github-action-push-to-another-repository@v2
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         with:
