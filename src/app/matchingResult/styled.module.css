@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.매칭완료 {
+  font-size: 36px;
+}
+
+.nicknameWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  font-size: 24px;
+}
+.nickname {
+  font-weight: 700;
+  font-size: 34px;
+  color: #04447c;
+}
+
+.디엠방 {
+  font-size: 24px;
+}
+.twoUsersWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 1rem;
+  flex-direction: row;
+}
+.userProfile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.userImage {
+  width: 84px;
+  height: 67px;
+}
+
+.pretendardFont {
+  font-family: var(--font-pretendard);
+  font-weight: 400;
+}
+
+.pretendardBoldFont {
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+}
+
+.mansehFont {
+  font-family: var(--font-manseh);
+}
