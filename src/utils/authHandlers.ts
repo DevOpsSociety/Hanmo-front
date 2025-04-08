@@ -2,6 +2,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import toast from 'react-hot-toast';
 import { loginUser } from '../api/user';
 import axios from 'axios';
+import { delay } from './delay';
 
 export async function handleLoginLogic(
   studentNumber: string,
@@ -16,6 +17,9 @@ export async function handleLoginLogic(
 
   try {
     toast.loading('로그인 중...');
+
+    await delay(1000); // 1초 대기
+
     const res = await loginUser({ studentNumber, phoneNumber });
     toast.dismiss();
 
@@ -23,6 +27,7 @@ export async function handleLoginLogic(
 
     if (res.status === 200) {
       toast.success('로그인 성공!');
+      await delay(1000); // 1초 대기
       localStorage.setItem('token', res.headers.temptoken);
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
     } else {

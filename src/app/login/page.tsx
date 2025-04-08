@@ -7,6 +7,8 @@ import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { findUser } from '../../api/user';
 
 const loginSchema = z.object({
   studentNumber: z.string().min(9, '학번을 입력해주세요.'),
@@ -19,16 +21,36 @@ export default function LoginPage(): JSX.Element {
   const router = useRouter();
   const {
     register,
-    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
-  const handleLogin = async () => {
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const tempToken = localStorage.getItem('token'); // 로컬스토리지에서 토큰 가져오기
+      if (tempToken) {
+        try {
+          const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
+          // console.log('토큰 검증 응답:', res); // 응답 확인
+          if (res.status === 200) {
+            router.push('/main'); // 토큰이 유효하면 main으로 리다이렉트
+          }
+        } catch (error) {
+          console.error('유효하지 않은 토큰:', error);
+          // 토큰이 유효하지 않으면 아무 작업도 하지 않음
+        }
+      }
+    };
+
+    checkToken();
+  }, [router]);
+
+  const handleLogin = async (data: LoginForm) => {
     console.log('로그인 버튼 클릭됨');
-    const studentNumber = getValues('studentNumber');
-    const phoneNumber = getValues('phoneNumber');
+    const studentNumber = data.studentNumber;
+    const phoneNumber = data.phoneNumber;
 
     await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
   };

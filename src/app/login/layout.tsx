@@ -1,4 +1,5 @@
 'use client';
+import { Toaster } from 'react-hot-toast';
 // import type { Metadata } from 'next';
 import PageHeader from '../../components/pageHeader';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -35,6 +36,8 @@ export default function LoginLayout({
               },
             }}
           >
+            <Toaster position='bottom-center' reverseOrder={false} />
+
             {children}
           </motion.div>
         </AnimatePresence>

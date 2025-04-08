@@ -32,3 +32,11 @@ export const deleteUser = (phoneNumber: string) => {
     params: { phoneNumber },
   });
 };
+
+export const findUser = (tempToken: string) => {
+  return api.get('/users/profile', {
+    headers: {
+      tempToken: tempToken, // Authorization 헤더에 토큰 추가
+    },
+  });
+};
