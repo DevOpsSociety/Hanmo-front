@@ -1,7 +1,5 @@
 'use client';
-
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -11,16 +9,9 @@ import axios from 'axios';
 import { delay } from '../../utils/delay';
 import Image from 'next/image';
 import withdrawImg from '../../../public/withdraw.png';
-
-// ✅ zod 스키마
-const withdrawSchema = z.object({
-  phoneNumber: z.string().min(10, '휴대전화 번호를 입력해주세요'),
-  deleteCheck: z.string().refine((val) => val === 'DELETE', {
-    message: '"DELETE"를 정확히 입력해주세요',
-  }),
-});
-
-type WithdrawForm = z.infer<typeof withdrawSchema>;
+import { WithdrawForm, withdrawSchema } from '../../schemas/withdrawSchema';
+import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import ErrorMessage from '../../components/errorMessage';
 
 export default function WithdrawPage(): JSX.Element {
   const router = useRouter();
@@ -62,54 +53,39 @@ export default function WithdrawPage(): JSX.Element {
   };
 
   return (
-    <div className={`flex flex-col ${styles.pretendardFont}`}>
-      <div className='text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center'>
-        <span className='text-[38px] font-[manSeh]'>회원탈퇴</span>
-      </div>
-
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='w-[393px] h-[852px] px-[56px] flex flex-col justify-center gap-4 mx-auto'
+        className={`w-[393px] px-[56px] flex flex-col justify-center gap-4 mx-auto h-[calc(100vh-73px)] font-[Pretendard] ${labelClass}`}
       >
         <Image src={withdrawImg} alt='로고' className='mx-auto' priority />
 
         {/* 휴대전화 */}
-        <div>
+        <div className={labelClass}>
           <div className='text-[15px]'>휴대전화</div>
           <input
             type='text'
             {...register('phoneNumber')}
-            placeholder='01011112222'
-            className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
+            placeholder='01012345678'
+            className={borderClass}
           />
-          {errors.phoneNumber && (
-            <p className='text-red-500 text-xs mt-1'>
-              {errors.phoneNumber.message}
-            </p>
-          )}
+          <ErrorMessage message={errors.phoneNumber?.message} />
         </div>
 
         {/* DELETE 체크 */}
-        <div className='mt-4'>
+        <div className={labelClass}>
           <div className=''>탈퇴하시려면 {`"DELETE"`}를 입력해주세요</div>
           <input
             type='text'
             {...register('deleteCheck')}
             placeholder='DELETE'
-            className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
+            className={borderClass}
           />
-          {errors.deleteCheck && (
-            <p className='text-red-500 text-xs mt-1'>
-              {errors.deleteCheck.message}
-            </p>
-          )}
+          <ErrorMessage message={errors.deleteCheck?.message} />
         </div>
 
         <div className={`flex flex-col gap-3 mt-4 ${styles.mansehFont}`}>
-          <button
-            type='submit'
-            className='border border-solid border-black bg-[#04447C] text-white rounded-[10px] h-[43px] text-[24px]'
-          >
+          <button type='submit' className={buttonClass}>
             탈퇴하기
           </button>
         </div>
