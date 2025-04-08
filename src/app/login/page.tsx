@@ -1,122 +1,89 @@
 'use client';
 
-import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { loginUser } from '../../api/user';
+import { handleLoginLogic } from '../../utils/authHandlers';
 import styles from './styles.module.css';
-import HanmoHeader from '@/components/HanmoHeader/HanmoHeader';
-import axios from 'axios';
+import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+const loginSchema = z.object({
+  studentNumber: z.string().min(9, '학번을 입력해주세요.'),
+  phoneNumber: z.string().min(10, '전화번호를 입력해주세요.'),
+});
+
+type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
-  const [studentNumber, setStudentNumber] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [error, setError] = useState('');
-
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+  });
   const handleLogin = async () => {
-    if (!studentNumber || !phoneNumber) {
-      toast.error('모든 항목을 입력해주세요.');
-      return;
-    }
+    console.log('로그인 버튼 클릭됨');
+    const studentNumber = getValues('studentNumber');
+    const phoneNumber = getValues('phoneNumber');
 
-    try {
-      toast.loading('로그인 중...');
-      const res = await loginUser({ studentNumber, phoneNumber });
-      toast.dismiss();
-
-      console.log('response :', res);
-
-      if (res.status === 200) {
-        toast.success('로그인 성공!');
-        // 예: localStorage 저장, 전역 상태 저장, 페이지 이동
-        localStorage.setItem('token', res.headers.temptoken);
-        const storedToken = localStorage.getItem('token');
-        console.log('로그인 페이지 토큰: ', storedToken);
-        router.push('/main');
-      } else {
-        setError('로그인 실패: 정보를 확인해주세요.');
-        toast.error('로그인 실패');
-      }
-    } catch (err) {
-      toast.dismiss();
-      toast.error('서버 오류가 발생했습니다.');
-      setError('로그인 중 오류 발생');
-
-      if (err instanceof Error) {
-        console.error('err :', err.message);
-      }
-
-      // axios 에러라면 응답 객체 접근
-      if (axios.isAxiosError(err)) {
-        console.error('axios error status :', err.response?.status);
-
-        if (err.response?.status === 404) {
-          setError('존재하지 않는 사용자입니다.');
-        }
-      }
-    }
+    await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
   };
 
-  const handleWithdrawPage = async () => {
-    await handleLogin(); // login 성공 여부 체크
-    router.push('/withdraw');
-  };
+  // const handleWithdrawPage = async () => {
+  //   const studentNumber = getValues('studentNumber');
+  //   const phoneNumber = getValues('phoneNumber');
+
+  //   await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
+  // };
 
   return (
-    <div className={`flex flex-col ${styles.pretendardFont}`}>
-      <HanmoHeader />
-      {/* <div className="text-center border-b border-solid border-#E7E7E7">
-        <span className="text-[38px] text-[#04447C]">한</span>
-        <span className="text-[38px] text-[#9ECCF3]">모</span>
-      </div> */}
-
-      <div>
-        <div
-          className={`text-[50px] text-[#04447c] text-center mt-[90px] ${styles.mansehFont}`}
-        >
-          로그인
+    <form
+      onSubmit={handleSubmit(handleLogin)}
+      className={`flex flex-col justify-center h-[calc(100vh-73px)] ${styles.pretendardFont} ${labelClass}`}
+    >
+      <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
+        <div className={labelClass}>
+          <label>학번</label>
+          <input
+            type='text'
+            {...register('studentNumber')}
+            placeholder='245151551'
+            className={borderClass}
+          />
         </div>
-        <div className='w-[393px] h-[852px] mt-16 px-[56px] flex flex-col gap-4 mx-auto'>
-          <div>
-            <div className='text-[15px]'>학번</div>
-            <input
-              type='text'
-              value={studentNumber}
-              onChange={(e) => setStudentNumber(e.target.value)}
-              placeholder='245151551'
-              className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
-            />
-          </div>
 
-          <div className='mt-4'>
-            <div className=''>전화번호</div>
-            <input
-              type='text'
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder='01011112222'
-              className='border border-solid border-black rounded-[10px] w-full h-11 px-3'
-            />
-          </div>
-
-          <div className={`flex flex-col gap-3 mt-4 ${styles.mansehFont}`}>
-            <button
-              onClick={handleLogin}
-              className={`border border-solid border-black bg-[#04447C] text-white rounded-[10px] h-[43px] text-[24px]`}
-            >
-              로그인
-            </button>
-            <button
-              onClick={handleWithdrawPage}
-              className='border border-solid border-black rounded-[10px] h-[43px] text-[24px]'
-            >
-              회원탈퇴
-            </button>
-          </div>
-          {error && <div className='text-[red] mt-3'>{error}</div>}
+        <div className={labelClass}>
+          <label>전화번호</label>
+          <input
+            type='text'
+            {...register('phoneNumber')}
+            placeholder='01012345678'
+            className={borderClass}
+          />
         </div>
+
+        <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
+          <button type='submit' className={`${buttonClass} bg-[#04447C]`}>
+            로그인
+          </button>
+          <button
+            type='button'
+            onClick={() => router.push('/withdraw')}
+            className='border border-solid border-[#04447C] border-opacity-60 rounded-[10px] h-[43px] text-[24px]'
+          >
+            회원탈퇴
+          </button>
+        </div>
+        {(errors.studentNumber?.message || errors.phoneNumber?.message) && (
+          <p className='text-red-500 font-[manSeh] text-[20px] '>
+            틀렸어요 ㅠㅡㅠ
+          </p>
+        )}
       </div>
-    </div>
+    </form>
   );
 }

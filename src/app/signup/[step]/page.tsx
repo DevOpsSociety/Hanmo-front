@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import SignUpStepOne from '../../../components/sign-up/SignUpStepOne';
-import SignUpStepTwo from '../../../components/sign-up/SignUpStepTwo';
+import SignUpStepOne from '../../../components/signUp/SignUpStepOne';
+import SignUpStepTwo from '../../../components/signUp/SignUpStepTwo';
 
 export default function SignupPage({ params }: { params: { step: string } }) {
   const { step } = params;
