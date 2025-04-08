@@ -74,7 +74,10 @@ export default function WithdrawPage(): JSX.Element {
 
         {/* DELETE 체크 */}
         <div className={labelClass}>
-          <div className=''>탈퇴하시려면 {`"DELETE"`}를 입력해주세요</div>
+          <div className=''>
+            탈퇴하시려면 <span className='text-red-500'>{`DELETE`}</span> 를
+            입력해주세요
+          </div>
           <input
             type='text'
             {...register('deleteCheck')}
