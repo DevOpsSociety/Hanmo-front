@@ -4,13 +4,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { handleWithdrawLogic } from '../../utils/authHandlers';
-import { withdrawSchema } from '../../schemas/withdrawSchema';
+import { WithdrawForm, withdrawSchema } from '../../schemas/withdrawSchema';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
-import ErrorMessage from '../../components/errorMessage';
+import ErrorMessage from '../../components/ErrorMessage';
 import Image from 'next/image';
 import withdrawImg from '../../../public/withdraw.png';
-
-type WithdrawForm = z.infer<typeof withdrawSchema>;
 
 export default function WithdrawPage(): JSX.Element {
   const router = useRouter();

@@ -163,13 +163,8 @@ export async function handleSignUpLogic(
   const payload = {
     ...formData,
     ...data,
-    studentNumber: data.studentNumber,
-    gender: data.gender,
-    mbti: data.mbti,
-    department: data.department,
-    instagramId: data.instagramId,
-    name: formData.name,
-    phoneNumber: formData.phoneNumber,
+    name: formData.name as string,
+    phoneNumber: formData.phoneNumber as string,
   };
 
   try {

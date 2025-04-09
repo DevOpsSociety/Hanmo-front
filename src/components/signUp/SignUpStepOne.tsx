@@ -9,11 +9,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { StepOneForm, stepOneSchema } from '../../schemas/stepOneSchema';
 import { labelClass, buttonClass, borderClass } from '../../utils/classNames';
-import ErrorMessage from '../errorMessage';
 import {
   handleSendCodeLogic,
   handleVerifyCodeLogic,
 } from '../../utils/authHandlers';
+import ErrorMessage from '../ErrorMessage';
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
