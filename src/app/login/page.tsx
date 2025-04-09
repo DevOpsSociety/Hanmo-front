@@ -2,20 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { handleLoginLogic } from '../../utils/authHandlers';
-import styles from './styles.module.css';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { findUser } from '../../api/user';
-
-const loginSchema = z.object({
-  studentNumber: z.string().min(9, '학번을 입력해주세요.'),
-  phoneNumber: z.string().min(10, '전화번호를 입력해주세요.'),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
+import { LoginForm, loginSchema } from '../../schemas/loginSchema';
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -48,24 +40,14 @@ export default function LoginPage(): JSX.Element {
   }, [router]);
 
   const handleLogin = async (data: LoginForm) => {
-    console.log('로그인 버튼 클릭됨');
-    const studentNumber = data.studentNumber;
-    const phoneNumber = data.phoneNumber;
-
-    await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
+    await handleLoginLogic(data, router, '/main');
   };
-
-  // const handleWithdrawPage = async () => {
-  //   const studentNumber = getValues('studentNumber');
-  //   const phoneNumber = getValues('phoneNumber');
-
-  //   await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
-  // };
 
   return (
     <form
       onSubmit={handleSubmit(handleLogin)}
-      className={`flex flex-col justify-center h-[calc(100vh-73px)] ${styles.pretendardFont} ${labelClass}`}
+      className={`flex flex-col justify-center h-[calc(100vh-73px)]
+        font-[pretendard] ${labelClass}`}
     >
       <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
         <div className={labelClass}>

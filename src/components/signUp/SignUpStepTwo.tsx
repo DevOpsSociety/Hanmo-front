@@ -2,26 +2,24 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { Gender, MBTI, Department } from '../../enums';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { resetForm } from '../../store/signUpSlice';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
-import { loginUser, signUpUser } from '../../api/user';
 import { useRouter } from 'next/navigation';
-import { delay } from '../../utils/delay';
-import { handleToastError } from '../../utils/errorHandlers';
 import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
 import ErrorMessage from '../errorMessage';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { handleSignUpLogic } from '../../utils/authHandlers';
 
 export default function SignUpStepTwo() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state: RootState) => state.signUp.formData);
   const [loading, setLoading] = useState(false);
+
+  console.log();
 
   const {
     register,
@@ -34,72 +32,13 @@ export default function SignUpStepTwo() {
 
   const selectedGender = watch('gender');
 
-  const onSubmit = async (data: StepTwoForm) => {
-    console.log('formData : ', formData);
-    console.log('data : ', data);
-
-    if (!formData.name || !formData.phoneNumber) {
-      toast.error(`필수 정보가 누락되었습니다.\n회원가입을 다시 시도해주세요.`);
-      return;
-    }
-
-    const payload = {
-      ...formData,
-      ...data,
-      studentNumber: data.studentNumber,
-      gender: data.gender,
-      mbti: data.mbti,
-      department: data.department,
-      instagramId: data.instagramId || '',
-      name: formData.name,
-      phoneNumber: formData.phoneNumber,
-    };
-
-    console.log('payload : ', payload);
-
-    try {
-      setLoading(true);
-      toast.loading('가입 중...');
-
-      await delay(1000); // 1초 대기
-
-      const res = await signUpUser(payload);
-
-      if (res.status === 200) {
-        toast.dismiss();
-        toast.success('가입 완료! 🎉');
-
-        const loginRes = await loginUser({
-          phoneNumber: payload.phoneNumber,
-          studentNumber: payload.studentNumber,
-        });
-
-        if (loginRes.status === 200) {
-          localStorage.setItem('token', loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
-
-          dispatch(resetForm());
-          router.push('/nickname');
-        } else {
-          toast.error('로그인에 실패했습니다.');
-        }
-      } else if (res.status === 409) {
-        toast.dismiss();
-        toast.error('이미 등록된 회원입니다.');
-      } else {
-        toast.dismiss();
-        toast.error('STATUS CODE : ' + res.status);
-      }
-    } catch (err) {
-      toast.dismiss();
-      handleToastError(err);
-    } finally {
-      setLoading(false);
-    }
+  const signUp = async (data: StepTwoForm) => {
+    await handleSignUpLogic(data, formData, dispatch, router, setLoading);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(signUp)}
       className={`flex flex-col gap-5 w-[200px] mx-auto h-[calc(100vh-73px)] justify-center ${labelClass}`}
     >
       <div className='w-full flex flex-col'>

@@ -20,7 +20,7 @@ export default function SignupLayout({
 
   return (
     <html lang='en'>
-      <body className='mx-auto'>
+      <body>
         <SignUpProviders>
           <Toaster position='bottom-center' reverseOrder={false} />
           <PageHeader title={title} />
