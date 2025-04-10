@@ -15,7 +15,7 @@ export default function LoginLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='mx-auto'>
+      <body style={{ overflow: 'hidden' }}>
         <PageHeader title='로그인' />
         <MotionWrapper>
           <Toaster position='bottom-center' reverseOrder={false} />;{children}

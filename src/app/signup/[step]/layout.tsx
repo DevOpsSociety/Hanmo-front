@@ -21,7 +21,7 @@ export default function SignupLayout({
 
   return (
     <html lang='en'>
-      <body>
+      <body style={{ overflow: 'hidden' }}>
         <SignUpProviders>
           <PageHeader title={title} />
           <MotionWrapper>
