@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
-import PageHeader from '../../components/PageHeader1';
+import PageHeader from '../../components/PageHeader';
 import MotionWrapper from '../../components/MotionWrapper';
 
 export const metadata: Metadata = {

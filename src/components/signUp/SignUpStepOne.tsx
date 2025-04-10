@@ -13,7 +13,7 @@ import {
   handleSendCodeLogic,
   handleVerifyCodeLogic,
 } from '../../utils/authHandlers';
-import ErrorMessage from '../ErrorMessage1';
+import ErrorMessage from '../ErrorMessage';
 import Link from 'next/link';
 
 export default function SignUpStepOne(): JSX.Element {

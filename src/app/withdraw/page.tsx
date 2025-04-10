@@ -8,7 +8,7 @@ import { WithdrawForm, withdrawSchema } from '../../schemas/withdrawSchema';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
 import Image from 'next/image';
 import withdrawImg from '../../../public/withdraw.png';
-import ErrorMessage from '../../components/ErrorMessage1';
+import ErrorMessage from '../../components/ErrorMessage';
 
 export default function WithdrawPage(): JSX.Element {
   const router = useRouter();
