@@ -1,4 +1,4 @@
-import PageHeader from '../../components/PageHeader';
+import PageHeader from '../../components/PageHeader1';
 import { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 import MotionWrapper from '../../components/MotionWrapper';

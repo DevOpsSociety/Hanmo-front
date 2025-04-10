@@ -9,7 +9,7 @@ import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
 import { RootState } from '../../store';
 import { useRouter } from 'next/navigation';
 import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
-import ErrorMessage from '../ErrorMessage';
+import ErrorMessage from '../ErrorMessage1';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
 import { handleSignUpLogic } from '../../utils/authHandlers';
 
