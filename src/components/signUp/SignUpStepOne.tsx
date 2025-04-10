@@ -14,6 +14,7 @@ import {
   handleVerifyCodeLogic,
 } from '../../utils/authHandlers';
 import ErrorMessage from '../ErrorMessage';
+import Link from 'next/link';
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
@@ -38,12 +39,14 @@ export default function SignUpStepOne(): JSX.Element {
 
   return (
     <div className='flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]'>
-      <Image
-        src={LogoImg}
-        alt='로고'
-        className='mx-auto w-[113px] h-[134px]'
-        priority
-      />
+      <Link href='/landing'>
+        <Image
+          src={LogoImg}
+          alt='로고'
+          className='mx-auto w-[113px] h-[134px]'
+          priority
+        />
+      </Link>
 
       <form
         className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'

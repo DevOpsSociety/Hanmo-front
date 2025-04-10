@@ -6,6 +6,8 @@ import HanmoHeader from '../../components/HanmoHeader/HanmoHeader';
 import Link from 'next/link';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import logoutIcon from '../../../public/logout.png';
+import withdrawIcon from '../../../public/withdrawIcon.png';
 // import { useRouter } from "next/router";
 
 // import fetchUserProfile from "@/api/usersProfile";
@@ -77,6 +79,32 @@ export default function MainPage() {
         <button className={`${styles.btns} ${styles.btns2}`}>
           게시판보러 가볼까~?
         </button>
+        <Link
+          href={{
+            pathname: '/matchingResult',
+            query: { nickname: mainPageData?.nickname },
+          }}
+          className={styles.btns}
+        >
+          매칭 결과 보러 가볼까~?
+        </Link>
+      </div>
+      <div className='w-96 h-20 flex justify-center gap-40 mt-20'>
+        <Link href='/landing' className=''>
+          <Image
+            src={logoutIcon}
+            alt='로그아웃'
+            width={66}
+            height={70}
+            onClick={() => {
+              localStorage.removeItem('token');
+              localStorage.removeItem('nickname');
+            }}
+          />
+        </Link>
+        <Link href='/withdraw' className=''>
+          <Image src={withdrawIcon} alt='회원탈퇴' width={66} height={70} />
+        </Link>
       </div>
     </div>
   );
