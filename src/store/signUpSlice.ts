@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type SignUpFormData = {
+export type SignUpFormData = {
   name?: string;
-  // nickname?: string;
   phoneNumber?: string;
   studentNumber?: string;
   gender?: string;

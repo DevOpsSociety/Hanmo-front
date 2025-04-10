@@ -14,7 +14,7 @@ const config: Config = {
       fontFamily: {
         angduk: ['116angduk_honesty1'],
         manSeh: ['var(--font-manSeh)'],
-        Pretendard: ['var(--font-pretendard)'],
+        pretendard: ['var(--font-pretendard)'],
         geistMono: ['var(--font-geist-mono)'],
         geistSans: ['var(--font-geist-sans)'],
       },

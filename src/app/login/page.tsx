@@ -2,48 +2,52 @@
 
 import { useRouter } from 'next/navigation';
 import { handleLoginLogic } from '../../utils/authHandlers';
-import styles from './styles.module.css';
 import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-
-const loginSchema = z.object({
-  studentNumber: z.string().min(9, '학번을 입력해주세요.'),
-  phoneNumber: z.string().min(10, '전화번호를 입력해주세요.'),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
+import { useEffect } from 'react';
+import { findUser } from '../../api/user';
+import { LoginForm, loginSchema } from '../../schemas/loginSchema';
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
   const {
     register,
-    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
-  const handleLogin = async () => {
-    console.log('로그인 버튼 클릭됨');
-    const studentNumber = getValues('studentNumber');
-    const phoneNumber = getValues('phoneNumber');
 
-    await handleLoginLogic(studentNumber, phoneNumber, router, '/main');
+  useEffect(() => {
+    const checkToken = async () => {
+      const tempToken = localStorage.getItem('token'); // 로컬스토리지에서 토큰 가져오기
+      if (tempToken) {
+        try {
+          const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
+          // console.log('토큰 검증 응답:', res); // 응답 확인
+          if (res.status === 200) {
+            router.push('/main'); // 토큰이 유효하면 main으로 리다이렉트
+          }
+        } catch (error) {
+          console.error('유효하지 않은 토큰:', error);
+          // 토큰이 유효하지 않으면 아무 작업도 하지 않음
+        }
+      }
+    };
+
+    checkToken();
+  }, [router]);
+
+  const handleLogin = async (data: LoginForm) => {
+    await handleLoginLogic(data, router, '/main');
   };
-
-  // const handleWithdrawPage = async () => {
-  //   const studentNumber = getValues('studentNumber');
-  //   const phoneNumber = getValues('phoneNumber');
-
-  //   await handleLoginLogic(studentNumber, phoneNumber, router, '/withdraw');
-  // };
 
   return (
     <form
       onSubmit={handleSubmit(handleLogin)}
-      className={`flex flex-col justify-center h-[calc(100vh-73px)] ${styles.pretendardFont} ${labelClass}`}
+      className={`flex flex-col justify-center h-[calc(100vh-73px)]
+        font-[pretendard] ${labelClass}`}
     >
       <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
         <div className={labelClass}>
