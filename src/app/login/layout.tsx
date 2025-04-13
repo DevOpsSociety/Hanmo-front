@@ -18,7 +18,8 @@ export default function LoginLayout({
       <body style={{ overflow: 'hidden' }}>
         <PageHeader title='로그인' />
         <MotionWrapper>
-          <Toaster position='bottom-center' reverseOrder={false} />;{children}
+          <Toaster position='bottom-center' reverseOrder={false} />
+          {children}
         </MotionWrapper>
       </body>
     </html>

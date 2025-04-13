@@ -25,7 +25,8 @@ export default function SignupLayout({
         <SignUpProviders>
           <PageHeader title={title} />
           <MotionWrapper>
-            <Toaster position='bottom-center' reverseOrder={false} />;{children}
+            <Toaster position='bottom-center' reverseOrder={false} />
+            {children}
           </MotionWrapper>
         </SignUpProviders>
       </body>
