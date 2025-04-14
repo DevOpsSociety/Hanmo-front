@@ -4,9 +4,13 @@ import axios from 'axios';
 export function handleToastError(error: unknown) {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
+    // const errorMessage = error.response?.data.errorMessage.split(', ')[1];
+    const errorMessage = error.response?.data.errorMessage;
+
+    // console.error('axios error status :', error);
 
     if (status === 409) {
-      toast.error(`이미 가입된 사용자입니다`);
+      toast.error(errorMessage);
     } else {
       toast.error(`오류 상태 코드: ${status}`);
     }

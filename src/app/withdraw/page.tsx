@@ -60,6 +60,10 @@ export default function WithdrawPage(): JSX.Element {
           <ErrorMessage message={errors.deleteCheck?.message} />
         </div>
 
+        <div className='text-red-500 text-center mt-5'>
+          회원탈퇴 시, 3일 간 재가입이 불가합니다!!
+        </div>
+
         <div className={`flex flex-col gap-3 mt-4`}>
           <button type='submit' className={buttonClass}>
             탈퇴하기
