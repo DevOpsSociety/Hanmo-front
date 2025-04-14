@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { handleWithdrawLogic } from '../../utils/authHandlers';
 import { WithdrawForm, withdrawSchema } from '../../schemas/withdrawSchema';
-import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { buttonClass, labelClass } from '../../utils/classNames';
 import Image from 'next/image';
 import withdrawImg from '../../../public/withdraw.png';
-import ErrorMessage from '../../components/ErrorMessage';
+import Input from '../../components/common/Input';
 
 export default function WithdrawPage(): JSX.Element {
   const router = useRouter();
@@ -34,31 +34,27 @@ export default function WithdrawPage(): JSX.Element {
         <Image src={withdrawImg} alt='로고' className='mx-auto' priority />
 
         {/* 휴대전화 */}
-        <div className={labelClass}>
-          <div className='text-[15px]'>휴대전화</div>
-          <input
-            type='text'
-            {...register('phoneNumber')}
-            placeholder='01012345678'
-            className={borderClass}
-          />
-          <ErrorMessage message={errors.phoneNumber?.message} />
-        </div>
+        <Input
+          label='휴대전화'
+          register={register}
+          registerName='phoneNumber'
+          placeholder='01012345678'
+          errorMessage={errors.phoneNumber?.message}
+        />
 
         {/* DELETE 체크 */}
-        <div className={labelClass}>
-          <div className=''>
-            탈퇴하시려면 <span className='text-red-500'>{`DELETE`}</span> 를
-            입력해주세요
-          </div>
-          <input
-            type='text'
-            {...register('deleteCheck')}
-            placeholder='DELETE'
-            className={borderClass}
-          />
-          <ErrorMessage message={errors.deleteCheck?.message} />
-        </div>
+        <Input
+          label={
+            <>
+              탈퇴하시려면 <span className='text-red-500'>DELETE</span> 를
+              입력해주세요
+            </>
+          }
+          register={register}
+          registerName='deleteCheck'
+          placeholder='DELETE'
+          errorMessage={errors.deleteCheck?.message}
+        />
 
         <div className='text-red-500 text-center mt-5'>
           회원탈퇴 시, 3일 간 재가입이 불가합니다!!

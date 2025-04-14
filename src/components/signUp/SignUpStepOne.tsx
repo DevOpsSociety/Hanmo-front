@@ -8,13 +8,13 @@ import { useAppDispatch } from '../../store/hooks';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { StepOneForm, stepOneSchema } from '../../schemas/stepOneSchema';
-import { labelClass, buttonClass, borderClass } from '../../utils/classNames';
 import {
   handleSendCodeLogic,
   handleVerifyCodeLogic,
 } from '../../utils/authHandlers';
-import ErrorMessage from '../ErrorMessage';
 import Link from 'next/link';
+import Input from '../common/Input';
+import Button from '../common/Button';
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function SignUpStepOne(): JSX.Element {
         <Image
           src={LogoImg}
           alt='로고'
-          className='mx-auto w-[113px] h-[134px]'
+          className='mx-auto w-[113px] h-[134px] mb-12'
           priority
         />
       </Link>
@@ -53,53 +53,51 @@ export default function SignUpStepOne(): JSX.Element {
         onSubmit={handleSubmit(verificationVisible ? verifyCode : sendCode)}
       >
         {/* 이름 */}
-        <div className={`${labelClass} mt-12`}>
-          <label>이름 입력</label>
-          <input
-            type='text'
-            {...register('name')}
-            placeholder='이름을 입력해주세요'
-            className={borderClass}
-          />
-
-          <ErrorMessage message={errors.name?.message} />
-        </div>
+        <Input
+          label='이름 입력'
+          register={register}
+          registerName='name'
+          placeholder='이름을 입력해주세요'
+          errorMessage={errors.name?.message}
+        />
 
         {/* 전화번호 */}
-        <div className={labelClass}>
-          <label>전화번호</label>
-          <input
-            type='text'
-            {...register('phoneNumber')}
-            placeholder='번호를 입력해주세요'
-            className={borderClass}
-          />
-          <ErrorMessage message={errors.phoneNumber?.message} />
-        </div>
+        <Input
+          label='휴대전화'
+          register={register}
+          registerName='phoneNumber'
+          placeholder='휴대폰 번호를 입력해주세요'
+          errorMessage={errors.phoneNumber?.message}
+        />
+
+        {/* <button
+          type='submit'
+          className={`${buttonClass} ${verificationVisible && 'bg-gray-400'}`}
+          disabled={verificationVisible}
+        >
+          인증하기
+        </button> */}
+        <Button
+          name='인증하기'
+          verificationVisible={verificationVisible}
+          className='mt-2'
+        />
 
         {/* 인증 버튼 */}
-        <div className='flex flex-col gap-2 mt-4'>
-          <button
-            type='submit'
-            className={`${buttonClass} ${verificationVisible && 'bg-gray-400'}`}
-            disabled={verificationVisible}
-          >
-            인증하기
-          </button>
-
+        <div className='flex flex-col gap-2'>
           {/* 인증번호 입력 및 확인 */}
           {verificationVisible && (
             <div className='flex flex-col gap-6 mt-5'>
-              <input
-                type='text'
-                {...register('authNumber')}
+              <Input
+                register={register}
+                registerName='authNumber'
                 placeholder='인증번호를 입력해주세요'
-                className={borderClass}
+                errorMessage={errors.authNumber?.message}
               />
-              <button type='submit' className={buttonClass}>
+              {/* <button type='submit' className={buttonClass}>
                 인증확인
-              </button>
-              <ErrorMessage message={errors.authNumber?.message} />
+              </button> */}
+              <Button name='인증확인' />
             </div>
           )}
         </div>
