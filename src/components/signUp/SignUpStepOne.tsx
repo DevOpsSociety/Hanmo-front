@@ -102,6 +102,9 @@ export default function SignUpStepOne(): JSX.Element {
           )}
         </div>
       </form>
+      <Link href='/restore' className='text-center mt-20 underline'>
+        3일 이내 탈퇴한 회원은 여기를 눌러주세요.
+      </Link>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import toast from 'react-hot-toast';
-import { loginUser, deleteUser, signUpUser } from '../api/user';
+import { loginUser, deleteUser, signUpUser, restoreUser } from '../api/user';
 import { delay } from './delay';
 import { sendCode, verifyCode } from '../api/sms';
 import { StepOneForm } from '../schemas/stepOneSchema';
@@ -192,5 +192,37 @@ export async function handleSignUpLogic(
     handleToastError(err);
   } finally {
     setLoading(false);
+  }
+}
+
+export async function handleRestoreLogic(
+  phoneNumber: string,
+  router: AppRouterInstance,
+  redirectPath: string,
+  setVerificationVisible: (visible: boolean) => void
+) {
+  try {
+    toast.loading('복원 중...');
+
+    setVerificationVisible(true);
+
+    await delay(1000);
+
+    const res = await restoreUser(phoneNumber);
+
+    if (res.status === 200) {
+      toast.dismiss();
+      toast.success('복원 완료!');
+      await delay(1000);
+
+      localStorage.removeItem('token');
+      router.push(redirectPath);
+    } else {
+      toast.error('복원 실패: 정보를 확인해주세요.');
+    }
+  } catch (err) {
+    toast.dismiss();
+    console.error('복원 실패:', err);
+    handleToastError(err);
   }
 }

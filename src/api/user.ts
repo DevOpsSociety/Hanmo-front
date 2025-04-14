@@ -33,10 +33,18 @@ export const deleteUser = (phoneNumber: string) => {
   });
 };
 
+// 5. 유저 조회
 export const findUser = (tempToken: string) => {
   return api.get('/users/profile', {
     headers: {
       tempToken: tempToken, // Authorization 헤더에 토큰 추가
     },
+  });
+};
+
+// 6. 탈퇴 회원 복원
+export const restoreUser = (phoneNumber: string) => {
+  return api.post('/users/restore', null, {
+    params: { phoneNumber },
   });
 };
