@@ -2,12 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import { handleLoginLogic } from '../../utils/authHandlers';
-import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { labelClass } from '../../utils/classNames';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { findUser } from '../../api/user';
 import { LoginForm, loginSchema } from '../../schemas/loginSchema';
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -25,13 +27,11 @@ export default function LoginPage(): JSX.Element {
       if (tempToken) {
         try {
           const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
-          // console.log('토큰 검증 응답:', res); // 응답 확인
           if (res.status === 200) {
             router.push('/main'); // 토큰이 유효하면 main으로 리다이렉트
           }
         } catch (error) {
           console.error('유효하지 않은 토큰:', error);
-          // 토큰이 유효하지 않으면 아무 작업도 하지 않음
         }
       }
     };
@@ -50,30 +50,24 @@ export default function LoginPage(): JSX.Element {
         font-[pretendard] ${labelClass}`}
     >
       <div className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'>
-        <div className={labelClass}>
-          <label>학번</label>
-          <input
-            type='text'
-            {...register('studentNumber')}
-            placeholder='245151551'
-            className={borderClass}
-          />
-        </div>
+        <Input
+          label='학번'
+          register={register}
+          registerName='studentNumber'
+          placeholder='245151551'
+          errorMessage={errors.studentNumber?.message}
+        />
 
-        <div className={labelClass}>
-          <label>전화번호</label>
-          <input
-            type='text'
-            {...register('phoneNumber')}
-            placeholder='01012345678'
-            className={borderClass}
-          />
-        </div>
+        <Input
+          label='전화번호'
+          register={register}
+          registerName='phoneNumber'
+          placeholder='01012345678'
+          errorMessage={errors.phoneNumber?.message}
+        />
 
         <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
-          <button type='submit' className={`${buttonClass} bg-[#04447C]`}>
-            로그인
-          </button>
+          <Button name='로그인' className='mt-2' />
           <button
             type='button'
             onClick={() => router.push('/withdraw')}

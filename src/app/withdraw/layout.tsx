@@ -15,10 +15,11 @@ export default function withdrawLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>
+      <body style={{ overflow: 'hidden' }}>
         <PageHeader title='회원탈퇴' />
         <MotionWrapper>
-          <Toaster position='bottom-center' reverseOrder={false} />;{children}
+          <Toaster position='bottom-center' reverseOrder={false} />
+          {children}
         </MotionWrapper>
       </body>
     </html>

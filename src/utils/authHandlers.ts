@@ -1,7 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import toast from 'react-hot-toast';
 import { loginUser, deleteUser, signUpUser } from '../api/user';
-import axios from 'axios';
 import { delay } from './delay';
 import { sendCode, verifyCode } from '../api/sms';
 import { StepOneForm } from '../schemas/stepOneSchema';
@@ -11,7 +10,7 @@ import {
   SignUpFormData,
   updateFormData,
 } from '../store/signUpSlice';
-import { handleToastError, handleAxiosError } from './errorHandlers';
+import { handleToastError } from './errorHandlers';
 import { StepTwoForm } from '../schemas/stepTwoSchema';
 import { LoginForm } from '../schemas/loginSchema';
 
@@ -47,14 +46,7 @@ export async function handleLoginLogic(
     }
   } catch (err) {
     toast.dismiss();
-    toast.error('서버 오류가 발생했습니다.');
-    // onError?.('로그인 중 오류 발생');
-
-    if (axios.isAxiosError(err)) {
-      if (err.response?.status === 404) {
-        // onError?.('존재하지 않는 사용자입니다.');
-      }
-    }
+    handleToastError(err);
   }
 }
 
@@ -83,13 +75,8 @@ export async function handleWithdrawLogic(
       toast.error('탈퇴 실패: 정보를 확인해주세요.');
     }
   } catch (err) {
-    if (axios.isAxiosError(err)) {
-      console.error('axios error status :', err.response?.status);
-      if (err.response?.status === 404) {
-        toast.dismiss();
-        toast.error('존재하지 않는 사용자입니다.');
-      }
-    }
+    toast.dismiss();
+    handleToastError(err);
   }
 }
 
@@ -142,9 +129,7 @@ export const handleVerifyCodeLogic = async (
     }
   } catch (err) {
     toast.dismiss();
-    handleAxiosError(err, {
-      400: '인증번호가 일치하지 않습니다.',
-    });
+    handleToastError(err);
   }
 };
 
@@ -166,6 +151,8 @@ export async function handleSignUpLogic(
     name: formData.name as string,
     phoneNumber: formData.phoneNumber as string,
   };
+
+  console.log('payload', payload);
 
   try {
     setLoading(true);

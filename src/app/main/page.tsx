@@ -89,7 +89,7 @@ export default function MainPage() {
           매칭 결과 보러 가볼까~?
         </Link>
       </div>
-      <div className='w-96 h-20 flex justify-center gap-40 mt-20'>
+      <div className='w-96 h-20 flex justify-center gap-40 mt-8'>
         <Link href='/landing' className=''>
           <Image
             src={logoutIcon}
