@@ -4,6 +4,7 @@ import styles from "./styled.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 type MatchUser = {
   nickname: string;
@@ -11,7 +12,7 @@ type MatchUser = {
   instagramId: string;
 };
 
-export default function MatchingResultPage() {
+export default function OneToOneResultPage() {
   const [matchedUser, setMatchedUser] = useState<MatchUser[] | null>();
 
   useEffect(() => {
@@ -60,8 +61,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[0]?.nickname}</div>
+              <div> {matchedUser?.[0]?.instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -72,38 +73,10 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[1]?.nickname}</div>
+              <div> {matchedUser?.[1]?.instagramId}</div>
             </div>
           </div>
-          <div className={styles.twoUsersWrapper}>
-            <div className={styles.userProfile}>
-              <Image
-                className={styles.userImage}
-                src="/images/matchingPage/user3.png"
-                alt="프로필3"
-                width={0}
-                height={0}
-                sizes="100vw"
-              />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
-            </div>
-            <div className={styles.userProfile}>
-              <Image
-                className={styles.userImage}
-                src="/images/matchingPage/user4.png"
-                alt="프로필4"
-                width={0}
-                height={0}
-                sizes="100vw"
-              />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
-            </div>
-          </div>
-          {/* 네명의 프로필을 보여줄 것입니다. 각각의 div에 이미지 + 닉네임 +
-        instagram 아이디를 보여줘야겠군 */}
         </div>
       </div>
       <div className={styles.bottom}>
