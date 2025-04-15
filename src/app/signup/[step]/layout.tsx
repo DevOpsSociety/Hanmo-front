@@ -21,11 +21,12 @@ export default function SignupLayout({
 
   return (
     <html lang='en'>
-      <body>
+      <body style={{ overflow: 'hidden' }}>
         <SignUpProviders>
           <PageHeader title={title} />
           <MotionWrapper>
-            <Toaster position='bottom-center' reverseOrder={false} />;{children}
+            <Toaster position='bottom-center' reverseOrder={false} />
+            {children}
           </MotionWrapper>
         </SignUpProviders>
       </body>

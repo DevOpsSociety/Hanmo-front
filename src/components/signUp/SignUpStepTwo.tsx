@@ -10,8 +10,11 @@ import { RootState } from '../../store';
 import { useRouter } from 'next/navigation';
 import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
 import ErrorMessage from '../ErrorMessage';
-import { borderClass, buttonClass, labelClass } from '../../utils/classNames';
+import { borderClass, labelClass } from '../../utils/classNames';
 import { handleSignUpLogic } from '../../utils/authHandlers';
+import Input from '../common/Input';
+import Option from '../common/Option';
+import Button from '../common/Button';
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -41,18 +44,15 @@ export default function SignUpStepTwo() {
       onSubmit={handleSubmit(signUp)}
       className={`flex flex-col gap-5 w-[200px] mx-auto h-[calc(100vh-73px)] justify-center ${labelClass}`}
     >
-      <div className='w-full flex flex-col'>
-        <label>학번</label>
-        <input
-          {...register('studentNumber')}
-          placeholder='ex)202010955'
-          className={borderClass}
-        />
-        <ErrorMessage message={errors.studentNumber?.message} />
-
-        <div className='text-[red] text-[9px] mt-2 text-center'>
-          학번은 아이디로 사용되니 정확히 입력해주세요.
-        </div>
+      <Input
+        label='학번'
+        register={register}
+        registerName='studentNumber'
+        placeholder='ex)202010955'
+        errorMessage={errors.studentNumber?.message}
+      />
+      <div className='text-[red] text-[9px] text-center'>
+        학번은 아이디로 사용되니 정확히 입력해주세요.
       </div>
 
       <div className='w-full flex flex-col'>
@@ -86,51 +86,35 @@ export default function SignUpStepTwo() {
         <ErrorMessage message={errors.gender?.message} />
       </div>
 
-      <div className='w-full flex flex-col'>
-        <label>MBTI</label>
-        <select {...register('mbti')} className={borderClass}>
-          <option value=''>선택</option>
-          {enumToOptions(MBTI).map((opt) => (
-            <option key={opt.id} value={opt.id}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <ErrorMessage message={errors.mbti?.message} />
-      </div>
+      <Option
+        label='MBTI'
+        register={register}
+        registerName='mbti'
+        enumOptions={enumToOptions(MBTI)}
+        errorMessage={errors.mbti?.message}
+      />
 
-      <div className='w-full flex flex-col text-black text-opacity-70'>
-        <label className='text-[15px] mb-2'>학과</label>
-        <select {...register('department')} className={borderClass}>
-          <option value=''>선택</option>
-          {objectEnumToOptions(Department).map((opt) => (
-            <option key={opt.id} value={opt.id} className=''>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <ErrorMessage message={errors.department?.message} />
-      </div>
+      <Option
+        label='학과'
+        register={register}
+        registerName='department'
+        enumOptions={objectEnumToOptions(Department)}
+        errorMessage={errors.department?.message}
+      />
 
-      <div className='w-full flex flex-col'>
-        <label>인스타</label>
-        <input
-          {...register('instagramId')}
-          placeholder='hsu_it_zzang'
-          className={borderClass}
-        />
-        <ErrorMessage message={errors.instagramId?.message} />
-      </div>
+      <Input
+        label='인스타'
+        register={register}
+        registerName='instagramId'
+        placeholder='hsu_it_zzang'
+        errorMessage={errors.instagramId?.message}
+      />
 
-      <button
-        type='submit'
-        disabled={loading}
-        className={`${buttonClass} text-[20px] ${
-          loading ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
-      >
-        {loading ? '가입 중...' : '가입하고 별명짓기'}
-      </button>
+      <Button
+        name={loading ? '가입 중...' : '가입하고 별명짓기'}
+        className={loading ? 'opacity-50 cursor-not-allowed' : '' + 'mt-5'}
+      />
+
       <p className='text-[10px] font-extrabold'>
         ※ 회원정보는 일주일 후에 자동 삭제됩니다.
       </p>
