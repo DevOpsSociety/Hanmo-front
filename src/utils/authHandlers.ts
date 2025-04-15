@@ -195,6 +195,7 @@ export async function handleSignUpLogic(
     }
   } catch (err) {
     toast.dismiss();
+    console.error('회원가입 실패:', err);
     handleToastError(err);
   } finally {
     setLoading(false);

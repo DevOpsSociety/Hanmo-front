@@ -16,7 +16,7 @@ import Button from '../../components/common/Button';
 export default function RestorePage(): JSX.Element {
   const router = useRouter();
 
-  const [verificationVisible, setVerificationVisible] = useState(false);
+  const [verificationVisible, setVerificationVisible] = useState(true);
 
   const {
     register,

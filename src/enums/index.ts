@@ -40,6 +40,7 @@ export const Department = {
   INTERIOR_DESIGN: { id: 15, name: '실내건축디자인학과' },
   FASHION_DESIGN: { id: 16, name: '섬유패션디자인학과' },
   FREE_MAJOR: { id: 17, name: '자유전공학부' },
+  IT_MAJOR: { id: 18, name: 'IT학부' },
 };
 
 // // Type for the Department object values
