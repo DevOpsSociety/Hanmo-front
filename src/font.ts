@@ -44,3 +44,13 @@ export const Nexon = localFont({
   ],
   variable: "--font-nexon",
 });
+
+export const NexonBold = localFont({
+  src: [
+    {
+      path: "./fonts/NEXONLv1GothicBold.ttf",
+      style: "normal",
+    },
+  ],
+  variable: "--font-nexonbold",
+});

@@ -93,7 +93,7 @@ export default function MatchingPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`styles.container font-[nexon]`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
@@ -105,10 +105,10 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <div className={`${styles.contents} ${styles.pretendardFont}`}>
+      <div className={`${styles.contents} `}>
         <div>매칭을 시작하세요!</div>
       </div>
-      <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
+      <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneButton
           onClick={() => handleMatch("one-to-one")}
           errorMessage={errorMessage}
@@ -117,7 +117,7 @@ export default function MatchingPage() {
           onClick={() => handleMatch("two-to-two")}
           errorMessage={errorMessage}
         />
-        <div className={`${styles.info} ${styles.mansehFont}`}>
+        <div className={`${styles.info} font-[manseh]`}>
           *1:1 매 칭은 동성 한명과, <br /> 2:2 매칭은 남녀 각각 2명씩 <br /> 총
           4명으로 이루어집니다. <br />
           <br /> 매칭하시고 부스 방문하시면 <br />

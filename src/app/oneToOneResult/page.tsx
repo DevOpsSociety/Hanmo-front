@@ -6,14 +6,18 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-type MatchUser = {
+interface MatchResponse {
+  matchingType: "ONE_TO_ONE";
+  users: MatchedUser[];
+}
+interface MatchedUser {
   nickname: string;
   name: string;
   instagramId: string;
-};
+}
 
 export default function OneToOneResultPage() {
-  const [matchedUser, setMatchedUser] = useState<MatchUser[] | null>();
+  const [matchedUser, setMatchedUser] = useState<MatchResponse | null>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,15 +43,13 @@ export default function OneToOneResultPage() {
     fetchData();
   }, []);
   return (
-    <div className={`${styles.wrapper} ${styles.nexonFont}`}>
+    <div className={`${styles.wrapper} font-[nexon]`}>
       <div className={styles.topMiddleWrapper}>
         <div className={styles.top}>
-          <div className={`${styles.매칭완료} ${styles.mansehFont}`}>
-            매칭완료!
-          </div>
+          <div className={`${styles.매칭완료} font-[manseh]`}>매칭완료!</div>
           <div className={styles.nicknameWrapper}>
-            <div className={`${styles.nickname} ${styles.nexonBoldFont}`}>
-              api로 받아온 닉네임
+            <div className={`${styles.nickname} font-[nexonbold]`}>
+              {matchedUser?.users?.[0].nickname}
             </div>
             님
           </div>
@@ -64,8 +66,10 @@ export default function OneToOneResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div className="font-black">{matchedUser?.[0]?.nickname}</div>
-              <div> @{matchedUser?.[0]?.instagramId}</div>
+              <div className="font-black">
+                {matchedUser?.users?.[0].nickname}
+              </div>
+              <div> @{matchedUser?.users?.[0].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -77,9 +81,9 @@ export default function OneToOneResultPage() {
                 sizes="100vw"
               />
               <div className={styles.BoldFont}>
-                {matchedUser?.[1]?.nickname}
+                {matchedUser?.users?.[1].nickname}
               </div>
-              <div> @{matchedUser?.[1]?.instagramId}</div>
+              <div> @{matchedUser?.users?.[1].instagramId}</div>
             </div>
           </div>
         </div>

@@ -8,13 +8,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import logoutIcon from "../../../public/logout.png";
 import withdrawIcon from "../../../public/withdrawIcon.png";
-// import { useRouter } from "next/router";
 
-// import fetchUserProfile from "@/api/usersProfile";
-
-type UserProfile = {
+interface UserProfile {
   nickname: string;
-};
+}
 
 export default function MainPage() {
   const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
@@ -48,7 +45,7 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className={`${styles.container} ${styles.NexonFont}`}>
+    <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
@@ -60,13 +57,16 @@ export default function MainPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <div className={`${styles.contents} ${styles.pretendardFont}`}>
+      <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          {`"${mainPageData?.nickname}"`}님
+          <div
+            className={`font-[nexonbold]`}
+          >{`"${mainPageData?.nickname}"`}</div>
+          님
         </div>
         <div>좋은 하루 보내세요</div>
       </div>
-      <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
+      <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
           href={{
             pathname: "/matching",
@@ -81,7 +81,7 @@ export default function MainPage() {
         </button>
         <Link
           href={{
-            pathname: "/matchingResult",
+            pathname: "/oneToOneResult",
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}

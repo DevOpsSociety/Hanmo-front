@@ -52,15 +52,6 @@ export default function NicknamePage() {
     const temptoken = localStorage.getItem("token");
     const url2 = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/nickname`;
     try {
-      // const response = await axios.put(
-      //   url2,
-      //   { nickname },
-      //   {
-      //     headers: {
-      //       tempToken: temptoken,
-      //     },
-      //   }
-      // );
       await axios.put(
         url2,
         { nickname },

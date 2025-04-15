@@ -3,20 +3,30 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: '116angduk_honesty1.5';
-  src: url('/src/app/fonts/116angduk_honesty1.5.ttf') format('woff2');
+  font-family: "116angduk_honesty1.5";
+  src: url("/src/app/fonts/116angduk_honesty1.5.ttf") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Pretendard';
-  src: url('../fonts/PretendardVariable.ttf') format('truetype');
+  font-family: "Pretendard";
+  src: url("../fonts/PretendardVariable.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'manSeh';
-  src: url('../fonts/YoonChildfundkoreaManSeh.ttf') format('truetype');
+  font-family: "manSeh";
+  src: url("../fonts/YoonChildfundkoreaManSeh.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "nexon";
+  src: url("../fonts/NEXONLv1GothicRegular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "nexonbold";
+  src: url("../fonts/NEXONLv1GothicBold.ttf") format("truetype");
 }
 
 :root {

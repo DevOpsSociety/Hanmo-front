@@ -5,14 +5,19 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-type MatchUser = {
+interface MatchResponse {
+  matchingType: "ONE_TO_ONE";
+  users: MatchedUser[];
+}
+
+interface MatchedUser {
   nickname: string;
   name: string;
   instagramId: string;
-};
+}
 
 export default function MatchingResultPage() {
-  const [matchedUser, setMatchedUser] = useState<MatchUser[] | null>();
+  const [matchedUser, setMatchedUser] = useState<MatchResponse | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +50,10 @@ export default function MatchingResultPage() {
             매칭완료!
           </div>
           <div className={styles.nicknameWrapper}>
-            <div className={styles.nickname}>api로 받아온 닉네임</div>님
+            <div className={styles.nickname}>
+              {matchedUser?.users?.[0].nickname}
+            </div>
+            님
           </div>
           <div className={styles.디엠방}>디엠방을 만들어주세요!</div>
         </div>
@@ -53,15 +61,15 @@ export default function MatchingResultPage() {
           <div className={styles.twoUsersWrapper}>
             <div className={styles.userProfile}>
               <Image
-                // className={styles.userImage} // 얘는 왕관 달려서 크기가 약간 다름
+                // 얘는 왕관 달려서 크기가 약간 다름
                 src="/images/matchingPage/user1.png"
                 alt="프로필1"
                 width={84}
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[0].nickname}</div>
-              <div> {matchedUser?.[0].instagramId}</div>
+              <div> {matchedUser?.users?.[0].nickname}</div>
+              <div> {matchedUser?.users?.[0].nickname}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -72,8 +80,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[1].nickname}</div>
-              <div> {matchedUser?.[1].instagramId}</div>
+              <div> {matchedUser?.users?.[1].nickname}</div>
+              <div> {matchedUser?.users?.[1].instagramId}</div>
             </div>
           </div>
           <div className={styles.twoUsersWrapper}>
@@ -86,8 +94,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[2].nickname}</div>
-              <div> {matchedUser?.[2].instagramId}</div>
+              <div> {matchedUser?.users?.[2].nickname}</div>
+              <div> {matchedUser?.users?.[2].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -98,8 +106,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[3].nickname}</div>
-              <div> {matchedUser?.[3].instagramId}</div>
+              <div> {matchedUser?.users?.[3].nickname}</div>
+              <div> {matchedUser?.users?.[3].instagramId}</div>
             </div>
           </div>
         </div>
