@@ -33,6 +33,7 @@ export const deleteUser = (phoneNumber: string) => {
   });
 };
 
+// 5. 유저 조회
 export const findUser = (tempToken: string) => {
   return api.get('/users/profile', {
     headers: {
@@ -40,3 +41,10 @@ export const findUser = (tempToken: string) => {
     },
   });
 };
+
+// // 6. 탈퇴 회원 복원
+// export const restoreUser = (phoneNumber: string) => {
+//   return api.post('/users/restore', null, {
+//     params: { phoneNumber },
+//   });
+// };
