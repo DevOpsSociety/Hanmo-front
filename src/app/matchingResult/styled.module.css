@@ -22,7 +22,7 @@
 }
 
 .매칭완료 {
-  font-size: 36px;
+  font-size: 40px;
   padding: 1rem;
 }
 
@@ -120,4 +120,8 @@
 
 .mansehFont {
   font-family: var(--font-manseh);
+}
+
+.nexonFont {
+  font-family: var(--font-nexon);
 }

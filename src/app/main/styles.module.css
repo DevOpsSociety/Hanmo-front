@@ -77,3 +77,7 @@
 .mansehFont {
   font-family: var(--font-manseh);
 }
+
+.nexonFont {
+  font-family: var(--font-nexon);
+}

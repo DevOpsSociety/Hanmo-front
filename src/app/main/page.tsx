@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import styles from './styles.module.css';
-import Image from 'next/image';
-import HanmoHeader from '../../components/HanmoHeader/HanmoHeader';
-import Link from 'next/link';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import logoutIcon from '../../../public/logout.png';
-import withdrawIcon from '../../../public/withdrawIcon.png';
+import styles from "./styles.module.css";
+import Image from "next/image";
+import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import Link from "next/link";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import logoutIcon from "../../../public/logout.png";
+import withdrawIcon from "../../../public/withdrawIcon.png";
 // import { useRouter } from "next/router";
 
 // import fetchUserProfile from "@/api/usersProfile";
@@ -21,16 +21,16 @@ export default function MainPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const temptoken = localStorage.getItem('token');
+      const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
-        console.error('토큰이 없습니다.');
+        console.error("토큰이 없습니다.");
         return;
       }
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
-      console.log('API URL:', url);
-      console.log('토큰:', temptoken);
+      console.log("API URL:", url);
+      console.log("토큰:", temptoken);
 
       try {
         const response = await axios.get(url, {
@@ -39,25 +39,25 @@ export default function MainPage() {
           },
         });
         setMainPageData(response.data);
-        console.log('Response:', response);
+        console.log("Response:", response);
       } catch (e) {
-        console.log('에러: ', e);
+        console.log("에러: ", e);
       }
     };
     fetchData();
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.NexonFont}`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
           className={styles.logo}
-          src='/images/mainchar_wink.png'
-          alt='한모'
+          src="/images/mainchar_wink.png"
+          alt="한모"
           width={0}
           height={0}
-          sizes='100vw' // 이거 없으면 화질깨짐
+          sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
       <div className={`${styles.contents} ${styles.pretendardFont}`}>
@@ -69,7 +69,7 @@ export default function MainPage() {
       <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
         <Link
           href={{
-            pathname: '/matching',
+            pathname: "/matching",
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
@@ -81,7 +81,7 @@ export default function MainPage() {
         </button>
         <Link
           href={{
-            pathname: '/matchingResult',
+            pathname: "/matchingResult",
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
@@ -89,21 +89,21 @@ export default function MainPage() {
           매칭 결과 보러 가볼까~?
         </Link>
       </div>
-      <div className='w-96 h-20 flex justify-center gap-40 mt-20'>
-        <Link href='/landing' className=''>
+      <div className="w-96 h-20 flex justify-center gap-40 mt-20">
+        <Link href="/landing" className="">
           <Image
             src={logoutIcon}
-            alt='로그아웃'
+            alt="로그아웃"
             width={66}
             height={70}
             onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('nickname');
+              localStorage.removeItem("token");
+              localStorage.removeItem("nickname");
             }}
           />
         </Link>
-        <Link href='/withdraw' className=''>
-          <Image src={withdrawIcon} alt='회원탈퇴' width={66} height={70} />
+        <Link href="/withdraw" className="">
+          <Image src={withdrawIcon} alt="회원탈퇴" width={66} height={70} />
         </Link>
       </div>
     </div>

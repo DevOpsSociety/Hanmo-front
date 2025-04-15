@@ -60,8 +60,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[0].nickname}</div>
+              <div> {matchedUser?.[0].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -72,8 +72,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[1].nickname}</div>
+              <div> {matchedUser?.[1].instagramId}</div>
             </div>
           </div>
           <div className={styles.twoUsersWrapper}>
@@ -86,8 +86,8 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[2].nickname}</div>
+              <div> {matchedUser?.[2].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -98,12 +98,10 @@ export default function MatchingResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> 닉네임</div>
-              <div> 인스타그램 id</div>
+              <div> {matchedUser?.[3].nickname}</div>
+              <div> {matchedUser?.[3].instagramId}</div>
             </div>
           </div>
-          {/* 네명의 프로필을 보여줄 것입니다. 각각의 div에 이미지 + 닉네임 +
-        instagram 아이디를 보여줘야겠군 */}
         </div>
       </div>
       <div className={styles.bottom}>
@@ -119,7 +117,6 @@ export default function MatchingResultPage() {
         </div>
         <div className={styles.boxWrapper}>
           <button>
-            {" "}
             <Image
               className={styles.warningBtn}
               src="/images/matchingPage/warning.png"
@@ -127,7 +124,7 @@ export default function MatchingResultPage() {
               width={0}
               height={0}
               sizes="100vw"
-            />{" "}
+            />
           </button>
           <div> 절대 누르지 마세요!</div>
         </div>

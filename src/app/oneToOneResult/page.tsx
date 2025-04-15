@@ -39,14 +39,17 @@ export default function OneToOneResultPage() {
     fetchData();
   }, []);
   return (
-    <div className={`${styles.wrapper} ${styles.pretendardFont}`}>
+    <div className={`${styles.wrapper} ${styles.nexonFont}`}>
       <div className={styles.topMiddleWrapper}>
         <div className={styles.top}>
           <div className={`${styles.매칭완료} ${styles.mansehFont}`}>
             매칭완료!
           </div>
           <div className={styles.nicknameWrapper}>
-            <div className={styles.nickname}>api로 받아온 닉네임</div>님
+            <div className={`${styles.nickname} ${styles.nexonBoldFont}`}>
+              api로 받아온 닉네임
+            </div>
+            님
           </div>
           <div className={styles.디엠방}>디엠방을 만들어주세요!</div>
         </div>
@@ -61,8 +64,8 @@ export default function OneToOneResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[0]?.nickname}</div>
-              <div> {matchedUser?.[0]?.instagramId}</div>
+              <div className="font-black">{matchedUser?.[0]?.nickname}</div>
+              <div> @{matchedUser?.[0]?.instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -73,8 +76,10 @@ export default function OneToOneResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[1]?.nickname}</div>
-              <div> {matchedUser?.[1]?.instagramId}</div>
+              <div className={styles.BoldFont}>
+                {matchedUser?.[1]?.nickname}
+              </div>
+              <div> @{matchedUser?.[1]?.instagramId}</div>
             </div>
           </div>
         </div>
@@ -92,7 +97,6 @@ export default function OneToOneResultPage() {
         </div>
         <div className={styles.boxWrapper}>
           <button>
-            {" "}
             <Image
               className={styles.warningBtn}
               src="/images/matchingPage/warning.png"
@@ -100,7 +104,7 @@ export default function OneToOneResultPage() {
               width={0}
               height={0}
               sizes="100vw"
-            />{" "}
+            />
           </button>
           <div> 절대 누르지 마세요!</div>
         </div>

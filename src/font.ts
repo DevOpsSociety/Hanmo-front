@@ -33,3 +33,14 @@ export const Manseh = localFont({
   ],
   variable: "--font-manseh",
 });
+
+export const Nexon = localFont({
+  src: [
+    {
+      path: "./fonts/NEXONLv1GothicRegular.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+  ],
+  variable: "--font-nexon",
+});
