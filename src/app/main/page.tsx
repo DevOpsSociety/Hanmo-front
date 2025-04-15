@@ -86,7 +86,7 @@ export default function MainPage() {
           }}
           className={styles.btns}
         >
-          매칭 결과 보러 가볼까~?
+          매칭 결과 보러가기!
         </Link>
       </div>
       <div className="w-96 h-20 flex justify-center gap-40 mt-8">
