@@ -42,9 +42,9 @@ export const findUser = (tempToken: string) => {
   });
 };
 
-// 6. 탈퇴 회원 복원
-export const restoreUser = (phoneNumber: string) => {
-  return api.post('/users/restore', null, {
-    params: { phoneNumber },
-  });
-};
+// // 6. 탈퇴 회원 복원
+// export const restoreUser = (phoneNumber: string) => {
+//   return api.post('/users/restore', null, {
+//     params: { phoneNumber },
+//   });
+// };

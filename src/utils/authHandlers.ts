@@ -1,8 +1,13 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import toast from 'react-hot-toast';
-import { loginUser, deleteUser, signUpUser, restoreUser } from '../api/user';
+import { loginUser, deleteUser, signUpUser } from '../api/user';
 import { delay } from './delay';
-import { sendCode, verifyCode } from '../api/sms';
+import {
+  restoreSendCode,
+  restoreVerifyCode,
+  sendCode,
+  verifyCode,
+} from '../api/sms';
 import { StepOneForm } from '../schemas/stepOneSchema';
 import { AppDispatch } from '../store';
 import {
@@ -13,6 +18,7 @@ import {
 import { handleToastError } from './errorHandlers';
 import { StepTwoForm } from '../schemas/stepTwoSchema';
 import { LoginForm } from '../schemas/loginSchema';
+import { RestoreForm } from '../schemas/restoreSchema';
 
 export async function handleLoginLogic(
   data: LoginForm,
@@ -195,34 +201,77 @@ export async function handleSignUpLogic(
   }
 }
 
-export async function handleRestoreLogic(
+export async function handleRestoreSendCodeLogic(
   phoneNumber: string,
-  router: AppRouterInstance,
-  redirectPath: string,
   setVerificationVisible: (visible: boolean) => void
 ) {
   try {
-    toast.loading('복원 중...');
-
-    setVerificationVisible(true);
+    toast.loading('인증번호 요청 중...');
 
     await delay(1000);
 
-    const res = await restoreUser(phoneNumber);
+    const sendRes = await restoreSendCode(phoneNumber);
+
+    console.log('복원 요청 응답:', sendRes);
+
+    if (sendRes.status === 200) {
+      toast.dismiss();
+      toast.success(sendRes.data);
+      setVerificationVisible(true);
+    }
+
+    // if (res.status === 200) {
+    //   toast.dismiss();
+    //   toast.success('복원 완료!');
+    //   await delay(1000);
+
+    //   localStorage.removeItem('token');
+    //   router.push(redirectPath);
+    // } else {
+    //   toast.error('복원 실패: 정보를 확인해주세요.');
+    // }
+  } catch (err) {
+    toast.dismiss();
+    console.error('복원 요청 실패:', err);
+    handleToastError(err);
+  }
+}
+
+export async function handleRestoreVerifyCodeLogic(
+  data: RestoreForm,
+  router: AppRouterInstance
+) {
+  const { authNumber } = data;
+
+  if (!authNumber) {
+    toast.error('인증번호를 입력해주세요.');
+    return;
+  }
+
+  try {
+    toast.loading('인증번호 확인 중...');
+
+    await delay(1000); // 1초 대기
+
+    const res = await restoreVerifyCode(authNumber);
 
     if (res.status === 200) {
       toast.dismiss();
-      toast.success('복원 완료!');
-      await delay(1000);
+      toast.success('복구 성공!');
+      await delay(1000); // 1초 대기
+      toast.dismiss();
+      toast('잠시 후 로그인 페이지로 이동합니다');
 
-      localStorage.removeItem('token');
-      router.push(redirectPath);
+      await delay(1000); // 1초 대기
+      toast.dismiss();
+
+      router.push('/login');
     } else {
-      toast.error('복원 실패: 정보를 확인해주세요.');
+      toast.dismiss();
+      toast.error('인증 실패');
     }
   } catch (err) {
     toast.dismiss();
-    console.error('복원 실패:', err);
     handleToastError(err);
   }
 }
