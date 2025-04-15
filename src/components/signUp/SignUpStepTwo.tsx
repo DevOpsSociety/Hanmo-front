@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Gender, MBTI, Department } from '../../enums';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
@@ -39,6 +39,10 @@ export default function SignUpStepTwo() {
     await handleSignUpLogic(data, formData, dispatch, router, setLoading);
   };
 
+  useEffect(() => {
+    console.log('formData : ', formData);
+  }, [formData]);
+
   return (
     <form
       onSubmit={handleSubmit(signUp)}
@@ -48,7 +52,7 @@ export default function SignUpStepTwo() {
         label='학번'
         register={register}
         registerName='studentNumber'
-        placeholder='ex)202010955'
+        placeholder='202512345'
         errorMessage={errors.studentNumber?.message}
       />
       <div className='text-[red] text-[9px] text-center'>

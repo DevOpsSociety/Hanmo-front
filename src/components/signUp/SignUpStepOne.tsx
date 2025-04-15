@@ -38,7 +38,7 @@ export default function SignUpStepOne(): JSX.Element {
   };
 
   return (
-    <div className='flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]'>
+    <div className='w-[393px] mx-auto flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]'>
       <Link href='/landing'>
         <Image
           src={LogoImg}
@@ -49,7 +49,7 @@ export default function SignUpStepOne(): JSX.Element {
       </Link>
 
       <form
-        className='w-[393px] px-[56px] flex flex-col gap-4 mx-auto'
+        className='  flex flex-col gap-4 mx-auto'
         onSubmit={handleSubmit(verificationVisible ? verifyCode : sendCode)}
       >
         {/* 이름 */}
@@ -57,7 +57,7 @@ export default function SignUpStepOne(): JSX.Element {
           label='이름 입력'
           register={register}
           registerName='name'
-          placeholder='이름을 입력해주세요'
+          placeholder='김한모'
           errorMessage={errors.name?.message}
         />
 
@@ -66,7 +66,7 @@ export default function SignUpStepOne(): JSX.Element {
           label='휴대전화'
           register={register}
           registerName='phoneNumber'
-          placeholder='휴대폰 번호를 입력해주세요'
+          placeholder='01012345678'
           errorMessage={errors.phoneNumber?.message}
         />
 
@@ -102,6 +102,9 @@ export default function SignUpStepOne(): JSX.Element {
           )}
         </div>
       </form>
+      <Link href='/restore' className='text-center mt-20 underline'>
+        3일 이내 탈퇴한 회원은 여기를 눌러주세요.
+      </Link>
     </div>
   );
 }

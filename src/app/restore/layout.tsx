@@ -1,0 +1,30 @@
+import { Metadata } from 'next';
+import { Toaster } from 'react-hot-toast';
+import MotionWrapper from '../../components/MotionWrapper';
+import PageHeader from '../../components/PageHeader';
+import SignUpProviders from '../../components/provider/SignUpProviders';
+
+export const metadata: Metadata = {
+  title: '한모 탈퇴복원',
+  description: '한모 탈퇴복원 페이지',
+};
+
+export default function SignupLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang='en'>
+      <body style={{ overflow: 'hidden' }}>
+        <SignUpProviders>
+          <PageHeader title='탈퇴복원' />
+          <MotionWrapper>
+            <Toaster position='bottom-center' reverseOrder={false} />
+            {children}
+          </MotionWrapper>
+        </SignUpProviders>
+      </body>
+    </html>
+  );
+}
