@@ -39,8 +39,8 @@ export default function MatchingPage() {
       });
       setMatchingData(response.data);
       setErrorMessage(null);
-      console.log("Response:", response);
       console.log("대기등록 완료!");
+      alert("대기등록이 완료됐어요!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
