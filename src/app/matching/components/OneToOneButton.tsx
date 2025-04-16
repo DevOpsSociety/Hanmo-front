@@ -1,6 +1,7 @@
 "use client";
 import styles from "./buttons.module.css";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface OneToOneButtonProps {
   onClick: () => void;
@@ -11,9 +12,12 @@ export default function OneToOneButton({
   onClick,
   errorMessage,
 }: OneToOneButtonProps) {
+  const router = useRouter();
+
   useEffect(() => {
     if (errorMessage) {
-      alert(errorMessage);
+      alert(errorMessage); // 모달로 수정하기
+      router.back();
     }
   }, [errorMessage]);
 

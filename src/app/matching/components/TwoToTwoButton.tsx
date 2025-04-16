@@ -1,6 +1,7 @@
 "use client";
 import styles from "./buttons.module.css";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface TwoToTwoButtonProps {
   onClick: () => void;
@@ -11,9 +12,11 @@ export default function TwoToTwoButton({
   onClick,
   errorMessage,
 }: TwoToTwoButtonProps) {
+  const router = useRouter();
   useEffect(() => {
     if (errorMessage) {
-      alert(errorMessage);
+      alert(errorMessage); // 모달로 수정하기
+      router.back();
     }
   }, []);
   return (

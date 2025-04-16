@@ -31,7 +31,7 @@ export default function LandingPage() {
       <div className={styles.btnsContainer}>
         <Link
           href="/login"
-          className={`${styles.btns} ${styles.btn_l} ${styles.mansehFont}`}
+          className={`${styles.btns} ${styles.btn_l} font-[manseh]`}
         >
           매칭
           <br />
@@ -39,7 +39,7 @@ export default function LandingPage() {
         </Link>
         <Link
           href="/signup/1"
-          className={`${styles.btns} ${styles.btn_r} ${styles.mansehFont}`}
+          className={`${styles.btns} ${styles.btn_r}  font-[manseh]`}
         >
           회원
           <br />

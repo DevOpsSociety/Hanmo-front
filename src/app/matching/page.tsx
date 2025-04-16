@@ -8,55 +8,21 @@ import TwoToTwoButton from "./components/TwoToTwoButton";
 import axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
 
-type MatchedUser = {
+interface MatchedUser {
   nickname: string;
   instagramId: string;
-};
+}
 
-type ApiResponse = {
+interface ApiResponse {
   matchedUsers: MatchedUser[];
   matchingType: "ONE_TO_ONE" | "TWO_TO_TWO";
   code: string;
   message: string;
-};
+}
 
 export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handleOneToOneMatch = async () => {
-    const temptoken = localStorage.getItem("token");
-    if (!temptoken) {
-      return console.error("토큰이 없습니다.");
-    }
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/one-to-one`;
-    console.log("URL:", url);
-    try {
-      const response = await axios.post(url, null, {
-        headers: {
-          tempToken: temptoken,
-        },
-      });
-      setMatchingData(response.data);
-      setErrorMessage(null);
-      console.log("Response:", response);
-      console.log("대기등록 완료!");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        if (status === 400) {
-          setErrorMessage("매칭 상대를 찾는 중이에요!");
-        } else if (status === 409) {
-          setErrorMessage("이미 매칭된 유저입니다.");
-        } else {
-          setErrorMessage("알 수 없는 오류가 발생했습니다.");
-        }
-        console.error("에러:", error);
-      } else {
-        console.error("예기치 못한 에러:", error);
-      }
-    }
-  };
 
   const handleMatch = async (type: "one-to-one" | "two-to-two") => {
     const temptoken = localStorage.getItem("token");
@@ -93,7 +59,7 @@ export default function MatchingPage() {
   };
 
   return (
-    <div className={`styles.container font-[nexon]`}>
+    <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
