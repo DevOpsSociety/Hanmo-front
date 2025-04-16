@@ -1,0 +1,22 @@
+.btns {
+  width: 280px;
+  height: 43px;
+  border-radius: 10px;
+  border: 1px #04447c solid;
+  color: #04447c;
+}
+.btns:hover {
+  background-color: #04447c;
+  color: #ffffff;
+}
+
+.btns2 {
+  background-color: #04447c;
+  color: #ffffff;
+}
+
+.btns2:hover {
+  background-color: #ffffff;
+  color: #04447c;
+  border: 1px #04447c solid;
+}

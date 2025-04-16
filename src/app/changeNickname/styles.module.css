@@ -3,14 +3,15 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding-top: 110px;
 }
 .charContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 90px;
-  gap: 10px;
+  gap: 2rem;
+  padding-top: 100px;
 }
 
 .speechBubble {

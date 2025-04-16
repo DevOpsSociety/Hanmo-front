@@ -4,16 +4,21 @@ import styles from "./styled.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-type MatchUser = {
+interface MatchResponse {
+  matchingType: "ONE_TO_ONE";
+  users: MatchedUser[];
+}
+interface MatchedUser {
   nickname: string;
   name: string;
   instagramId: string;
-};
+}
 
 export default function OneToOneResultPage() {
-  const [matchedUser, setMatchedUser] = useState<MatchUser[] | null>();
+  const [matchedUser, setMatchedUser] = useState<MatchResponse | null>();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,21 +37,33 @@ export default function OneToOneResultPage() {
         });
         setMatchedUser(response.data);
         console.log("Response:", response);
-      } catch (e) {
-        console.log("에러: ", e);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          if (status === 400) {
+            alert("매칭상대가 없어요!");
+            router.back();
+          } else {
+            console.log("status is ", status);
+            alert(status + "에러입니다.");
+            router.back();
+          }
+          console.log("에러: ", error);
+        }
       }
     };
     fetchData();
   }, []);
   return (
-    <div className={`${styles.wrapper} ${styles.pretendardFont}`}>
+    <div className={`${styles.wrapper} font-[nexon]`}>
       <div className={styles.topMiddleWrapper}>
         <div className={styles.top}>
-          <div className={`${styles.매칭완료} ${styles.mansehFont}`}>
-            매칭완료!
-          </div>
+          <div className={`${styles.매칭완료} font-[manseh]`}>매칭완료!</div>
           <div className={styles.nicknameWrapper}>
-            <div className={styles.nickname}>api로 받아온 닉네임</div>님
+            <div className={`${styles.nickname} font-[nexonbold]`}>
+              {matchedUser?.users?.[0].nickname}
+            </div>
+            님
           </div>
           <div className={styles.디엠방}>디엠방을 만들어주세요!</div>
         </div>
@@ -61,8 +78,10 @@ export default function OneToOneResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[0]?.nickname}</div>
-              <div> {matchedUser?.[0]?.instagramId}</div>
+              <div className="font-black">
+                {matchedUser?.users?.[0].nickname}
+              </div>
+              <div> @{matchedUser?.users?.[0].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
@@ -73,8 +92,10 @@ export default function OneToOneResultPage() {
                 height={0}
                 sizes="100vw"
               />
-              <div> {matchedUser?.[1]?.nickname}</div>
-              <div> {matchedUser?.[1]?.instagramId}</div>
+              <div className={styles.BoldFont}>
+                {matchedUser?.users?.[1].nickname}
+              </div>
+              <div> @{matchedUser?.users?.[1].instagramId}</div>
             </div>
           </div>
         </div>
@@ -92,7 +113,6 @@ export default function OneToOneResultPage() {
         </div>
         <div className={styles.boxWrapper}>
           <button>
-            {" "}
             <Image
               className={styles.warningBtn}
               src="/images/matchingPage/warning.png"
@@ -100,7 +120,7 @@ export default function OneToOneResultPage() {
               width={0}
               height={0}
               sizes="100vw"
-            />{" "}
+            />
           </button>
           <div> 절대 누르지 마세요!</div>
         </div>

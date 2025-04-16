@@ -22,7 +22,7 @@
 }
 
 .매칭완료 {
-  font-size: 36px;
+  font-size: 40px;
   padding: 1rem;
 }
 
@@ -73,7 +73,6 @@
 
 /* bottom 영역 */
 .bottom {
-  /* background-image: url("/images/matchingPage/background1.png"); */
   background-color: #9eccf3;
   border-top-left-radius: 80% 40%;
   border-top-right-radius: 80% 40%;
@@ -113,11 +112,14 @@
   font-weight: 400;
 }
 
-.pretendardBoldFont {
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-}
-
 .mansehFont {
   font-family: var(--font-manseh);
+}
+
+.nexonFont {
+  font-family: var(--font-nexon);
+}
+
+.BoldFont {
+  font-weight: 900;
 }

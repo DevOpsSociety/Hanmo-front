@@ -1,36 +1,40 @@
-'use client';
+"use client";
 
-import styles from './styles.module.css';
-import Image from 'next/image';
-import HanmoHeader from '../../components/HanmoHeader/HanmoHeader';
-import Link from 'next/link';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import logoutIcon from '../../../public/logout.png';
-import withdrawIcon from '../../../public/withdrawIcon.png';
-// import { useRouter } from "next/router";
+import styles from "./styles.module.css";
+import Image from "next/image";
+import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import Link from "next/link";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import logoutIcon from "../../../public/logout.png";
+import withdrawIcon from "../../../public/withdrawIcon.png";
+import { useRouter } from "next/navigation";
 
-// import fetchUserProfile from "@/api/usersProfile";
-
-type UserProfile = {
+interface UserProfile {
   nickname: string;
-};
+}
+
+interface MatchingType {
+  matchingType: string;
+}
 
 export default function MainPage() {
   const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
-
+  const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
+    null
+  );
   useEffect(() => {
     const fetchData = async () => {
-      const temptoken = localStorage.getItem('token');
+      const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
-        console.error('토큰이 없습니다.');
+        console.error("토큰이 없습니다.");
         return;
       }
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
-      console.log('API URL:', url);
-      console.log('토큰:', temptoken);
+      console.log("API URL:", url);
+      console.log("토큰:", temptoken);
 
       try {
         const response = await axios.get(url, {
@@ -39,37 +43,81 @@ export default function MainPage() {
           },
         });
         setMainPageData(response.data);
-        console.log('Response:', response);
+        console.log("Response:", response);
       } catch (e) {
-        console.log('에러: ', e);
+        console.log("에러: ", e);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const router = useRouter();
+  // const query = `?nickname=${mainPageData?.nickname}`;
+
+  const handleMoveToResultPage = () => {
+    const nickname = mainPageData?.nickname;
+    if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
+      router.push(`/matchingResult?nickname=${nickname}`);
+    } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
+      router.push(`/oneToOneResult?nickname=${nickname}`);
+    } else {
+      alert("매칭 타입이 올바르지 않습니다.");
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const temptoken = localStorage.getItem("token");
+
+      if (!temptoken) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
+
+      const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/result`;
+      console.log("API URL:", url);
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            tempToken: temptoken,
+          },
+        });
+        setMatchingTypeData(response.data);
+        console.log("Response:", response);
+      } catch (e) {
+        console.log("에러: ", e);
       }
     };
     fetchData();
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
           className={styles.logo}
-          src='/images/mainchar_wink.png'
-          alt='한모'
+          src="/images/mainchar_wink.png"
+          alt="한모"
           width={0}
           height={0}
-          sizes='100vw' // 이거 없으면 화질깨짐
+          sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <div className={`${styles.contents} ${styles.pretendardFont}`}>
+      <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          {`"${mainPageData?.nickname}"`}님
+          <div
+            className={`font-[nexonbold]`}
+          >{`"${mainPageData?.nickname}"`}</div>
+          님
         </div>
         <div>좋은 하루 보내세요</div>
+        <div>{matchingTypeData?.matchingType}</div>
       </div>
-      <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
+      <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
           href={{
-            pathname: '/matching',
+            pathname: "/matching",
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
@@ -81,29 +129,32 @@ export default function MainPage() {
         </button>
         <Link
           href={{
-            pathname: '/matchingResult',
+            pathname: "/oneToOneResult",
             query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
         >
-          매칭 결과 보러 가볼까~?
+          매칭 결과 보러가기!
         </Link>
+        <button onClick={handleMoveToResultPage} className={styles.btns}>
+          매칭 결과 보러가기 업데이트 ver
+        </button>
       </div>
-      <div className='w-96 h-20 flex justify-center gap-40 mt-8'>
-        <Link href='/landing' className=''>
+      <div className="w-96 h-20 flex justify-center gap-40 mt-8">
+        <Link href="/landing" className="">
           <Image
             src={logoutIcon}
-            alt='로그아웃'
+            alt="로그아웃"
             width={66}
             height={70}
             onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('nickname');
+              localStorage.removeItem("token");
+              localStorage.removeItem("nickname");
             }}
           />
         </Link>
-        <Link href='/withdraw' className=''>
-          <Image src={withdrawIcon} alt='회원탈퇴' width={66} height={70} />
+        <Link href="/withdraw" className="">
+          <Image src={withdrawIcon} alt="회원탈퇴" width={66} height={70} />
         </Link>
       </div>
     </div>

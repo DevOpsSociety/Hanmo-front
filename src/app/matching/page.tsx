@@ -3,10 +3,59 @@
 import styles from "./styles.module.css";
 import Image from "next/image";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import OneToOneButton from "./components/OneToOneButton";
+import TwoToTwoButton from "./components/TwoToTwoButton";
+import axios, { AxiosError } from "axios";
+import { useState, useEffect } from "react";
+
+interface MatchedUser {
+  nickname: string;
+  instagramId: string;
+}
+
+interface ApiResponse {
+  matchedUsers: MatchedUser[];
+  matchingType: "ONE_TO_ONE" | "TWO_TO_TWO";
+  code: string;
+  message: string;
+}
 
 export default function MatchingPage() {
+  const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleMatch = async (type: "one-to-one" | "two-to-two") => {
+    const temptoken = localStorage.getItem("token");
+    if (!temptoken) {
+      return console.error("토큰이 없습니다.");
+    }
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
+    console.log("URL:", url);
+    try {
+      const response = await axios.post(url, null, {
+        headers: {
+          tempToken: temptoken,
+        },
+      });
+      setMatchingData(response.data);
+      setErrorMessage(null);
+      console.log("Response:", response);
+      onmessage = response?.data?.message;
+      console.log(onmessage);
+      alert("대기등록이 완료됐습니다!");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const dataErrorMessage = error.response?.data?.errorMessage;
+        setErrorMessage(dataErrorMessage || "알 수 없는 오류가 발생했습니다.");
+        console.error("에러:", error);
+      } else {
+        console.error("예기치 못한 에러:", error);
+      }
+    }
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
       <div className={styles.down}>
         <Image
@@ -18,15 +67,19 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <div className={`${styles.contents} ${styles.pretendardFont}`}>
+      <div className={`${styles.contents} `}>
         <div>매칭을 시작하세요!</div>
       </div>
-      <div className={`${styles.btns묶음} ${styles.mansehFont}`}>
-        <button className={styles.btns}>랜덤 친구 뽑기(1:1)</button>
-        <button className={`${styles.btns} ${styles.btns2}`}>
-          랜덤 과팅 (2:2)
-        </button>
-        <div className={`${styles.info} ${styles.mansehFont}`}>
+      <div className={`${styles.btns묶음} font-[manseh]`}>
+        <OneToOneButton
+          onClick={() => handleMatch("one-to-one")}
+          errorMessage={errorMessage}
+        />
+        <TwoToTwoButton
+          onClick={() => handleMatch("two-to-two")}
+          errorMessage={errorMessage}
+        />
+        <div className={`${styles.info} font-[manseh]`}>
           *1:1 매 칭은 동성 한명과, <br /> 2:2 매칭은 남녀 각각 2명씩 <br /> 총
           4명으로 이루어집니다. <br />
           <br /> 매칭하시고 부스 방문하시면 <br />
