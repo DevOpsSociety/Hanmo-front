@@ -72,40 +72,42 @@ export default function NicknamePage() {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <HanmoHeader />
-      <div className={styles.charContainer}>
-        <Image
-          className={styles.speechBubble}
-          src="/images/nicknamePage1.png"
-          alt="바꿀 기회는 1번입니다."
-          width={0}
-          height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
-        />
-        <Image
-          className={styles.mainchar}
-          src="/images/mainchar_smile.png"
-          alt="한모"
-          width={0}
-          height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
-        />
+      <div className={styles.container}>
+        <div className={styles.charContainer}>
+          <Image
+            className={styles.speechBubble}
+            src="/images/nicknamePage1.png"
+            alt="바꿀 기회는 1번입니다."
+            width={0}
+            height={0}
+            sizes="100vw" // 이거 없으면 화질깨짐
+          />
+          <Image
+            className={styles.mainchar}
+            src="/images/mainchar_smile.png"
+            alt="한모"
+            width={0}
+            height={0}
+            sizes="100vw" // 이거 없으면 화질깨짐
+          />
+        </div>
+        <div className={`${styles.userNickname} font-[nexonbold]`}>
+          {`${nicknamePageData?.nickname}`}
+        </div>
+        <div className={`${styles.btnsContainer} font-[manseh]`}>
+          <button
+            onClick={handleNicknameChange}
+            className={`${styles.btns} ${styles.btn_l}`}
+          >
+            변경
+          </button>
+          <Link href="/main" className={`${styles.btns} ${styles.btn_r}`}>
+            좋아
+          </Link>
+        </div>
       </div>
-      <div className={`${styles.userNickname} ${styles.pretendardFont}`}>
-        {`"${nicknamePageData?.nickname}"`}
-      </div>
-      <div className={`${styles.btnsContainer} ${styles.mansehFont}`}>
-        <button
-          onClick={handleNicknameChange}
-          className={`${styles.btns} ${styles.btn_l}`}
-        >
-          변경
-        </button>
-        <Link href="/main" className={`${styles.btns} ${styles.btn_r}`}>
-          좋아
-        </Link>
-      </div>
-    </div>
+    </>
   );
 }

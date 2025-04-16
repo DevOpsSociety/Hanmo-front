@@ -4,7 +4,6 @@ import styles from "./styled.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface MatchResponse {
@@ -46,7 +45,7 @@ export default function OneToOneResultPage() {
             router.back();
           } else {
             console.log("status is ", status);
-            alert("에러!!!!");
+            alert(status + "에러입니다.");
             router.back();
           }
           console.log("에러: ", error);

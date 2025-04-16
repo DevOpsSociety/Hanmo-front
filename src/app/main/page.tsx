@@ -8,14 +8,21 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import logoutIcon from "../../../public/logout.png";
 import withdrawIcon from "../../../public/withdrawIcon.png";
+import { useRouter } from "next/navigation";
 
 interface UserProfile {
   nickname: string;
 }
 
+interface MatchingType {
+  matchingType: string;
+}
+
 export default function MainPage() {
   const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
-
+  const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
+    null
+  );
   useEffect(() => {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
@@ -36,6 +43,45 @@ export default function MainPage() {
           },
         });
         setMainPageData(response.data);
+        console.log("Response:", response);
+      } catch (e) {
+        console.log("에러: ", e);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const router = useRouter();
+  const query = `?nickname=${mainPageData?.nickname}`;
+
+  const handleMoveToResultPage = () => {
+    if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
+      router.push(`/matchingResult${query}`);
+    } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
+      router.push(`/oneToOneResult${query}`);
+    } else {
+      alert("매칭 타입이 올바르지 않습니다.");
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const temptoken = localStorage.getItem("token");
+
+      if (!temptoken) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
+
+      const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/result`;
+      console.log("API URL:", url);
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            tempToken: temptoken,
+          },
+        });
+        setMatchingTypeData(response.data);
         console.log("Response:", response);
       } catch (e) {
         console.log("에러: ", e);
@@ -65,6 +111,7 @@ export default function MainPage() {
           님
         </div>
         <div>좋은 하루 보내세요</div>
+        <div>{matchingTypeData?.matchingType}</div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
@@ -88,6 +135,9 @@ export default function MainPage() {
         >
           매칭 결과 보러가기!
         </Link>
+        <button onClick={handleMoveToResultPage} className={styles.btns}>
+          매칭 결과 보러가기 업데이트 ver
+        </button>
       </div>
       <div className="w-96 h-20 flex justify-center gap-40 mt-8">
         <Link href="/landing" className="">

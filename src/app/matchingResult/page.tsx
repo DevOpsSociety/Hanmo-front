@@ -4,6 +4,7 @@ import styles from "./styled.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -18,6 +19,7 @@ interface MatchedUser {
 
 export default function MatchingResultPage() {
   const [matchedUser, setMatchedUser] = useState<MatchResponse | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,8 +38,19 @@ export default function MatchingResultPage() {
         });
         setMatchedUser(response.data);
         console.log("Response:", response);
-      } catch (e) {
-        console.log("에러: ", e);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          if (status === 400) {
+            alert("매칭상대가 없어요!");
+            router.back();
+          } else {
+            console.log("status is ", status);
+            alert(status + "에러입니다.");
+            router.back();
+          }
+          console.log("에러: ", error);
+        }
       }
     };
     fetchData();
