@@ -126,9 +126,7 @@ export default function MatchingResultPage() {
         </div>
       </div>
       <div className={styles.bottom}>
-        <div className={`${styles.mansehFont} ${styles.캡쳐}`}>
-          화면을 캡쳐하세요!
-        </div>
+        <div className={`font-[manseh] ${styles.캡쳐}`}>화면을 캡쳐하세요!</div>
         <div className={styles.messageBox}>
           상대방에게 dm을 보내주세요~
           <br />
