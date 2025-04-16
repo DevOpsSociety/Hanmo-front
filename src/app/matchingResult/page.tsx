@@ -82,7 +82,7 @@ export default function MatchingResultPage() {
                 sizes="100vw"
               />
               <div> {matchedUser?.users?.[0].nickname}</div>
-              <div> {matchedUser?.users?.[0].nickname}</div>
+              <div> {matchedUser?.users?.[0].instagramId}</div>
             </div>
             <div className={styles.userProfile}>
               <Image
