@@ -39,15 +39,10 @@ export default function MatchingPage() {
       });
       setMatchingData(response.data);
       setErrorMessage(null);
-<<<<<<< HEAD
-      console.log("대기등록 완료!");
-      alert("대기등록이 완료됐어요!");
-=======
       console.log("Response:", response);
       onmessage = response?.data?.message;
       console.log(onmessage);
       alert("대기등록이 완료됐습니다!");
->>>>>>> yu
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const dataErrorMessage = error.response?.data?.errorMessage;

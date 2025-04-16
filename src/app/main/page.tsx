@@ -52,13 +52,14 @@ export default function MainPage() {
   }, []);
 
   const router = useRouter();
-  const query = `?nickname=${mainPageData?.nickname}`;
+  // const query = `?nickname=${mainPageData?.nickname}`;
 
   const handleMoveToResultPage = () => {
+    const nickname = mainPageData?.nickname;
     if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
-      router.push(`/matchingResult${query}`);
+      router.push(`/matchingResult?nickname=${nickname}`);
     } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
-      router.push(`/oneToOneResult${query}`);
+      router.push(`/oneToOneResult?nickname=${nickname}`);
     } else {
       alert("매칭 타입이 올바르지 않습니다.");
     }
