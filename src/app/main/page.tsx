@@ -60,7 +60,7 @@ export default function MainPage() {
     } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
       router.push(`/oneToOneResult${query}`);
     } else {
-      alert("매칭 타입이 올바르지 않습니다.");
+      alert("음..");
     }
   };
   useEffect(() => {
@@ -111,7 +111,6 @@ export default function MainPage() {
           님
         </div>
         <div>좋은 하루 보내세요</div>
-        <div>{matchingTypeData?.matchingType}</div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
@@ -126,18 +125,11 @@ export default function MainPage() {
         <button className={`${styles.btns} ${styles.btns2}`}>
           게시판보러 가볼까~?
         </button>
-        <Link
-          href={{
-            pathname: "/oneToOneResult",
-            query: { nickname: mainPageData?.nickname },
-          }}
-          className={styles.btns}
-        >
-          매칭 결과 보러가기!
-        </Link>
-        <button onClick={handleMoveToResultPage} className={styles.btns}>
-          매칭 결과 보러가기 업데이트 ver
-        </button>
+        {matchingTypeData?.matchingType && (
+          <button onClick={handleMoveToResultPage} className={styles.btns}>
+            매칭 결과 보러가기 업데이트 ver
+          </button>
+        )}
       </div>
       <div className="w-96 h-20 flex justify-center gap-40 mt-8">
         <Link href="/landing" className="">
