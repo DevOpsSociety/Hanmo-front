@@ -1,4 +1,4 @@
-import api from './axiosInstance';
+import api from "./axiosInstance";
 
 // 1. 간편 회원가입
 export const signUpUser = (payload: {
@@ -10,7 +10,7 @@ export const signUpUser = (payload: {
   department: string;
   instagramId: string;
 }) => {
-  return api.post('/users/signup', payload);
+  return api.post("/users/signup", payload);
 };
 
 // 2. 간편 로그인
@@ -18,12 +18,12 @@ export const loginUser = (payload: {
   phoneNumber: string;
   studentNumber: string;
 }) => {
-  return api.post('/users/login', payload);
+  return api.post("/users/login", payload);
 };
 
 // 3. 1회 닉네임 변경
 export const changeNickname = (nickname: string) => {
-  return api.post('/users/nickname', { nickname });
+  return api.post("/users/nickname", { nickname });
 };
 
 // 4. 회원 탈퇴
@@ -35,7 +35,7 @@ export const deleteUser = (phoneNumber: string) => {
 
 // 5. 유저 조회
 export const findUser = (tempToken: string) => {
-  return api.get('/users/profile', {
+  return api.get("/users/profile", {
     headers: {
       tempToken: tempToken, // Authorization 헤더에 토큰 추가
     },
@@ -48,3 +48,12 @@ export const findUser = (tempToken: string) => {
 //     params: { phoneNumber },
 //   });
 // };
+
+// 7. 로그아웃
+export const logoutUser = (tempToken: string | null) => {
+  return api.post("/users/logout", null, {
+    headers: {
+      tempToken: tempToken, // Authorization 헤더에 토큰 추가
+    },
+  });
+};

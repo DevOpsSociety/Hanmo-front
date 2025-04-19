@@ -49,7 +49,7 @@ export default function SignUpStepOne(): JSX.Element {
       </Link>
 
       <form
-        className='  flex flex-col gap-4 mx-auto'
+        className='px-[56px] flex flex-col gap-4 mx-auto'
         onSubmit={handleSubmit(verificationVisible ? verifyCode : sendCode)}
       >
         {/* 이름 */}
