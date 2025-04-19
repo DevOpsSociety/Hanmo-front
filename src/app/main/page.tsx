@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import logoutIcon from "../../../public/logout.png";
 import withdrawIcon from "../../../public/withdrawIcon.png";
 import { useRouter } from "next/navigation";
+import { logoutUser } from "../../api/user";
 
 interface UserProfile {
   nickname: string;
@@ -147,9 +148,20 @@ export default function MainPage() {
             alt="로그아웃"
             width={66}
             height={70}
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("nickname");
+            onClick={async () => {
+              const tempToken = localStorage.getItem("token");
+              const res = await logoutUser(tempToken);
+              console.log("로그아웃 응답:", res);
+
+              if (res.status === 200) {
+                console.log("로그아웃 성공");
+                localStorage.removeItem("token");
+                localStorage.removeItem("nickname");
+                alert("로그아웃 되었습니다.");
+              } else {
+                console.log("로그아웃 실패");
+                alert("로그아웃에 실패했습니다.");
+              }
             }}
           />
         </Link>
