@@ -24,6 +24,7 @@ export default function MainPage() {
   // const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
   //   null
   // );
+  const [matchingTypeData, setMatchingTypeData] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       const savedNickname = localStorage.getItem("nickname");
@@ -64,8 +65,8 @@ export default function MainPage() {
   // const query = `?nickname=${mainPageData?.nickname}`;
 
   const handleMoveToResultPage = () => {
-    // const nickname = mainPageData?.nickname;
-    const nickname = localStorage.getItem("matchingType");
+    const nickname = mainPageData?.nickname;
+    // const nickname = localStorage.getItem("matchingType");
 
     // if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
     //   router.push(`/matchingResult?nickname=${nickname}`);
@@ -74,9 +75,9 @@ export default function MainPage() {
     // } else {
     //   alert("예상치 못한 에러가 발생했습니다.");
     // }
-    if (nickname === "TWO_TO_TWO") {
+    if (matchingTypeData === "TWO_TO_TWO") {
       router.push(`/matchingResult?nickname=${nickname}`);
-    } else if (nickname === "ONE_TO_ONE") {
+    } else if (matchingTypeData === "ONE_TO_ONE") {
       router.push(`/oneToOneResult?nickname=${nickname}`);
     } else {
       alert("예상치 못한 에러가 발생했습니다.");
@@ -84,10 +85,15 @@ export default function MainPage() {
   };
   useEffect(() => {
     const fetchData = async () => {
+      // const savedMatchingType = matchingTypeData?.matchingType
       const savedMatchingType = localStorage.getItem("matchingType");
+
+      console.log("savedMatchingType:", savedMatchingType);
 
       if (savedMatchingType) {
         console.log("매칭타입:", savedMatchingType);
+        setMatchingTypeData(savedMatchingType);
+        console.log("매칭타입:", matchingTypeData);
         return;
       }
 
@@ -101,21 +107,26 @@ export default function MainPage() {
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/result`;
       console.log("API URL:", url);
 
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            tempToken: temptoken,
-          },
-        });
-        // setMatchingTypeData(response.data);
-        localStorage.setItem("matchingType", response.data.matchingType);
-        console.log("매칭타입 Response:", response);
-      } catch (e) {
-        console.log("에러: ", e);
+      if (!savedMatchingType) {
+        try {
+          const response = await axios.get(url, {
+            headers: {
+              tempToken: temptoken,
+            },
+          });
+          setMatchingTypeData(response.data);
+          localStorage.setItem("matchingType", response.data.matchingType);
+
+          console.log("매칭타입 Response:", response);
+        } catch (e) {
+          console.log("에러: ", e);
+        }
+      } else {
+        console.log("savedMatchingType가 존재합니다.");
       }
     };
     fetchData();
-  }, []);
+  }, [matchingTypeData]);
 
   return (
     <div className={`${styles.container} font-[nexon]`}>
@@ -132,10 +143,7 @@ export default function MainPage() {
       </div>
       <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          <div className={`font-[nexonbold]`}>{`"${localStorage.getItem(
-            "nickname"
-          )}"`}</div>
-          님
+          <div className={`font-[nexonbold]`}>{matchingTypeData}</div>님
         </div>
         <div>좋은 하루 보내세요</div>
       </div>
@@ -157,7 +165,7 @@ export default function MainPage() {
             매칭 결과 보러가기 업데이트 ver
           </button>
         )} */}
-        {localStorage.getItem("matchingType") && (
+        {matchingTypeData && (
           <button onClick={handleMoveToResultPage} className={styles.btns}>
             매칭 결과 보러가기
           </button>
