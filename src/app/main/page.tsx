@@ -15,17 +15,24 @@ interface UserProfile {
   nickname: string;
 }
 
-interface MatchingType {
-  matchingType: string;
-}
+// interface MatchingType {
+//   matchingType: string;
+// }
 
 export default function MainPage() {
   const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
-  const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
-    null
-  );
+  // const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
+  //   null
+  // );
   useEffect(() => {
     const fetchData = async () => {
+      const savedNickname = localStorage.getItem("nickname");
+
+      if (savedNickname) {
+        console.log("닉네임:", savedNickname);
+        return;
+      }
+
       const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
@@ -44,7 +51,8 @@ export default function MainPage() {
           },
         });
         setMainPageData(response.data);
-        console.log("Response:", response);
+        localStorage.setItem("nickname", response.data.nickname);
+        console.log("first Response:", response);
       } catch (e) {
         console.log("에러: ", e);
       }
@@ -56,10 +64,19 @@ export default function MainPage() {
   // const query = `?nickname=${mainPageData?.nickname}`;
 
   const handleMoveToResultPage = () => {
-    const nickname = mainPageData?.nickname;
-    if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
+    // const nickname = mainPageData?.nickname;
+    const nickname = localStorage.getItem("matchingType");
+
+    // if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
+    //   router.push(`/matchingResult?nickname=${nickname}`);
+    // } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
+    //   router.push(`/oneToOneResult?nickname=${nickname}`);
+    // } else {
+    //   alert("예상치 못한 에러가 발생했습니다.");
+    // }
+    if (nickname === "TWO_TO_TWO") {
       router.push(`/matchingResult?nickname=${nickname}`);
-    } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
+    } else if (nickname === "ONE_TO_ONE") {
       router.push(`/oneToOneResult?nickname=${nickname}`);
     } else {
       alert("예상치 못한 에러가 발생했습니다.");
@@ -67,6 +84,13 @@ export default function MainPage() {
   };
   useEffect(() => {
     const fetchData = async () => {
+      const savedMatchingType = localStorage.getItem("matchingType");
+
+      if (savedMatchingType) {
+        console.log("매칭타입:", savedMatchingType);
+        return;
+      }
+
       const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
@@ -83,8 +107,9 @@ export default function MainPage() {
             tempToken: temptoken,
           },
         });
-        setMatchingTypeData(response.data);
-        console.log("Response:", response);
+        // setMatchingTypeData(response.data);
+        localStorage.setItem("matchingType", response.data.matchingType);
+        console.log("매칭타입 Response:", response);
       } catch (e) {
         console.log("에러: ", e);
       }
@@ -107,9 +132,9 @@ export default function MainPage() {
       </div>
       <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          <div
-            className={`font-[nexonbold]`}
-          >{`"${mainPageData?.nickname}"`}</div>
+          <div className={`font-[nexonbold]`}>{`"${localStorage.getItem(
+            "nickname"
+          )}"`}</div>
           님
         </div>
         <div>좋은 하루 보내세요</div>
@@ -127,9 +152,14 @@ export default function MainPage() {
         <button className={`${styles.btns} ${styles.btns2}`}>
           게시판보러 가볼까~?
         </button>
-        {matchingTypeData?.matchingType && (
+        {/* {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={styles.btns}>
             매칭 결과 보러가기 업데이트 ver
+          </button>
+        )} */}
+        {localStorage.getItem("matchingType") && (
+          <button onClick={handleMoveToResultPage} className={styles.btns}>
+            매칭 결과 보러가기
           </button>
         )}
       </div>
