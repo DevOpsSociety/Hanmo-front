@@ -50,6 +50,7 @@ const PostsPage: React.FC = () => {
 
           if (res.status === 200) {
             console.log("게시글 불러오기 성공:", res.data.content);
+            console.log("전체 res:", res);
             setPosts(res.data.content); // 응답 형식에 따라 조정 필요
           }
         } catch (err) {
@@ -96,6 +97,9 @@ const PostsPage: React.FC = () => {
     const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
     if (tempToken) {
       try {
+        console.log("id:", id);
+        console.log("tempToken:", tempToken);
+
         const res = await deletePost(tempToken, id); // 게시글 삭제 API 호출 (예시로 ID 1 삭제)
         if (res.status === 200) {
           console.log("게시글 삭제 성공:", res.data);
