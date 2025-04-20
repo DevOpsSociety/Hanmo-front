@@ -53,7 +53,7 @@ export default function MainPage() {
             tempToken: temptoken,
           },
         });
-        setMainPageData(response.data);
+        setMainPageData(response.data.nickname);
         localStorage.setItem("nickname", response.data.nickname);
         console.log("first Response:", response);
       } catch (e) {
@@ -86,6 +86,11 @@ export default function MainPage() {
       alert("예상치 못한 에러가 발생했습니다.");
     }
   };
+
+  const handleMoveToPostsPage = () => {
+    router.push(`/posts`);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       // const savedMatchingType = matchingTypeData?.matchingType
@@ -160,7 +165,10 @@ export default function MainPage() {
         >
           매칭하러 가볼까~?
         </Link>
-        <button className={`${styles.btns} ${styles.btns2}`}>
+        <button
+          onClick={handleMoveToPostsPage}
+          className={`${styles.btns} ${styles.btns2}`}
+        >
           게시판보러 가볼까~?
         </button>
         {/* {matchingTypeData?.matchingType && (
@@ -190,6 +198,7 @@ export default function MainPage() {
                 console.log("로그아웃 성공");
                 localStorage.removeItem("token");
                 localStorage.removeItem("nickname");
+                localStorage.removeItem("matchingType");
                 alert("로그아웃 되었습니다.");
               } else {
                 console.log("로그아웃 실패");
