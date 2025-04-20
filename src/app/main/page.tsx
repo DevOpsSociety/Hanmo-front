@@ -11,19 +11,20 @@ import withdrawIcon from "../../../public/withdrawIcon.png";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "../../api/user";
 
-interface UserProfile {
-  nickname: string;
-}
+// interface UserProfile {
+//   nickname: string;
+// }
 
 // interface MatchingType {
 //   matchingType: string;
 // }
 
 export default function MainPage() {
-  const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
+  // const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
   // const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
   //   null
   // );
+  const [mainPageData, setMainPageData] = useState("");
   const [matchingTypeData, setMatchingTypeData] = useState("");
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +32,7 @@ export default function MainPage() {
 
       if (savedNickname) {
         console.log("닉네임:", savedNickname);
+        setMainPageData(savedNickname);
         return;
       }
 
@@ -65,7 +67,8 @@ export default function MainPage() {
   // const query = `?nickname=${mainPageData?.nickname}`;
 
   const handleMoveToResultPage = () => {
-    const nickname = mainPageData?.nickname;
+    const nickname = mainPageData;
+    // const nickname = mainPageData?.nickname;
     // const nickname = localStorage.getItem("matchingType");
 
     // if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
@@ -143,7 +146,7 @@ export default function MainPage() {
       </div>
       <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          <div className={`font-[nexonbold]`}>{matchingTypeData}</div>님
+          <div className={`font-[nexonbold]`}>{mainPageData}</div>님
         </div>
         <div>좋은 하루 보내세요</div>
       </div>
@@ -151,7 +154,7 @@ export default function MainPage() {
         <Link
           href={{
             pathname: "/matching",
-            query: { nickname: mainPageData?.nickname },
+            query: { nickname: mainPageData },
           }}
           className={styles.btns}
         >
