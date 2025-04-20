@@ -114,7 +114,7 @@ export default function MainPage() {
               tempToken: temptoken,
             },
           });
-          setMatchingTypeData(response.data);
+          setMatchingTypeData(response.data.matchingType);
           localStorage.setItem("matchingType", response.data.matchingType);
 
           console.log("매칭타입 Response:", response);
