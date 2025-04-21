@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { findUser } from "../../api/user";
 import Image from "next/image";
 import leftBtn from "../../../public/leftButton.png";
@@ -13,14 +13,20 @@ const PostsPage: React.FC = () => {
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [posts, setPosts] = useState<{ nickName: string; content: string }[]>(
-    []
-  );
+  const [posts, setPosts] = useState<
+    { nickName: string; id: number; content: string }[]
+  >([]);
+
+  const pageNumber = useRef(0);
+  const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
+
+  const userNickName = localStorage.getItem("nickname"); // 로컬스토리지에서 닉네임 가져오기
+
+  const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
 
   useEffect(() => {
     console.log("PostsPage useEffect 실행");
     const checkToken = async () => {
-      const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
       console.log("tempToken:", tempToken);
       if (tempToken) {
         try {
@@ -37,43 +43,97 @@ const PostsPage: React.FC = () => {
     };
 
     checkToken();
-  }, [router]);
+  }, [router, tempToken]);
 
   useEffect(() => {
-    const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
     const fetchPosts = async () => {
-      if (tempToken) {
-        try {
-          const res = await getPosts(tempToken, 0, 5); // 예시 API
+      if (!tempToken) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
 
-          console.log("res:", res.data);
+      try {
+        const res = await getPosts(tempToken, 0);
 
-          if (res.status === 200) {
-            console.log("게시글 불러오기 성공:", res.data.content);
-            console.log("전체 res:", res);
-            setPosts(res.data.content); // 응답 형식에 따라 조정 필요
-          }
-        } catch (err) {
-          console.error("게시글 불러오기 실패:", err);
+        console.log("res:", res.data);
+
+        if (res.status === 200) {
+          console.log("게시글 불러오기 성공:", res.data.content);
+          console.log("전체 res:", res);
+
+          setPosts(res.data.content); // 응답 형식에 따라 조정 필요
+          totalPage.current = res.data.totalPages; // 전체 페이지 수 저장
         }
+      } catch (err) {
+        console.error("게시글 불러오기 실패:", err);
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [tempToken]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = async () => {
     console.log("이전 페이지로 이동");
+
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+
+    if (pageNumber.current <= 0) {
+      console.error("첫 페이지입니다.");
+      return;
+    }
+
+    try {
+      const res = await getPosts(tempToken, --pageNumber.current); // 다음 페이지 API 호출
+
+      if (res.status === 200) {
+        console.log("게시글 불러오기 성공:", res.data.content);
+        setPosts(res.data.content); // 응답 형식에 따라 조정 필요
+      } else {
+        console.error("게시글 불러오기 실패:", res.data);
+      }
+    } catch (error) {
+      console.error("다음 페이지 불러오기 에러:", error);
+    }
   };
 
-  const handleNextPage = () => {
+  const handleNextPage = async () => {
     console.log("다음 페이지로 이동");
+
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+
+    if (pageNumber.current >= totalPage.current - 1) {
+      console.error("마지막 페이지입니다.");
+      return;
+    }
+
+    try {
+      const res = await getPosts(tempToken, ++pageNumber.current); // 다음 페이지 API 호출
+
+      if (res.status === 200) {
+        console.log("게시글 불러오기 성공:", res.data.content);
+        setPosts(res.data.content); // 응답 형식에 따라 조정 필요
+        console.log("pageNumber.current:", pageNumber.current);
+      } else {
+        console.error("게시글 불러오기 실패:", res.data);
+      }
+    } catch (error) {
+      console.error("다음 페이지 불러오기 에러:", error);
+    }
   };
 
   const handleCreatePost = async () => {
     console.log("게시글 작성하기");
 
-    const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
+    if (!content) {
+      console.error("게시글 내용을 입력해주세요.");
+      return;
+    }
 
     if (tempToken) {
       try {
@@ -93,40 +153,44 @@ const PostsPage: React.FC = () => {
 
   const handleDeletePost = async (id: number) => {
     console.log("게시글 삭제하기");
-    // 삭제 로직 구현 필요
-    const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
-    if (tempToken) {
-      try {
-        console.log("id:", id);
-        console.log("tempToken:", tempToken);
 
-        const res = await deletePost(tempToken, id); // 게시글 삭제 API 호출 (예시로 ID 1 삭제)
-        if (res.status === 200) {
-          console.log("게시글 삭제 성공:", res.data);
-        } else {
-          console.error("게시글 삭제 실패:", res.data);
-        }
-      } catch (error) {
-        console.error("게시글 삭제 에러:", error);
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+
+    try {
+      console.log("id:", id);
+      console.log("tempToken:", tempToken);
+
+      const res = await deletePost(tempToken, id); // 게시글 삭제 API 호출 (예시로 ID 1 삭제)
+      if (res.status === 200) {
+        console.log("게시글 삭제 성공:", res.data);
+      } else {
+        console.error("게시글 삭제 실패:", res.data);
       }
+    } catch (error) {
+      console.error("게시글 삭제 에러:", error);
     }
   };
 
   return (
-    <div className="w-[393px] h-[calc(100dvh-137px)] mx-auto flex flex-col gap-4 justify-between font-[Pretendard]">
-      <div className="flex flex-col gap-6 px-4">
+    <div className="w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 justify-between font-[Pretendard]">
+      <div className="flex flex-col gap-4 px-6">
         {posts.map((post, index) => (
-          <div key={index} className="h-[75px] w-full">
+          <div key={post.id} className="h-[75px] w-full">
             <div className="flex items-center gap-3">
               <span className="font-bold">
-                {/* {index} */}
+                {/* {post.id} */}
                 {post.nickName}
               </span>
               {/* 시간 추가할 건지 의논 후 추가하기 */}
               {/* <span className="text-xs">2025.04.04 16:42</span> */}
-              <button onClick={() => handleDeletePost(index)}>
-                <Image src={deleteBtn} alt="삭제 버튼" />
-              </button>
+              {post.nickName === userNickName && (
+                <button onClick={() => handleDeletePost(post.id)}>
+                  <Image src={deleteBtn} alt="삭제 버튼" />
+                </button>
+              )}
             </div>
             <div
               className={`w-fit border rounded-bl-[20px] rounded-br-[20px] rounded-tr-[20px] rounded-tl-none p-3 text-lg font-semibold  ${
@@ -138,7 +202,7 @@ const PostsPage: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-col w-full gap-10">
+      <div className="flex flex-col w-full gap-10 relative">
         <div className="flex justify-center gap-20">
           <button onClick={handlePrevPage}>
             <Image src={leftBtn} alt="왼쪽 버튼" />

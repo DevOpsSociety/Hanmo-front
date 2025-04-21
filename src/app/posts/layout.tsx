@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import PostsImg from "../../../public/commentHeader.png";
+import HanmoIcon from "../../../public/commentImg1.png";
+import commentImg from "../../../public/commentImg2.png";
 
 export default function PostsLayout({
   children,
@@ -8,12 +9,17 @@ export default function PostsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <header className="h-[110px] w-full mb-[27px]">
+    <div className="overflow-hidden">
+      <header className="h-[110px] w-full mt-5 flex justify-center items-center relative">
         <Image
-          src={PostsImg}
+          src={HanmoIcon}
           alt="Comment Header"
-          className="w-[190px] h-[110px] mx-auto"
+          className="w-[84px] h-[66px]"
+        />
+        <Image
+          src={commentImg}
+          alt="Comment Header"
+          className="w-[100px] h-[66px] absolute left-1/2 translate-x-[50px] top-0"
         />
       </header>
       {children}
