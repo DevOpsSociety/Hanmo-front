@@ -8,6 +8,8 @@ import leftBtn from "../../../public/leftButton.png";
 import rightBtn from "../../../public/rightButton.png";
 import deleteBtn from "../../../public/deleteButton.png";
 import { createPost, deletePost, getPosts } from "../../api/post";
+import axios from "axios";
+import MotionWrapper from "../../components/MotionWrapper";
 
 const PostsPage: React.FC = () => {
   const router = useRouter();
@@ -28,16 +30,20 @@ const PostsPage: React.FC = () => {
     console.log("PostsPage useEffect 실행");
     const checkToken = async () => {
       console.log("tempToken:", tempToken);
-      if (tempToken) {
-        try {
-          const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
-          if (res.status !== 200) {
-            router.push("/main"); // 토큰이 유효하면 main으로 리다이렉트
-          }
-        } catch (error) {
-          console.error("유효하지 않은 토큰:", error);
+
+      if (!tempToken) {
+        console.error("토큰이 없습니다.");
+        router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+        return;
+      }
+
+      try {
+        const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
+        if (res.status !== 200) {
+          router.push("/main"); // 토큰이 유효하면 main으로 리다이렉트
         }
-      } else {
+      } catch (error) {
+        console.error("유효하지 않은 토큰:", error);
         router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
       }
     };
@@ -124,6 +130,8 @@ const PostsPage: React.FC = () => {
       }
     } catch (error) {
       console.error("다음 페이지 불러오기 에러:", error);
+      // 이전, 다음 페이지 클릭 시 토큰 만료되면 로그인페이지로 리다이렉트 코드 추가
+      // 구분 방법은? 에러 코드? 아니면 시간 직접 비교 체크? 5분을?
     }
   };
 
@@ -146,6 +154,9 @@ const PostsPage: React.FC = () => {
           console.error("게시글 작성 실패:", res.data);
         }
       } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.response?.data.errorMessage);
+        }
         console.error("게시글 작성 에러:", error);
       }
     }
@@ -175,34 +186,37 @@ const PostsPage: React.FC = () => {
   };
 
   return (
-    <div className="w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 justify-between font-[Pretendard]">
-      <div className="flex flex-col gap-4 px-6">
-        {posts.map((post, index) => (
-          <div key={post.id} className="h-[75px] w-full">
-            <div className="flex items-center gap-3">
-              <span className="font-bold">
-                {/* {post.id} */}
-                {post.nickName}
-              </span>
-              {/* 시간 추가할 건지 의논 후 추가하기 */}
-              {/* <span className="text-xs">2025.04.04 16:42</span> */}
-              {post.nickName === userNickName && (
-                <button onClick={() => handleDeletePost(post.id)}>
-                  <Image src={deleteBtn} alt="삭제 버튼" />
-                </button>
-              )}
+    <div className="w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
+      <MotionWrapper>
+        <div className="flex flex-col gap-6 px-6">
+          {posts.map((post, index) => (
+            <div key={post.id}>
+              <div className="flex items-center gap-3">
+                <span className="font-bold">
+                  {/* {post.id} */}
+                  {post.nickName}
+                </span>
+                {/* 시간 추가할 건지 의논 후 추가하기 */}
+                {/* <span className="text-xs">2025.04.04 16:42</span> */}
+                {post.nickName === userNickName && (
+                  <button onClick={() => handleDeletePost(post.id)}>
+                    <Image src={deleteBtn} alt="삭제 버튼" />
+                  </button>
+                )}
+              </div>
+              <div
+                className={`w-fit border rounded-bl-[20px] rounded-br-[20px] rounded-tr-[20px] rounded-tl-none p-3 text-sm font-semibold  ${
+                  index % 2 ? "bg-[#1D5789] text-white" : "bg-[#AACCEC]"
+                }`}
+              >
+                {post.content}
+                {/* 일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오 */}
+              </div>
             </div>
-            <div
-              className={`w-fit border rounded-bl-[20px] rounded-br-[20px] rounded-tr-[20px] rounded-tl-none p-3 text-lg font-semibold  ${
-                index % 2 ? "bg-[#1D5789] text-white" : "bg-[#AACCEC]"
-              }`}
-            >
-              {post.content}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-col w-full gap-10 relative">
+          ))}
+        </div>
+      </MotionWrapper>
+      <div className="flex flex-col w-full gap-10 absolute bottom-0">
         <div className="flex justify-center gap-20">
           <button onClick={handlePrevPage}>
             <Image src={leftBtn} alt="왼쪽 버튼" />
@@ -214,7 +228,7 @@ const PostsPage: React.FC = () => {
         <div className="grid grid-cols-6 h-[75px] items-center py-3 bg-[#D9D9D9] gap-4 px-4">
           <input
             type="text"
-            placeholder="댓글을 작성해주세요."
+            placeholder="댓글을 작성해주세요. (최대 35자)"
             className="col-span-5 rounded-2xl h-full px-4"
             value={content}
             onChange={(e) => setContent(e.target.value)}
