@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function MotionWrapper({
   children,
@@ -8,11 +8,11 @@ export default function MotionWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <AnimatePresence mode='wait'>
+    <AnimatePresence mode="wait">
       <motion.div
-        initial='initial'
-        animate='in'
-        exit='out'
+        initial="initial"
+        animate="in"
+        exit="out"
         transition={{ duration: 1 }}
         variants={{
           initial: {
