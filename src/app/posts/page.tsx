@@ -7,7 +7,8 @@ import Image from "next/image";
 import leftBtn from "../../../public/leftButton.png";
 import rightBtn from "../../../public/rightButton.png";
 import deleteBtn from "../../../public/deleteButton.png";
-import { createPost, deletePost, getPosts } from "../../api/post";
+import editBtn from "../../../public/edit.png";
+import { createPost, deletePost, editPost, getPosts } from "../../api/post";
 import axios from "axios";
 import MotionWrapper from "../../components/MotionWrapper";
 
@@ -19,12 +20,33 @@ const PostsPage: React.FC = () => {
     { nickName: string; id: number; content: string }[]
   >([]);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editPostId, setEditPostId] = useState<number | null>(null);
+
   const pageNumber = useRef(0);
   const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
 
   const userNickName = localStorage.getItem("nickname"); // 로컬스토리지에서 닉네임 가져오기
 
   const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
+
+  const fetchPosts = async () => {
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+      return;
+    }
+
+    try {
+      const res = await getPosts(tempToken, pageNumber.current);
+      if (res.status === 200) {
+        setPosts(res.data.content);
+        totalPage.current = res.data.totalPages;
+      }
+    } catch (err) {
+      console.error("게시글 조회 실패:", err);
+    }
+  };
 
   useEffect(() => {
     console.log("PostsPage useEffect 실행");
@@ -52,30 +74,8 @@ const PostsPage: React.FC = () => {
   }, [router, tempToken]);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      if (!tempToken) {
-        console.error("토큰이 없습니다.");
-        return;
-      }
-
-      try {
-        const res = await getPosts(tempToken, 0);
-
-        console.log("res:", res.data);
-
-        if (res.status === 200) {
-          console.log("게시글 불러오기 성공:", res.data.content);
-          console.log("전체 res:", res);
-
-          setPosts(res.data.content); // 응답 형식에 따라 조정 필요
-          totalPage.current = res.data.totalPages; // 전체 페이지 수 저장
-        }
-      } catch (err) {
-        console.error("게시글 불러오기 실패:", err);
-      }
-    };
-
-    fetchPosts();
+    console.log("PostsPage useEffect 실행");
+    fetchPosts(); // 컴포넌트가 마운트될 때 게시글을 불러옴
   }, [tempToken]);
 
   const handlePrevPage = async () => {
@@ -136,15 +136,34 @@ const PostsPage: React.FC = () => {
   };
 
   const handleCreatePost = async () => {
-    console.log("게시글 작성하기");
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
 
     if (!content) {
       console.error("게시글 내용을 입력해주세요.");
       return;
     }
 
-    if (tempToken) {
-      try {
+    console.log(isEditing, editPostId);
+
+    try {
+      if (isEditing !== false && editPostId !== null) {
+        // 수정 로직
+        console.log("게시글 수정하기");
+        const res = await editPost(tempToken, content, editPostId);
+        if (res.status === 200) {
+          console.log("게시글 수정 성공");
+          setIsEditing(false);
+          setEditPostId(null);
+          setContent(""); // 입력 필드 초기화
+        } else {
+          console.error("게시글 수정 실패:", res.data);
+        }
+      } else {
+        console.log("게시글 작성하기");
+
         const res = await createPost(tempToken, content); // 게시글 작성 API 호출
 
         if (res.status === 200) {
@@ -153,13 +172,28 @@ const PostsPage: React.FC = () => {
         } else {
           console.error("게시글 작성 실패:", res.data);
         }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error(error.response?.data.errorMessage);
-        }
-        console.error("게시글 작성 에러:", error);
       }
+
+      await fetchPosts(); // 게시글 작성 후 게시글 목록 다시 불러오기
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.errorMessage);
+      }
+      console.error("게시글 작성 에러:", error);
     }
+  };
+
+  const handleEditPost = (id: number, content: string) => {
+    console.log("게시글 수정하기");
+
+    if (!tempToken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+
+    setContent(content); // 인풋창에 기존 내용 표시
+    setEditPostId(id); // 수정 중인 게시글 ID 저장
+    setIsEditing(true); // 수정 모드 진입
   };
 
   const handleDeletePost = async (id: number) => {
@@ -177,6 +211,7 @@ const PostsPage: React.FC = () => {
       const res = await deletePost(tempToken, id); // 게시글 삭제 API 호출 (예시로 ID 1 삭제)
       if (res.status === 200) {
         console.log("게시글 삭제 성공:", res.data);
+        await fetchPosts(); // 게시글 작성 후 게시글 목록 다시 불러오기
       } else {
         console.error("게시글 삭제 실패:", res.data);
       }
@@ -199,9 +234,24 @@ const PostsPage: React.FC = () => {
                 {/* 시간 추가할 건지 의논 후 추가하기 */}
                 {/* <span className="text-xs">2025.04.04 16:42</span> */}
                 {post.nickName === userNickName && (
-                  <button onClick={() => handleDeletePost(post.id)}>
-                    <Image src={deleteBtn} alt="삭제 버튼" />
-                  </button>
+                  <>
+                    <button
+                      onClick={() => handleEditPost(post.id, post.content)}
+                    >
+                      <Image
+                        src={editBtn}
+                        alt="수정 버튼"
+                        className="w-[20px] h-[20px]"
+                      />
+                    </button>
+                    <button onClick={() => handleDeletePost(post.id)}>
+                      <Image
+                        src={deleteBtn}
+                        alt="삭제 버튼"
+                        className="w-[20px] h-[20px]"
+                      />
+                    </button>
+                  </>
                 )}
               </div>
               <div
@@ -210,7 +260,7 @@ const PostsPage: React.FC = () => {
                 }`}
               >
                 {post.content}
-                {/* 일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오 */}
+                {/* 일이삼사오일이삼사오일이삼사오일이삼사오일이삼사오 */}
               </div>
             </div>
           ))}
@@ -228,7 +278,7 @@ const PostsPage: React.FC = () => {
         <div className="grid grid-cols-6 h-[75px] items-center py-3 bg-[#D9D9D9] gap-4 px-4">
           <input
             type="text"
-            placeholder="댓글을 작성해주세요. (최대 35자)"
+            placeholder="댓글을 작성해주세요. (최대 20자)"
             className="col-span-5 rounded-2xl h-full px-4"
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -237,7 +287,7 @@ const PostsPage: React.FC = () => {
             onClick={handleCreatePost}
             className="col-span-1 border border-black h-full rounded-2xl font-[manseh] text-xl"
           >
-            등록
+            {isEditing ? "수정" : "등록"}
           </button>
         </div>
       </div>

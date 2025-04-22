@@ -34,3 +34,19 @@ export const deletePost = (tempToken: string, postId: number) => {
     },
   });
 };
+
+export const editPost = (
+  tempToken: string,
+  content: string,
+  postId: number
+) => {
+  return api.put(
+    `/posts/${postId}`,
+    { content },
+    {
+      headers: {
+        tempToken: tempToken, // Authorization 헤더에 토큰 추가
+      },
+    }
+  );
+};
