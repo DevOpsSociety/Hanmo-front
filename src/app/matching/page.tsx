@@ -41,7 +41,6 @@ export default function MatchingPage() {
       setErrorMessage(null);
       console.log("Response:", response);
       onmessage = response?.data?.message;
-      console.log(onmessage);
       alert("대기등록이 완료됐습니다!");
     } catch (error) {
       if (axios.isAxiosError(error)) {

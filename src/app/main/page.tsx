@@ -16,6 +16,7 @@ interface UserProfile {
 }
 
 interface MatchingType {
+  userStatus: string;
   matchingType: string;
 }
 
@@ -24,6 +25,8 @@ export default function MainPage() {
   const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
     null
   );
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
@@ -65,6 +68,7 @@ export default function MainPage() {
       alert("예상치 못한 에러가 발생했습니다.");
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
@@ -85,12 +89,41 @@ export default function MainPage() {
         });
         setMatchingTypeData(response.data);
         console.log("Response:", response);
-      } catch (e) {
-        console.log("에러: ", e);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const dataErrorCode = error.response?.data?.errorCode;
+          console.error("에러:", error);
+          console.error("에러코드: ", dataErrorCode);
+          setErrorCode(dataErrorCode || null); // 상태 저장
+        } else {
+          console.error("예기치 못한 에러:", error);
+          setErrorCode("UNKNOWN");
+        }
       }
     };
     fetchData();
   }, []);
+
+  const handleCancelMatching = async () => {
+    const temptoken = localStorage.getItem("token");
+    if (!temptoken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+    const cancelUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/cancel`;
+    try {
+      const response = await axios.delete(cancelUrl, {
+        headers: {
+          tempToken: temptoken,
+        },
+      });
+      alert(response.data);
+      console.log(response.data);
+      setErrorCode("404");
+    } catch (e) {
+      console.log("에러: ", e);
+    }
+  };
 
   return (
     <div className={`${styles.container} font-[nexon]`}>
@@ -112,7 +145,7 @@ export default function MainPage() {
           >{`"${mainPageData?.nickname}"`}</div>
           님
         </div>
-        <div>좋은 하루 보내세요</div>
+        <div>좋은 하루 보내세요 </div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
@@ -130,6 +163,11 @@ export default function MainPage() {
         {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={styles.btns}>
             매칭 결과 보러가기 업데이트 ver
+          </button>
+        )}
+        {errorCode === "400" && (
+          <button onClick={handleCancelMatching} className={`${styles.btns}`}>
+            매칭 취소
           </button>
         )}
       </div>
