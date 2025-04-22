@@ -47,6 +47,7 @@ export default function MainPage() {
           },
         });
         setMainPageData(response.data);
+        localStorage.setItem("nickname", response.data.nickname); // 닉네임을 로컬 스토리지에 저장
         console.log("Response:", response);
       } catch (e) {
         console.log("에러: ", e);
@@ -67,6 +68,10 @@ export default function MainPage() {
     } else {
       alert("예상치 못한 에러가 발생했습니다.");
     }
+  };
+
+  const handleMoveToPostPage = () => {
+    router.push("/posts");
   };
 
   useEffect(() => {
@@ -157,7 +162,10 @@ export default function MainPage() {
         >
           매칭하러 가볼까~?
         </Link>
-        <button className={`${styles.btns} ${styles.btns2}`}>
+        <button
+          onClick={handleMoveToPostPage}
+          className={`${styles.btns} ${styles.btns2}`}
+        >
           게시판보러 가볼까~?
         </button>
         {matchingTypeData?.matchingType && (

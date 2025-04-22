@@ -29,15 +29,15 @@ const PostsPage: React.FC = () => {
   const [userNickName, setUserNickName] = useState<string | null>(null);
   const [tempToken, setTempToken] = useState<string | null>(null);
 
-  const fetchPosts = async () => {
-    if (!tempToken) {
-      console.error("토큰이 없습니다.");
-      router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
-      return;
-    }
+  const fetchPosts = async (token: string) => {
+    // if (!tempToken) {
+    //   console.error("토큰이 없습니다.");
+    //   router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+    //   return;
+    // }
 
     try {
-      const res = await getPosts(tempToken, pageNumber.current);
+      const res = await getPosts(token, pageNumber.current);
       if (res.status === 200) {
         setPosts(res.data.content);
         totalPage.current = res.data.totalPages;
@@ -49,23 +49,27 @@ const PostsPage: React.FC = () => {
 
   useEffect(() => {
     console.log("PostsPage useEffect 실행");
+
+    const nickname = localStorage.getItem("nickname");
+    const token = localStorage.getItem("token");
+
+    console.log("nickname:", nickname);
+    console.log("token:", token);
+
+    if (nickname) setUserNickName(nickname);
+    if (token) setTempToken(token);
+
+    console.log("tempToken:", tempToken);
+
+    if (!token) {
+      console.error("토큰이 없습니다.");
+      router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+      return;
+    }
+
     const checkToken = async () => {
-      console.log("tempToken:", tempToken);
-
-      const nickname = localStorage.getItem("nickname");
-      const token = localStorage.getItem("token");
-
-      if (nickname) setUserNickName(nickname);
-      if (token) setTempToken(token);
-
-      if (!tempToken) {
-        console.error("토큰이 없습니다.");
-        router.push("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
-        return;
-      }
-
       try {
-        const res = await findUser(tempToken); // findUser API 호출로 토큰 검증
+        const res = await findUser(token); // findUser API 호출로 토큰 검증
         if (res.status !== 200) {
           router.push("/main"); // 토큰이 유효하면 main으로 리다이렉트
         }
@@ -76,12 +80,12 @@ const PostsPage: React.FC = () => {
     };
 
     checkToken();
-  }, [router, tempToken]);
+    fetchPosts(token); // fetchPosts도 token 인자로 받게 수정
+  }, [router, tempToken, userNickName]);
 
-  useEffect(() => {
-    console.log("PostsPage useEffect 실행");
-    fetchPosts(); // 컴포넌트가 마운트될 때 게시글을 불러옴
-  }, [tempToken]);
+  // useEffect(() => {
+  //   console.log("PostsPage useEffect 실행");
+  // }, [tempToken]);
 
   const handlePrevPage = async () => {
     console.log("이전 페이지로 이동");
@@ -179,7 +183,7 @@ const PostsPage: React.FC = () => {
         }
       }
 
-      await fetchPosts(); // 게시글 작성 후 게시글 목록 다시 불러오기
+      await fetchPosts(tempToken); // 게시글 작성 후 게시글 목록 다시 불러오기
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error.response?.data.errorMessage);
@@ -216,7 +220,7 @@ const PostsPage: React.FC = () => {
       const res = await deletePost(tempToken, id); // 게시글 삭제 API 호출 (예시로 ID 1 삭제)
       if (res.status === 200) {
         console.log("게시글 삭제 성공:", res.data);
-        await fetchPosts(); // 게시글 작성 후 게시글 목록 다시 불러오기
+        await fetchPosts(tempToken); // 게시글 작성 후 게시글 목록 다시 불러오기
       } else {
         console.error("게시글 삭제 실패:", res.data);
       }
