@@ -11,31 +11,24 @@ import withdrawIcon from "../../../public/withdrawIcon.png";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "../../api/user";
 
-// interface UserProfile {
-//   nickname: string;
-// }
+interface UserProfile {
+  nickname: string;
+}
 
-// interface MatchingType {
-//   matchingType: string;
-// }
+interface MatchingType {
+  userStatus: string;
+  matchingType: string;
+}
 
 export default function MainPage() {
-  // const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
-  // const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
-  //   null
-  // );
-  const [mainPageData, setMainPageData] = useState("");
-  const [matchingTypeData, setMatchingTypeData] = useState("");
+  const [mainPageData, setMainPageData] = useState<UserProfile | null>(null);
+  const [matchingTypeData, setMatchingTypeData] = useState<MatchingType | null>(
+    null
+  );
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
-      const savedNickname = localStorage.getItem("nickname");
-
-      if (savedNickname) {
-        console.log("닉네임:", savedNickname);
-        setMainPageData(savedNickname);
-        return;
-      }
-
       const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
@@ -53,9 +46,9 @@ export default function MainPage() {
             tempToken: temptoken,
           },
         });
-        setMainPageData(response.data.nickname);
-        localStorage.setItem("nickname", response.data.nickname);
-        console.log("first Response:", response);
+        setMainPageData(response.data);
+        localStorage.setItem("nickname", response.data.nickname); // 닉네임을 로컬 스토리지에 저장
+        console.log("Response:", response);
       } catch (e) {
         console.log("에러: ", e);
       }
@@ -67,44 +60,22 @@ export default function MainPage() {
   // const query = `?nickname=${mainPageData?.nickname}`;
 
   const handleMoveToResultPage = () => {
-    const nickname = mainPageData;
-    // const nickname = mainPageData?.nickname;
-    // const nickname = localStorage.getItem("matchingType");
-
-    // if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
-    //   router.push(`/matchingResult?nickname=${nickname}`);
-    // } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
-    //   router.push(`/oneToOneResult?nickname=${nickname}`);
-    // } else {
-    //   alert("예상치 못한 에러가 발생했습니다.");
-    // }
-    if (matchingTypeData === "TWO_TO_TWO") {
+    const nickname = mainPageData?.nickname;
+    if (matchingTypeData?.matchingType === "TWO_TO_TWO") {
       router.push(`/matchingResult?nickname=${nickname}`);
-    } else if (matchingTypeData === "ONE_TO_ONE") {
+    } else if (matchingTypeData?.matchingType === "ONE_TO_ONE") {
       router.push(`/oneToOneResult?nickname=${nickname}`);
     } else {
       alert("예상치 못한 에러가 발생했습니다.");
     }
   };
 
-  const handleMoveToPostsPage = () => {
-    router.push(`/posts`);
+  const handleMoveToPostPage = () => {
+    router.push("/posts");
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      // const savedMatchingType = matchingTypeData?.matchingType
-      const savedMatchingType = localStorage.getItem("matchingType");
-
-      console.log("savedMatchingType:", savedMatchingType);
-
-      if (savedMatchingType) {
-        console.log("매칭타입:", savedMatchingType);
-        setMatchingTypeData(savedMatchingType);
-        console.log("매칭타입:", matchingTypeData);
-        return;
-      }
-
       const temptoken = localStorage.getItem("token");
 
       if (!temptoken) {
@@ -115,26 +86,49 @@ export default function MainPage() {
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/result`;
       console.log("API URL:", url);
 
-      if (!savedMatchingType) {
-        try {
-          const response = await axios.get(url, {
-            headers: {
-              tempToken: temptoken,
-            },
-          });
-          setMatchingTypeData(response.data.matchingType);
-          localStorage.setItem("matchingType", response.data.matchingType);
-
-          console.log("매칭타입 Response:", response);
-        } catch (e) {
-          console.log("에러: ", e);
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            tempToken: temptoken,
+          },
+        });
+        setMatchingTypeData(response.data);
+        console.log("Response:", response);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const dataErrorCode = error.response?.data?.errorCode;
+          console.error("에러:", error);
+          console.error("에러코드: ", dataErrorCode);
+          setErrorCode(dataErrorCode || null); // 상태 저장
+        } else {
+          console.error("예기치 못한 에러:", error);
+          setErrorCode("UNKNOWN");
         }
-      } else {
-        console.log("savedMatchingType가 존재합니다.");
       }
     };
     fetchData();
-  }, [matchingTypeData]);
+  }, []);
+
+  const handleCancelMatching = async () => {
+    const temptoken = localStorage.getItem("token");
+    if (!temptoken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+    const cancelUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/cancel`;
+    try {
+      const response = await axios.delete(cancelUrl, {
+        headers: {
+          tempToken: temptoken,
+        },
+      });
+      alert(response.data);
+      console.log(response.data);
+      setErrorCode("404");
+    } catch (e) {
+      console.log("에러: ", e);
+    }
+  };
 
   return (
     <div className={`${styles.container} font-[nexon]`}>
@@ -151,34 +145,37 @@ export default function MainPage() {
       </div>
       <div className={`${styles.contents}`}>
         <div className={`${styles.nickname}`}>
-          <div className={`font-[nexonbold]`}>{mainPageData}</div>님
+          <div
+            className={`font-[nexonbold]`}
+          >{`"${mainPageData?.nickname}"`}</div>
+          님
         </div>
-        <div>좋은 하루 보내세요</div>
+        <div>좋은 하루 보내세요 </div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
           href={{
             pathname: "/matching",
-            query: { nickname: mainPageData },
+            query: { nickname: mainPageData?.nickname },
           }}
           className={styles.btns}
         >
           매칭하러 가볼까~?
         </Link>
         <button
-          onClick={handleMoveToPostsPage}
+          onClick={handleMoveToPostPage}
           className={`${styles.btns} ${styles.btns2}`}
         >
           게시판보러 가볼까~?
         </button>
-        {/* {matchingTypeData?.matchingType && (
-          <button onClick={handleMoveToResultPage} className={styles.btns}>
-            매칭 결과 보러가기 업데이트 ver
-          </button>
-        )} */}
-        {matchingTypeData && (
+        {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={styles.btns}>
             매칭 결과 보러가기
+          </button>
+        )}
+        {errorCode === "400" && (
+          <button onClick={handleCancelMatching} className={`${styles.btns}`}>
+            매칭 취소
           </button>
         )}
       </div>
@@ -198,7 +195,6 @@ export default function MainPage() {
                 console.log("로그아웃 성공");
                 localStorage.removeItem("token");
                 localStorage.removeItem("nickname");
-                localStorage.removeItem("matchingType");
                 alert("로그아웃 되었습니다.");
               } else {
                 console.log("로그아웃 실패");

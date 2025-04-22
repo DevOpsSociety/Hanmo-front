@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { symbol } from "zod";
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -54,6 +55,7 @@ export default function OneToOneResultPage() {
     };
     fetchData();
   }, []);
+
   return (
     <div className={`${styles.wrapper} font-[nexon]`}>
       <div className={styles.topMiddleWrapper}>
@@ -112,17 +114,20 @@ export default function OneToOneResultPage() {
           화면을 보여주시고 상품추첨하세요!
         </div>
         <div className={styles.boxWrapper}>
-          <button>
+          <button className={styles.warningBtn}>
             <Image
-              className={styles.warningBtn}
+              className={styles.btnImg}
               src="/images/matchingPage/warning.png"
               alt="프로필1"
               width={0}
               height={0}
               sizes="100vw"
             />
+            <div>매칭취소</div>
           </button>
-          <div> 절대 누르지 마세요!</div>
+          <div className={styles.cancelInfo}>
+            매칭 취소시 30분 간 매칭이 불가능합니다.
+          </div>
         </div>
       </div>
     </div>

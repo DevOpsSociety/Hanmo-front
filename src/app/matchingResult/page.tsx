@@ -55,6 +55,7 @@ export default function MatchingResultPage() {
     };
     fetchData();
   }, []);
+
   return (
     <div className={`${styles.wrapper} ${styles.pretendardFont}`}>
       <div className={styles.topMiddleWrapper}>
