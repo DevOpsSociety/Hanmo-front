@@ -162,7 +162,7 @@ export default function MainPage() {
         </button>
         {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={styles.btns}>
-            매칭 결과 보러가기 업데이트 ver
+            매칭 결과 보러가기
           </button>
         )}
         {errorCode === "400" && (
