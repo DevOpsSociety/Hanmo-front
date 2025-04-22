@@ -1,24 +1,24 @@
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import toast from 'react-hot-toast';
-import { loginUser, deleteUser, signUpUser } from '../api/user';
-import { delay } from './delay';
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import toast from "react-hot-toast";
+import { loginUser, deleteUser, signUpUser } from "../api/user";
+import { delay } from "./delay";
 import {
   restoreSendCode,
   restoreVerifyCode,
   sendCode,
   verifyCode,
-} from '../api/sms';
-import { StepOneForm } from '../schemas/stepOneSchema';
-import { AppDispatch } from '../store';
+} from "../api/sms";
+import { StepOneForm } from "../schemas/stepOneSchema";
+import { AppDispatch } from "../store";
 import {
   resetForm,
   SignUpFormData,
   updateFormData,
-} from '../store/signUpSlice';
-import { handleToastError } from './errorHandlers';
-import { StepTwoForm } from '../schemas/stepTwoSchema';
-import { LoginForm } from '../schemas/loginSchema';
-import { RestoreForm } from '../schemas/restoreSchema';
+} from "../store/signUpSlice";
+import { handleToastError } from "./errorHandlers";
+import { StepTwoForm } from "../schemas/stepTwoSchema";
+import { LoginForm } from "../schemas/loginSchema";
+import { RestoreForm } from "../schemas/restoreSchema";
 
 export async function handleLoginLogic(
   data: LoginForm,
@@ -28,12 +28,12 @@ export async function handleLoginLogic(
   const { studentNumber, phoneNumber } = data;
 
   if (!studentNumber || !phoneNumber) {
-    toast.error('모든 항목을 입력해주세요.');
+    toast.error("모든 항목을 입력해주세요.");
     return;
   }
 
   try {
-    toast.loading('로그인 중...');
+    toast.loading("로그인 중...");
 
     await delay(1000); // 1초 대기
 
@@ -41,12 +41,12 @@ export async function handleLoginLogic(
     toast.dismiss();
 
     if (res.status === 200) {
-      toast.success('로그인 성공!');
+      toast.success("로그인 성공!");
       await delay(1000); // 1초 대기
-      localStorage.setItem('token', res.headers.temptoken);
+      localStorage.setItem("token", res.headers.temptoken);
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
     } else {
-      toast.error('로그인 실패');
+      toast.error("로그인 실패");
       return res;
       // onError?.('로그인 실패: 정보를 확인해주세요.');
     }
@@ -62,7 +62,7 @@ export async function handleWithdrawLogic(
   redirectPath: string
 ) {
   try {
-    toast.loading('탈퇴 중...');
+    toast.loading("탈퇴 중...");
 
     await delay(1000);
 
@@ -70,15 +70,17 @@ export async function handleWithdrawLogic(
 
     if (res.status === 200) {
       toast.dismiss();
-      toast.success('탈퇴 완료!');
+      toast.success("탈퇴 완료!");
       await delay(1000);
-      toast('다시 또 만나요!!');
+      toast("다시 또 만나요!!");
       await delay(2000);
 
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
+      localStorage.removeItem("nickname");
+      localStorage.removeItem("matchingType");
       router.push(redirectPath);
     } else {
-      toast.error('탈퇴 실패: 정보를 확인해주세요.');
+      toast.error("탈퇴 실패: 정보를 확인해주세요.");
     }
   } catch (err) {
     toast.dismiss();
@@ -93,10 +95,10 @@ export const handleSendCodeLogic = async (
   const { phoneNumber } = data;
 
   try {
-    toast.loading('인증번호 전송 중...');
+    toast.loading("인증번호 전송 중...");
     await sendCode(phoneNumber);
     toast.dismiss();
-    toast.success('인증번호가 전송되었습니다.');
+    toast.success("인증번호가 전송되었습니다.");
     setVerificationVisible(true);
   } catch (err) {
     toast.dismiss();
@@ -112,12 +114,12 @@ export const handleVerifyCodeLogic = async (
   const { name, phoneNumber, authNumber } = data;
 
   if (!authNumber) {
-    toast.error('인증번호를 입력해주세요.');
+    toast.error("인증번호를 입력해주세요.");
     return;
   }
 
   try {
-    toast.loading('인증번호 확인 중...');
+    toast.loading("인증번호 확인 중...");
 
     await delay(1000); // 1초 대기
 
@@ -125,13 +127,13 @@ export const handleVerifyCodeLogic = async (
 
     if (res.status === 200) {
       toast.dismiss();
-      toast.success('인증 성공!');
+      toast.success("인증 성공!");
       dispatch(updateFormData({ name, phoneNumber }));
       await delay(1000); // 1초 대기
-      router.push('/signup/2');
+      router.push("/signup/2");
     } else {
       toast.dismiss();
-      toast.error('인증 실패');
+      toast.error("인증 실패");
     }
   } catch (err) {
     toast.dismiss();
@@ -158,11 +160,11 @@ export async function handleSignUpLogic(
     phoneNumber: formData.phoneNumber as string,
   };
 
-  console.log('payload', payload);
+  console.log("payload", payload);
 
   try {
     setLoading(true);
-    toast.loading('가입 중...');
+    toast.loading("가입 중...");
 
     await delay(1000); // 1초 대기
 
@@ -170,7 +172,7 @@ export async function handleSignUpLogic(
 
     if (res.status === 200) {
       toast.dismiss();
-      toast.success('가입 완료! 🎉');
+      toast.success("가입 완료! 🎉");
       await delay(1000); // 1초 대기
 
       const loginRes = await loginUser({
@@ -179,23 +181,23 @@ export async function handleSignUpLogic(
       });
 
       if (loginRes.status === 200) {
-        localStorage.setItem('token', loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
+        localStorage.setItem("token", loginRes.headers.temptoken); // 필요 시 저장 위치 변경 가능
 
         dispatch(resetForm());
-        router.push('/nickname');
+        router.push("/nickname");
       } else {
-        toast.error('로그인에 실패했습니다.');
+        toast.error("로그인에 실패했습니다.");
       }
     } else if (res.status === 409) {
       toast.dismiss();
-      toast.error('이미 등록된 회원입니다.');
+      toast.error("이미 등록된 회원입니다.");
     } else {
       toast.dismiss();
-      toast.error('STATUS CODE : ' + res.status);
+      toast.error("STATUS CODE : " + res.status);
     }
   } catch (err) {
     toast.dismiss();
-    console.error('회원가입 실패:', err);
+    console.error("회원가입 실패:", err);
     handleToastError(err);
   } finally {
     setLoading(false);
@@ -207,13 +209,13 @@ export async function handleRestoreSendCodeLogic(
   setVerificationVisible: (visible: boolean) => void
 ) {
   try {
-    toast.loading('인증번호 요청 중...');
+    toast.loading("인증번호 요청 중...");
 
     await delay(1000);
 
     const sendRes = await restoreSendCode(phoneNumber);
 
-    console.log('복원 요청 응답:', sendRes);
+    console.log("복원 요청 응답:", sendRes);
 
     if (sendRes.status === 200) {
       toast.dismiss();
@@ -233,7 +235,7 @@ export async function handleRestoreSendCodeLogic(
     // }
   } catch (err) {
     toast.dismiss();
-    console.error('복원 요청 실패:', err);
+    console.error("복원 요청 실패:", err);
     handleToastError(err);
   }
 }
@@ -245,12 +247,12 @@ export async function handleRestoreVerifyCodeLogic(
   const { authNumber } = data;
 
   if (!authNumber) {
-    toast.error('인증번호를 입력해주세요.');
+    toast.error("인증번호를 입력해주세요.");
     return;
   }
 
   try {
-    toast.loading('인증번호 확인 중...');
+    toast.loading("인증번호 확인 중...");
 
     await delay(1000); // 1초 대기
 
@@ -258,18 +260,18 @@ export async function handleRestoreVerifyCodeLogic(
 
     if (res.status === 200) {
       toast.dismiss();
-      toast.success('복구 성공!');
+      toast.success("복구 성공!");
       await delay(1000); // 1초 대기
       toast.dismiss();
-      toast('잠시 후 로그인 페이지로 이동합니다');
+      toast("잠시 후 로그인 페이지로 이동합니다");
 
       await delay(1000); // 1초 대기
       toast.dismiss();
 
-      router.push('/login');
+      router.push("/login");
     } else {
       toast.dismiss();
-      toast.error('인증 실패');
+      toast.error("인증 실패");
     }
   } catch (err) {
     toast.dismiss();
