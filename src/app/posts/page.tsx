@@ -29,6 +29,8 @@ const PostsPage: React.FC = () => {
   const [userNickName, setUserNickName] = useState<string | null>(null);
   const [tempToken, setTempToken] = useState<string | null>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const fetchPosts = async (token: string) => {
     // if (!tempToken) {
     //   console.error("토큰이 없습니다.");
@@ -203,6 +205,8 @@ const PostsPage: React.FC = () => {
     setContent(content); // 인풋창에 기존 내용 표시
     setEditPostId(id); // 수정 중인 게시글 ID 저장
     setIsEditing(true); // 수정 모드 진입
+
+    inputRef.current?.focus(); // 인풋창에 포커스
   };
 
   const handleDeletePost = async (id: number) => {
@@ -291,6 +295,7 @@ const PostsPage: React.FC = () => {
             className="col-span-5 rounded-2xl h-full px-4"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            ref={inputRef}
           />
           <button
             onClick={handleCreatePost}
