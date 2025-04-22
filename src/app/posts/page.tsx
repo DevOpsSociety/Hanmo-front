@@ -26,9 +26,8 @@ const PostsPage: React.FC = () => {
   const pageNumber = useRef(0);
   const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
 
-  const userNickName = localStorage.getItem("nickname"); // 로컬스토리지에서 닉네임 가져오기
-
-  const tempToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
+  const [userNickName, setUserNickName] = useState<string | null>(null);
+  const [tempToken, setTempToken] = useState<string | null>(null);
 
   const fetchPosts = async () => {
     if (!tempToken) {
@@ -52,6 +51,12 @@ const PostsPage: React.FC = () => {
     console.log("PostsPage useEffect 실행");
     const checkToken = async () => {
       console.log("tempToken:", tempToken);
+
+      const nickname = localStorage.getItem("nickname");
+      const token = localStorage.getItem("token");
+
+      if (nickname) setUserNickName(nickname);
+      if (token) setTempToken(token);
 
       if (!tempToken) {
         console.error("토큰이 없습니다.");
