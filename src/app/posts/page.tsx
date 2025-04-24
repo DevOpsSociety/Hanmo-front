@@ -23,8 +23,12 @@ const PostsPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editPostId, setEditPostId] = useState<number | null>(null);
 
-  const pageNumber = useRef(0);
-  const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
+  // const pageNumber = useRef(0);
+  // const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
+
+  const [firstPageNumber, setFirstPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [lastPageNumber, setLastPageNumber] = useState(0);
 
   const [userNickName, setUserNickName] = useState<string | null>(null);
   const [tempToken, setTempToken] = useState<string | null>(null);
@@ -39,10 +43,15 @@ const PostsPage: React.FC = () => {
     // }
 
     try {
-      const res = await getPosts(token, pageNumber.current);
+      const res = await getPosts(token, pageNumber);
+
+      console.log("게시글 조회 성공:", res);
+
       if (res.status === 200) {
         setPosts(res.data.content);
-        totalPage.current = res.data.totalPages;
+        setFirstPageNumber(res.data.pageNumber);
+        setPageNumber(res.data.pageNumber); // 현재 페이지 번호 저장
+        setLastPageNumber(res.data.totalPages); // 전체 페이지 수 저장
       }
     } catch (err) {
       console.error("게시글 조회 실패:", err);
@@ -97,16 +106,17 @@ const PostsPage: React.FC = () => {
       return;
     }
 
-    if (pageNumber.current <= 0) {
+    if (pageNumber <= 0) {
       console.error("첫 페이지입니다.");
       return;
     }
 
     try {
-      const res = await getPosts(tempToken, --pageNumber.current); // 다음 페이지 API 호출
+      const res = await getPosts(tempToken, pageNumber - 1); // 다음 페이지 API 호출
 
       if (res.status === 200) {
         console.log("게시글 불러오기 성공:", res.data.content);
+        setPageNumber((prev) => prev - 1); // 페이지 번호 감소
         setPosts(res.data.content); // 응답 형식에 따라 조정 필요
       } else {
         console.error("게시글 불러오기 실패:", res.data);
@@ -124,18 +134,19 @@ const PostsPage: React.FC = () => {
       return;
     }
 
-    if (pageNumber.current >= totalPage.current - 1) {
+    if (pageNumber >= lastPageNumber - 1) {
       console.error("마지막 페이지입니다.");
       return;
     }
 
     try {
-      const res = await getPosts(tempToken, ++pageNumber.current); // 다음 페이지 API 호출
+      const res = await getPosts(tempToken, pageNumber + 1); // 다음 페이지 API 호출
 
       if (res.status === 200) {
         console.log("게시글 불러오기 성공:", res.data.content);
         setPosts(res.data.content); // 응답 형식에 따라 조정 필요
-        console.log("pageNumber.current:", pageNumber.current);
+        setPageNumber((prev) => prev + 1); // 페이지 번호 증가
+        // console.log("pageNumber.current:", pageNumber + 1);
       } else {
         console.error("게시글 불러오기 실패:", res.data);
       }
@@ -234,9 +245,9 @@ const PostsPage: React.FC = () => {
   };
 
   return (
-    <div className="w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
+    <div className="max-w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
       <MotionWrapper>
-        <div className="flex flex-col gap-6 px-6">
+        <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-[calc(100dvh-300px)]">
           {posts.map((post, index) => (
             <div key={post.id}>
               <div className="flex items-center gap-3">
@@ -280,13 +291,18 @@ const PostsPage: React.FC = () => {
         </div>
       </MotionWrapper>
       <div className="flex flex-col w-full gap-10 absolute bottom-0">
-        <div className="flex justify-center gap-20">
-          <button onClick={handlePrevPage}>
-            <Image src={leftBtn} alt="왼쪽 버튼" />
-          </button>
-          <button onClick={handleNextPage}>
-            <Image src={rightBtn} alt="오른쪽 버튼" />
-          </button>
+        <div className="flex justify-center gap-10 items-center font-[manseh] text-xl font-bold px-6">
+          <span>{firstPageNumber + 1} ~</span>
+          <div className="flex gap-6 items-center">
+            <button onClick={handlePrevPage}>
+              <Image src={leftBtn} alt="왼쪽 버튼" />
+            </button>
+            <span>{pageNumber + 1}</span>
+            <button onClick={handleNextPage}>
+              <Image src={rightBtn} alt="오른쪽 버튼" />
+            </button>
+          </div>
+          <span>~ {lastPageNumber}</span>
         </div>
         <div className="grid grid-cols-6 h-[75px] items-center py-3 bg-[#D9D9D9] gap-4 px-4">
           <input
