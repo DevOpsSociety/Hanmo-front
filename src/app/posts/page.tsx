@@ -304,7 +304,7 @@ const PostsPage: React.FC = () => {
           </div>
           <span>~ {lastPageNumber}</span>
         </div>
-        <div className="grid grid-cols-6 h-[75px] items-center py-3 bg-[#D9D9D9] gap-4 px-4">
+        <div className="grid grid-cols-6 h-[75px] items-center py-3 bg-[#D9D9D9] gap-4 px-4 rounded-t-2xl">
           <input
             type="text"
             placeholder="댓글을 작성해주세요. (최대 20자)"
