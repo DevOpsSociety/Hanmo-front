@@ -247,7 +247,7 @@ const PostsPage: React.FC = () => {
   return (
     <div className="max-w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
       <MotionWrapper>
-        <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-[calc(100dvh-300px)]">
+        <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-[calc(100dvh-270px)]">
           {posts.map((post, index) => (
             <div key={post.id}>
               <div className="flex items-center gap-3">
@@ -290,7 +290,7 @@ const PostsPage: React.FC = () => {
           ))}
         </div>
       </MotionWrapper>
-      <div className="flex flex-col w-full gap-10 absolute bottom-0">
+      <div className="flex flex-col w-full gap-3 absolute bottom-0">
         <div className="flex justify-center gap-10 items-center font-[manseh] text-xl font-bold px-6">
           <span>{firstPageNumber + 1} ~</span>
           <div className="flex gap-6 items-center">
