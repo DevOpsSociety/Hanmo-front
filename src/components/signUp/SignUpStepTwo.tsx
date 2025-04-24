@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
-import { Gender, MBTI, Department } from '../../enums';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { enumToOptions, objectEnumToOptions } from '../../utils/enumToOptions';
-import { RootState } from '../../store';
-import { useRouter } from 'next/navigation';
-import { StepTwoForm, stepTwoSchema } from '../../schemas/stepTwoSchema';
-import ErrorMessage from '../ErrorMessage';
-import { borderClass, labelClass } from '../../utils/classNames';
-import { handleSignUpLogic } from '../../utils/authHandlers';
-import Input from '../common/Input';
-import Option from '../common/Option';
-import Button from '../common/Button';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { Gender, MBTI, Department } from "../../enums";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { enumToOptions, objectEnumToOptions } from "../../utils/enumToOptions";
+import { RootState } from "../../store";
+import { useRouter } from "next/navigation";
+import { StepTwoForm, stepTwoSchema } from "../../schemas/stepTwoSchema";
+import ErrorMessage from "../ErrorMessage";
+import { borderClass, labelClass } from "../../utils/classNames";
+import { handleSignUpLogic } from "../../utils/authHandlers";
+import Input from "../common/Input";
+import Option from "../common/Option";
+import Button from "../common/Button";
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -33,35 +33,35 @@ export default function SignUpStepTwo() {
     resolver: zodResolver(stepTwoSchema),
   });
 
-  const selectedGender = watch('gender');
+  const selectedGender = watch("gender");
 
   const signUp = async (data: StepTwoForm) => {
     await handleSignUpLogic(data, formData, dispatch, router, setLoading);
   };
 
   useEffect(() => {
-    console.log('formData : ', formData);
+    console.log("formData : ", formData);
   }, [formData]);
 
   return (
     <form
       onSubmit={handleSubmit(signUp)}
-      className={`flex flex-col gap-5 w-[200px] mx-auto h-[calc(100vh-73px)] justify-center ${labelClass}`}
+      className={`flex flex-col gap-5 w-[200px] mx-auto justify-center mt-10 ${labelClass}`}
     >
       <Input
-        label='학번'
+        label="학번"
         register={register}
-        registerName='studentNumber'
-        placeholder='202512345'
+        registerName="studentNumber"
+        placeholder="202512345"
         errorMessage={errors.studentNumber?.message}
       />
-      <div className='text-[red] text-[9px] text-center'>
+      <div className="text-[red] text-[9px] text-center">
         학번은 아이디로 사용되니 정확히 입력해주세요.
       </div>
 
-      <div className='w-full flex flex-col'>
+      <div className="w-full flex flex-col">
         <label>성별</label>
-        <div className='flex justify-between gap-5'>
+        <div className="flex justify-between gap-5">
           {enumToOptions(Gender).map((opt) => {
             const isSelected = selectedGender === String(opt.id);
 
@@ -71,18 +71,18 @@ export default function SignUpStepTwo() {
                 className={`flex-1 text-[24px] text-center border cursor-pointer font-[manSeh] ${borderClass}
         ${
           isSelected
-            ? 'bg-[#04447C] bg-opacity-90 text-white border-none'
-            : 'text-[#2D2D2D] text-opacity-70'
+            ? "bg-[#04447C] bg-opacity-90 text-white border-none"
+            : "text-[#2D2D2D] text-opacity-70"
         }
       `}
               >
                 <input
-                  type='radio'
+                  type="radio"
                   value={opt.id}
-                  {...register('gender')}
-                  className='hidden'
+                  {...register("gender")}
+                  className="hidden"
                 />
-                {opt.label === 'MALE' ? '남' : '여'}
+                {opt.label === "MALE" ? "남" : "여"}
               </label>
             );
           })}
@@ -91,35 +91,35 @@ export default function SignUpStepTwo() {
       </div>
 
       <Option
-        label='MBTI'
+        label="MBTI"
         register={register}
-        registerName='mbti'
+        registerName="mbti"
         enumOptions={enumToOptions(MBTI)}
         errorMessage={errors.mbti?.message}
       />
 
       <Option
-        label='학과'
+        label="학과"
         register={register}
-        registerName='department'
+        registerName="department"
         enumOptions={objectEnumToOptions(Department)}
         errorMessage={errors.department?.message}
       />
 
       <Input
-        label='인스타'
+        label="인스타"
         register={register}
-        registerName='instagramId'
-        placeholder='hsu_it_zzang'
+        registerName="instagramId"
+        placeholder="hsu_it_zzang"
         errorMessage={errors.instagramId?.message}
       />
 
       <Button
-        name={loading ? '가입 중...' : '가입하고 별명짓기'}
-        className={loading ? 'opacity-50 cursor-not-allowed' : '' + 'mt-5'}
+        name={loading ? "가입 중..." : "가입하고 별명짓기"}
+        className={loading ? "opacity-50 cursor-not-allowed" : "" + "mt-5"}
       />
 
-      <p className='text-[10px] font-extrabold'>
+      <p className="text-[10px] font-extrabold">
         ※ 회원정보는 일주일 후에 자동 삭제됩니다.
       </p>
     </form>
