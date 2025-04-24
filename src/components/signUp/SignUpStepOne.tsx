@@ -38,7 +38,7 @@ export default function SignUpStepOne(): JSX.Element {
   };
 
   return (
-    <div className="w-[393px] mx-auto flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]">
+    <div className="max-w-[393px] mx-auto flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]">
       <Link href="/landing">
         <Image
           src={LogoImg}
