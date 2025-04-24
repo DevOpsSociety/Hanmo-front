@@ -123,11 +123,8 @@ export default function OneToOneResultPage() {
               height={0}
               sizes="100vw"
             />
-            <div>매칭취소</div>
+            <div>누르지 마세요!</div>
           </button>
-          <div className={styles.cancelInfo}>
-            매칭 취소시 30분 간 매칭이 불가능합니다.
-          </div>
         </div>
       </div>
     </div>
