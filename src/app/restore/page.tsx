@@ -58,7 +58,7 @@ export default function RestorePage(): JSX.Element {
       onSubmit={handleSubmit(
         verificationVisible ? restoreVerifyCode : restoreSendCode
       )}
-      className={`w-[393px] px-[56px] flex flex-col justify-center gap-4 mx-auto h-[calc(100vh-73px)] font-[Pretendard] ${labelClass}`}
+      className={`max-w-[393px] px-[56px] flex flex-col justify-center gap-4 mx-auto h-[calc(100vh-73px)] font-[Pretendard] ${labelClass}`}
     >
       <Input
         label="휴대전화"
