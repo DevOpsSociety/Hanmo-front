@@ -1,12 +1,14 @@
 name: Synchronize to forked repo
+
 on:
   push:
     branches:
       - develop
+      - main
 
 jobs:
   sync:
-    name: Sync forked repo
+    name: Sync develop and main to forked repo
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +24,20 @@ jobs:
           git remote add forked-repo https://tnemnorivnelee:${{ secrets.AUTO_ACTIONS }}@github.com/tnemnorivnelee/Hanmo-front
           git config user.name tnemnorivnelee
           git config user.email ${{ secrets.EMAIL }}
-      
-      - name: Push changes to forked-repo 
+
+      - name: Push develop to forked repo
         run: |
           git push -f forked-repo develop
-      
+
+      - name: Checkout main branch
+        run: |
+          git fetch origin main
+          git checkout main
+
+      - name: Push main to forked repo
+        run: |
+          git push -f forked-repo main
+
       - name: Clean up
         run: |
           git remote remove forked-repo
