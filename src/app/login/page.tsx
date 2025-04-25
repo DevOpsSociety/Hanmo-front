@@ -49,7 +49,7 @@ export default function LoginPage(): JSX.Element {
       className={`flex flex-col justify-center h-[calc(100dvh-73px)]
         font-[pretendard] ${labelClass}`}
     >
-      <div className="w-[393px] px-[56px] flex flex-col gap-4 mx-auto">
+      <div className="max-w-[393px] px-[56px] flex flex-col gap-4 mx-auto">
         <Input
           label="학번"
           register={register}
