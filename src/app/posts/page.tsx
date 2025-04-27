@@ -23,9 +23,6 @@ const PostsPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editPostId, setEditPostId] = useState<number | null>(null);
 
-  // const pageNumber = useRef(0);
-  // const totalPage = useRef(0); // 전체 페이지 수를 저장할 ref
-
   const [firstPageNumber, setFirstPageNumber] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   const [lastPageNumber, setLastPageNumber] = useState(0);
@@ -93,10 +90,6 @@ const PostsPage: React.FC = () => {
     checkToken();
     fetchPosts(token); // fetchPosts도 token 인자로 받게 수정
   }, [router, tempToken, userNickName]);
-
-  // useEffect(() => {
-  //   console.log("PostsPage useEffect 실행");
-  // }, [tempToken]);
 
   const handlePrevPage = async () => {
     console.log("이전 페이지로 이동");
