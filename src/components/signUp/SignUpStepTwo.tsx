@@ -1,20 +1,20 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { Gender, MBTI, Department } from "../../enums";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { enumToOptions, objectEnumToOptions } from "../../utils/enumToOptions";
-import { RootState } from "../../store";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Department, Gender, MBTI } from "../../enums";
 import { StepTwoForm, stepTwoSchema } from "../../schemas/stepTwoSchema";
-import ErrorMessage from "../ErrorMessage";
-import { borderClass, labelClass } from "../../utils/classNames";
+import { RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { handleSignUpLogic } from "../../utils/authHandlers";
+import { borderClass, labelClass } from "../../utils/classNames";
+import { enumToOptions, objectEnumToOptions } from "../../utils/enumToOptions";
+import Button from "../common/Button";
 import Input from "../common/Input";
 import Option from "../common/Option";
-import Button from "../common/Button";
+import ErrorMessage from "../ErrorMessage";
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -119,9 +119,9 @@ export default function SignUpStepTwo() {
         className={loading ? "opacity-50 cursor-not-allowed" : "" + "mt-5"}
       />
 
-      <p className="text-[10px] font-extrabold">
+      {/* <p className="text-[10px] font-extrabold">
         ※ 회원정보는 일주일 후에 자동 삭제됩니다.
-      </p>
+      </p> */}
     </form>
   );
 }
