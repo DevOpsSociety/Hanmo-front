@@ -1,30 +1,32 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import toast from "react-hot-toast";
-import { loginUser, deleteUser, signUpUser } from "../api/user";
-import { delay } from "./delay";
 import {
   restoreSendCode,
   restoreVerifyCode,
   sendCode,
   verifyCode,
 } from "../api/sms";
+import { deleteUser, loginUser, signUpUser } from "../api/user";
+import { LoginForm } from "../schemas/loginSchema";
+import { RestoreForm } from "../schemas/restoreSchema";
 import { StepOneForm } from "../schemas/stepOneSchema";
+import { StepTwoForm } from "../schemas/stepTwoSchema";
 import { AppDispatch } from "../store";
 import {
   resetForm,
   SignUpFormData,
   updateFormData,
 } from "../store/signUpSlice";
+import { delay } from "./delay";
 import { handleToastError } from "./errorHandlers";
-import { StepTwoForm } from "../schemas/stepTwoSchema";
-import { LoginForm } from "../schemas/loginSchema";
-import { RestoreForm } from "../schemas/restoreSchema";
+
 
 export async function handleLoginLogic(
   data: LoginForm,
   router: AppRouterInstance,
   onSuccessRedirect: string
 ) {
+
   const { studentNumber, phoneNumber } = data;
 
   if (!studentNumber || !phoneNumber) {
@@ -40,15 +42,19 @@ export async function handleLoginLogic(
     const res = await loginUser({ studentNumber, phoneNumber });
     toast.dismiss();
 
+
     if (res.status === 200) {
       toast.success("로그인 성공!");
       await delay(1000); // 1초 대기
       localStorage.setItem("token", res.headers.temptoken);
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
+    } else if (res.status === 202) {
+      toast.error("관리자 인증 필요: 관리자 로그인 페이지로 이동합니다.");
+      router.push("/admin/login");
     } else {
       toast.error("로그인 실패");
-      return res;
-      // onError?.('로그인 실패: 정보를 확인해주세요.');
+      console.error("로그인 실패:", res); // 에러 로그 추가
+      // onerror?.('로그인 실패: 정보를 확인해주세요.');
     }
   } catch (err) {
     toast.dismiss();

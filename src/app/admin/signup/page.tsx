@@ -7,9 +7,10 @@ import Input from "../../../components/common/Input";
 
 import { useRouter } from "next/navigation";
 import { AdminForm, adminSchema } from "../../../schemas/admin/adminSchema";
-import { handleAdminLoginLogic } from "../../../utils/adminAuthHandlers";
+import { handleAdminSignupLogic } from "../../../utils/adminAuthHandlers";
 import { labelClass } from "../../../utils/classNames";
-export default function AdminLoginPage(): JSX.Element {
+
+export default function AdminSignupPage(): JSX.Element {
   const router = useRouter();
 
   const {
@@ -38,13 +39,13 @@ export default function AdminLoginPage(): JSX.Element {
   //   checkToken();
   // }, [router]);
 
-  const handleAdminLogin = async (data: AdminForm) => {
-    await handleAdminLoginLogic(data, router);
+  const handleAdminSignup = async (data: AdminForm) => {
+    await handleAdminSignupLogic(data, router);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(handleAdminLogin)}
+      onSubmit={handleSubmit(handleAdminSignup)}
       className={`flex flex-col justify-center h-[calc(100dvh-73px)]
         font-[pretendard] ${labelClass}`}
     >
@@ -74,8 +75,17 @@ export default function AdminLoginPage(): JSX.Element {
           type="password"
         />
 
+        <Input
+          label="비밀번호 확인"
+          register={register}
+          registerName="loginPwCheck"
+          placeholder="password"
+          errorMessage={errors.loginPwCheck?.message}
+          type="password"
+        />
+
         <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
-          <Button name="관리자 계정으로 로그인" className="mt-2" />
+          <Button name="관리자 계정 가입하기" className="mt-2" />
         </div>
         {(errors.loginId?.message || errors.loginPw?.message) && (
           <p className="text-red-500 font-[manSeh] text-[20px] ">

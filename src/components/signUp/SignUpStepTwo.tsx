@@ -35,7 +35,7 @@ export default function SignUpStepTwo() {
 
   const selectedGender = watch("gender");
 
-  const signUp = async (data: StepTwoForm) => {
+  const handleSignup = async (data: StepTwoForm) => {
     await handleSignUpLogic(data, formData, dispatch, router, setLoading);
   };
 
@@ -45,7 +45,7 @@ export default function SignUpStepTwo() {
 
   return (
     <form
-      onSubmit={handleSubmit(signUp)}
+      onSubmit={handleSubmit(handleSignup)}
       className={`flex flex-col gap-5 w-[200px] mx-auto justify-center mt-10 ${labelClass}`}
     >
       <Input
