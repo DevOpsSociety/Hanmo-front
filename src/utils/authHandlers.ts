@@ -42,6 +42,8 @@ export async function handleLoginLogic(
     const res = await loginUser({ studentNumber, phoneNumber });
     toast.dismiss();
 
+    console.log("로그인 응답:", res); // 응답 확인용 로그 추가
+
 
     if (res.status === 200) {
       toast.success("로그인 성공!");
@@ -49,8 +51,13 @@ export async function handleLoginLogic(
       localStorage.setItem("token", res.headers.temptoken);
       router.push(onSuccessRedirect); // ✅ 전달받은 router 사용
     } else if (res.status === 202) {
-      toast.error("관리자 인증 필요: 관리자 로그인 페이지로 이동합니다.");
-      router.push("/admin/login");
+      if (res.data.errorMessage === "관리자 추가 정보 입력이 필요합니다.") {
+        toast.error("관리자 추가 정보 입력이 필요합니다.");
+        router.push("/admin/signup");
+      } else if (res.data.errorMessage === "관리자 로그인 페이지로 이동해야 합니다.") {
+        toast.error("관리자 로그인 페이지로 이동해야 합니다.");
+        router.push("/admin/login");
+      }
     } else {
       toast.error("로그인 실패");
       console.error("로그인 실패:", res); // 에러 로그 추가

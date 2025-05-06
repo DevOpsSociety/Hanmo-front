@@ -5,7 +5,7 @@ export const loginAdminUser = (payload: {
   loginPw: string;
   phoneNumber: string;
 }) => {
-  return api.post("/users/login/admin", payload);
+  return api.post("/admin/login/admin", payload);
 }
 
 export const signupAdminUser = (payload: {
@@ -13,5 +13,5 @@ export const signupAdminUser = (payload: {
   loginPw: string;
   phoneNumber: string;
 }) => {
-  return api.put("/users/signup/admin", payload);
+  return api.put("/admin/signup/admin", payload);
 } 

@@ -34,12 +34,12 @@ export async function handleAdminLoginLogic(
     toast.dismiss();
 
     if (res.status === 200) {
-      toast.success("로그인 성공!");
+      toast.success("관리자 로그인 성공!");
       await delay(1000); // 1초 대기
       localStorage.setItem("token", res.headers.temptoken);
       router.push("/admin/main"); // ✅ 전달받은 router 사용
     } else {
-      toast.error("로그인 실패");
+      toast.error("관리자 로그인 실패");
       return res;
       // onError?.('로그인 실패: 정보를 확인해주세요.');
     }
