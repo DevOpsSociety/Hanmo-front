@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import HanmoIcon from "../../../public/commentImg1.png";
 import commentImg from "../../../public/commentImg2.png";
@@ -11,11 +12,13 @@ export default function PostsLayout({
   return (
     <div className="overflow-hidden">
       <header className="h-[110px] w-full mt-5 flex justify-center items-center relative">
-        <Image
-          src={HanmoIcon}
-          alt="Comment Header"
-          className="w-[84px] h-[66px]"
-        />
+        <Link href="/main">
+          <Image
+            src={HanmoIcon}
+            alt="Comment Header"
+            className="w-[84px] h-[66px] cursor-pointer"
+          />
+        </Link>
         <Image
           src={commentImg}
           alt="Comment Header"

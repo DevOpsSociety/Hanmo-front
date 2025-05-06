@@ -1,15 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { findUser } from "../../api/user";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+import { LoginForm, loginSchema } from "../../schemas/loginSchema";
 import { handleLoginLogic } from "../../utils/authHandlers";
 import { labelClass } from "../../utils/classNames";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { findUser } from "../../api/user";
-import { LoginForm, loginSchema } from "../../schemas/loginSchema";
-import Input from "../../components/common/Input";
-import Button from "../../components/common/Button";
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -68,13 +68,6 @@ export default function LoginPage(): JSX.Element {
 
         <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
           <Button name="로그인" className="mt-2" />
-          <button
-            type="button"
-            onClick={() => router.push("/withdraw")}
-            className="border border-solid border-[#04447C] border-opacity-60 rounded-[10px] h-[43px] text-[24px]"
-          >
-            회원탈퇴
-          </button>
         </div>
         {(errors.studentNumber?.message || errors.phoneNumber?.message) && (
           <p className="text-red-500 font-[manSeh] text-[20px] ">
