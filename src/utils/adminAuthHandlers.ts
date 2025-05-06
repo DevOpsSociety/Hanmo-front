@@ -37,6 +37,7 @@ export async function handleAdminLoginLogic(
       toast.success("관리자 로그인 성공!");
       await delay(1000); // 1초 대기
       localStorage.setItem("token", res.headers.temptoken);
+      localStorage.setItem("role", "ADMIN");
       router.push("/admin/main"); // ✅ 전달받은 router 사용
     } else {
       toast.error("관리자 로그인 실패");
