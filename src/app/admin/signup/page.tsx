@@ -6,7 +6,7 @@ import Button from "../../../components/common/Button";
 import Input from "../../../components/common/Input";
 
 import { useRouter } from "next/navigation";
-import { AdminForm, adminSchema } from "../../../schemas/admin/adminSchema";
+import { AdminSignupForm, adminSignupSchema } from "../../../schemas/admin/adminSignupSchema";
 import { handleAdminSignupLogic } from "../../../utils/adminAuthHandlers";
 import { labelClass } from "../../../utils/classNames";
 
@@ -17,8 +17,8 @@ export default function AdminSignupPage(): JSX.Element {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AdminForm>({
-    resolver: zodResolver(adminSchema),
+  } = useForm<AdminSignupForm>({
+    resolver: zodResolver(adminSignupSchema),
   });
 
   // useEffect(() => {
@@ -39,7 +39,7 @@ export default function AdminSignupPage(): JSX.Element {
   //   checkToken();
   // }, [router]);
 
-  const handleAdminSignup = async (data: AdminForm) => {
+  const handleAdminSignup = async (data: AdminSignupForm) => {
     await handleAdminSignupLogic(data, router);
   };
 

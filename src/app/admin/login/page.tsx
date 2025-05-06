@@ -6,7 +6,7 @@ import Button from "../../../components/common/Button";
 import Input from "../../../components/common/Input";
 
 import { useRouter } from "next/navigation";
-import { AdminForm, adminSchema } from "../../../schemas/admin/adminSchema";
+import { AdminLoginForm, adminLoginSchema } from "../../../schemas/admin/adminLoginSchema";
 import { handleAdminLoginLogic } from "../../../utils/adminAuthHandlers";
 import { labelClass } from "../../../utils/classNames";
 export default function AdminLoginPage(): JSX.Element {
@@ -16,8 +16,8 @@ export default function AdminLoginPage(): JSX.Element {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AdminForm>({
-    resolver: zodResolver(adminSchema),
+  } = useForm<AdminLoginForm>({
+    resolver: zodResolver(adminLoginSchema),
   });
 
   // useEffect(() => {
@@ -38,7 +38,7 @@ export default function AdminLoginPage(): JSX.Element {
   //   checkToken();
   // }, [router]);
 
-  const handleAdminLogin = async (data: AdminForm) => {
+  const handleAdminLogin = async (data: AdminLoginForm) => {
     await handleAdminLoginLogic(data, router);
   };
 
