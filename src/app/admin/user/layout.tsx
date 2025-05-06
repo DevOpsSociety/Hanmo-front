@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   description: "관리자 메인 페이지",
 };
 
-export default function AdminMainLayout({
+export default function AdminUserLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <SignUpProviders>
-      <PageHeader title="관리자 페이지" />
+      <PageHeader title="사용자 검색" />
       <MotionWrapper>
         <Toaster position="bottom-center" reverseOrder={false} />
         {children}
