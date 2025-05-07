@@ -94,7 +94,13 @@ export default function AdminUserPage(): JSX.Element {
 
 
   return (
-    <div className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard]">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSearch();
+      }}
+      className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard] overflow-y-hidden"
+    >
       <div>
         <label>사용자 닉네임 or 이름 입력 :</label>
         <input
@@ -104,9 +110,14 @@ export default function AdminUserPage(): JSX.Element {
           placeholder="사용자 닉네임"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
         />
         <button
-          onClick={handleSearch}
+          type="submit"
           className="bg-[#04447C] text-white px-4 py-2 rounded hover:bg-blue-700 transition"
         >
           조회
@@ -114,6 +125,6 @@ export default function AdminUserPage(): JSX.Element {
       </div>
       <UserTable users={userList} onDelete={handleDelete} onChangeRole={handleChangeRole}
       />
-    </div>
+    </form>
   );
 };

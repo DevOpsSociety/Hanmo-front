@@ -29,19 +29,19 @@ export default function AdminMainPage(): JSX.Element {
           console.error("매칭된 그룹 수 조회 에러:", error);
           alert("조회 중 오류가 발생했습니다.");
         }
-      }
+      };
 
       const todaySignupCount = async () => {
         try {
           const res = await adminFindUserSignupCount(tempToken);
           console.log("가입자 수:", res); // API 응답 형태에 따라 조정
-          setTodaySignupCount(res.data.todayMatchedSignUpCount)
+          setTodaySignupCount(res.data.todayMatchedSignUpCount);
           return res; // 가입자 수 반환
         } catch (error) {
           console.error("가입자 수 조회 에러:", error);
           alert("조회 중 오류가 발생했습니다.");
         }
-      }
+      };
 
       todayMatchedGroupCount();
       todaySignupCount();
@@ -64,7 +64,7 @@ export default function AdminMainPage(): JSX.Element {
         <div className="flex flex-col gap-2">
           <Link href="/admin/user">
             <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow hover:bg-blue-700 transition-colors cursor-pointer">
-              사용자 정보 조회
+              사용자 관리 페이지
             </div>
           </Link>
           <Link href="/main">
