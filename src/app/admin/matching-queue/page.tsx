@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminDeleteUser, adminFindUser, adminUpdateUserRole } from "../../../api/admin/adminUser";
-import UserTable from "../../../components/UserTable";
+import { adminDeleteUser, adminFindMatchingQueueStatus, adminUpdateUserRole } from "../../../api/admin/adminUser";
+import QueueTable from "../../../components/QueueTable";
 import { Role } from "../../../enums";
 
-export default function AdminUserPage(): JSX.Element {
+export default function AdminMatchingQueuePage(): JSX.Element {
   const [nickname, setNickname] = useState("");
-  const [userList, setUserList] = useState([]);
+  const [queueList, setQueueList] = useState([]);
   const [tempToken, setTempToken] = useState("");
 
 
@@ -24,22 +24,16 @@ export default function AdminUserPage(): JSX.Element {
     }
   }, []);
 
-  useEffect(() => {
-    if (tempToken) {
-      handleSearch();
-    }
-  }, [tempToken]);
-
   const handleSearch = async () => {
     try {
-      const res = await adminFindUser(tempToken, nickname);
+      const res = await adminFindMatchingQueueStatus(tempToken);
 
       console.log("사용자 조회 요청:", nickname); // 요청 확인용 로그 추가
 
       console.log("사용자 조회 응답:", res); // 응답 확인용 로그 추가 
 
       if (res.status === 200) {
-        setUserList(res.data); // API 응답 형태에 따라 조정
+        setQueueList(res.data); // API 응답 형태에 따라 조정
       } else {
         alert("사용자 조회 실패");
       }
@@ -108,28 +102,14 @@ export default function AdminUserPage(): JSX.Element {
       className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard] overflow-y-hidden"
     >
       <div>
-        <label>사용자 닉네임 or 이름 입력 :</label>
-        <input
-          id="nickname"
-          type="text"
-          className="border border-gray-300 rounded-md p-2 mx-2"
-          placeholder="사용자 닉네임"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSearch();
-            }
-          }}
-        />
         <button
           type="submit"
           className="bg-[#04447C] text-white px-4 py-2 rounded hover:bg-blue-700 transition"
         >
-          조회
+          조회 / 갱신
         </button>
       </div>
-      <UserTable users={userList} onDelete={handleDelete} onChangeRole={handleChangeRole}
+      <QueueTable lists={queueList} onDelete={handleDelete} onChangeRole={handleChangeRole}
       />
     </form>
   );
