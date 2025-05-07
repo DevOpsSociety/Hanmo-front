@@ -1,10 +1,4 @@
 "use client";
-<<<<<<< HEAD
-import styles from "./styles.module.css"
-import Link from 'next/link'
-=======
-
->>>>>>> bab67055e10987a40dc2f3e5baef75bdb8397558
 import { logoutUser } from '@/api/user';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
