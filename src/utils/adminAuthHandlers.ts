@@ -13,7 +13,7 @@ export async function handleAdminLoginLogic(
   // onSuccessRedirect: string
 ) {
 
-  console.log("Admin Login Data:", data); // 데이터 확인용 로그 추가
+  // console.log("Admin Login Data:", data); // 데이터 확인용 로그 추가
 
   const { loginId, loginPw, phoneNumber } = data;
 
@@ -56,7 +56,7 @@ export async function handleAdminSignupLogic(
   data: AdminSignupForm,
   router: AppRouterInstance,
 ) {
-  console.log("Admin Login Data:", data); // 데이터 확인용 로그 추가
+  // console.log("Admin Login Data:", data); // 데이터 확인용 로그 추가
 
   const { loginId, loginPw, phoneNumber } = data;
 
