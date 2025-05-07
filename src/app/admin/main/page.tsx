@@ -15,7 +15,7 @@ export default function AdminMainPage(): JSX.Element {
     const nickname = localStorage.getItem("nickname");
 
     if (!nickname || !tempToken) {
-      alert("사용자 정보가 없습니다.");
+      console.error("사용자 정보가 없습니다.");
       window.location.href = "/admin/login";
       return;
     }
@@ -24,7 +24,7 @@ export default function AdminMainPage(): JSX.Element {
       const res = await findUser(tempToken);
       console.log("토큰 확인 응답:", res); // 응답 확인용 로그 추가
       if (res.status !== 200) {
-        alert("잘못된 토큰입니다. 다시 로그인 해주세요.");
+        console.error("잘못된 토큰입니다. 다시 로그인 해주세요.");
         window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
       }
     };
@@ -33,9 +33,9 @@ export default function AdminMainPage(): JSX.Element {
     const checkAdmin = async () => {
       const res = await adminFindUser(tempToken, nickname);
       console.log("관리자 확인 응답:", res); // 응답 확인용 로그 추가
-      const resUserRole = res.data[0].userRole;
+      const resUserRole = res.data.content[0].userRole;
       if (resUserRole !== "ADMIN") {
-        alert("관리자 권한이 없습니다.");
+        console.error("관리자 권한이 없습니다.");
         window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
       }
     };
@@ -44,12 +44,12 @@ export default function AdminMainPage(): JSX.Element {
     const todayMatchedGroupCount = async () => {
       try {
         const res = await adminFindMatchingGroups(tempToken);
-        console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
+        // console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
         setTodayMatchedGroupCount(res.data.todayMatchedGroupCount);
         return res; // 매칭된 그룹 수 반환
       } catch (error) {
         console.error("매칭된 그룹 수 조회 에러:", error);
-        alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
+        // alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
         window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
 
       }
@@ -58,7 +58,7 @@ export default function AdminMainPage(): JSX.Element {
     const todaySignupCount = async () => {
       try {
         const res = await adminFindUserSignupCount(tempToken);
-        console.log("가입자 수:", res); // API 응답 형태에 따라 조정
+        // console.log("가입자 수:", res); // API 응답 형태에 따라 조정
         setTodaySignupCount(res.data.todayMatchedSignUpCount);
         return res; // 가입자 수 반환
       } catch (error) {

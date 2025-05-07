@@ -16,10 +16,11 @@ export const signupAdminUser = (payload: {
   return api.put("/admin/signup", payload);
 };
 
-export const adminFindUser = (tempToken: string, keyword: string) => {
+export const adminFindUser = (tempToken: string, keyword: string, page: number = 0) => {
   return api.get("/admin/search", {
     params: {
-      keyword
+      keyword,
+      page
     },
     headers: {
       tempToken: tempToken,
