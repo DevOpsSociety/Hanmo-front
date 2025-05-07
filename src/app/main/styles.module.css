@@ -4,6 +4,7 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  gap: 10px;
 }
 
 .down {
@@ -12,9 +13,9 @@
   align-items: center;
 }
 
-.logo {
-  width: 144px;
-  height: 114px;
+.mainchar {
+  width: 174.11px;
+  height: 160.56px;
 }
 
 .contents {
@@ -25,49 +26,57 @@
   align-items: center;
   flex-direction: column;
   color: black;
-  font-size: 20px;
+  font-size: 34px;
 }
 
 .nickname {
-  font-size: 20px; /* 크기 키울랬는데 그럼 두줄 됨  */
   display: flex;
   flex-direction: row;
 }
+
 
 .btns묶음 {
   display: flex;
   /* justify-content: center; */
   /* align-items: center; */
-  flex-direction: column;
-  gap: 25px;
+  flex-direction:row;
+  gap: 50px;
   font-size: 24px;
+  padding-bottom: 10px;
 }
 .btns {
-  width: 280px;
-  height: 43px;
-  border-radius: 10px;
-  border: 1px #04447c solid;
-  color: #04447c;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 106.73px;
+  height: 120.21px;
+  color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 10px;
 }
 .btns:hover {
-  background-color: #04447c;
-  color: #ffffff;
+  font-weight: 900;
 }
 
-.btns2 {
-  background-color: #04447c;
-  color: #ffffff;
+
+.leftBg {
+  background-image: url('/images/mainPage/btn_left_ver1.png');
 }
 
-.btns2:hover {
-  background-color: #ffffff;
-  color: #04447c;
-  border: 1px #04447c solid;
+.rightBg {
+  background-image: url('/images/mainPage/btn_right_ver1.png');
 }
 
+.adbox{
+  width: 80%;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+}
 /* 폰트 */
 .pretendardFont {
   font-family: var(--font-pretendard);
@@ -80,4 +89,22 @@
 
 .nexonFont {
   font-family: var(--font-nexon);
+}
+
+
+/* 소형 화면 대응 (ipone se 기준) */
+@media screen and (max-width: 378px) {
+  .mainchar {
+    width: 120px;
+    height: 110px;
+  }
+  .contents {
+    font-size: 26px;
+    padding-top: 20px;
+  }
+  
+  .btns {
+    width: 91px;
+    height: 102.5px;
+  }
 }

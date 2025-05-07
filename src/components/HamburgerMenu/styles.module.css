@@ -16,6 +16,16 @@
   cursor: pointer;
 }
 
+/* @media (max-width: 768px) {
+  .label {
+    display: block;
+  }
+
+  .sidebar {
+    display: block;
+  }
+} */
+
 .label span {
   z-index: 900;
   display: block;
@@ -55,7 +65,7 @@
 /* 체크되었을 때 메뉴 */
 .menuBox {
   position: fixed;
-  left: -999px;
+  left: -1999px;
   top: 0;
   /* width: 340px; */
   width: 80%;
