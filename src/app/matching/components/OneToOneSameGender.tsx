@@ -8,7 +8,7 @@ interface OneToOneButtonProps {
   errorMessage?: string | null;
 }
 
-export default function OneToOneButton({
+export default function OneToOneSameGender({
   onClick,
   errorMessage,
 }: OneToOneButtonProps) {
@@ -23,7 +23,7 @@ export default function OneToOneButton({
 
   return (
     <button className={`${styles.btns} ${styles.oneToOne}`} onClick={onClick}>
-      랜덤 친구 만들기(1:1)
+      친구 뽑기(1:1 동성)
     </button>
   );
 }
