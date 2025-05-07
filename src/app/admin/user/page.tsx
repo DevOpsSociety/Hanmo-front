@@ -96,7 +96,7 @@ export default function AdminUserPage(): JSX.Element {
   return (
     <div className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard]">
       <div>
-        <label>사용자 닉네임 입력 :</label>
+        <label>사용자 닉네임 or 이름 입력 :</label>
         <input
           id="nickname"
           type="text"
@@ -115,5 +115,5 @@ export default function AdminUserPage(): JSX.Element {
       <UserTable users={userList} onDelete={handleDelete} onChangeRole={handleChangeRole}
       />
     </div>
-  )
+  );
 };
