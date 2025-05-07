@@ -1,22 +1,24 @@
-import styles from "./styles.module.css"
-import Link from 'next/link'
+"use client";
+
 import { logoutUser } from '@/api/user';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import styles from "./styles.module.css";
 
 export default function HamburgerMenu() {
   const router = useRouter();
   return (
     <div className={`font-[manseh] ${styles.container}`}>
-    <input type="checkbox" id="menuicon" className={styles.menuIcon}></input>
-    <label htmlFor="menuicon" className={styles.label}>
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
-    <div className={styles.menuBox}>
-      <ul className={styles.menuList}>
-        <li> 
-          <button onClick={async () => {
+      <input type="checkbox" id="menuicon" className={styles.menuIcon}></input>
+      <label htmlFor="menuicon" className={styles.label}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      <div className={styles.menuBox}>
+        <ul className={styles.menuList}>
+          <li>
+            <button onClick={async () => {
               const tempToken = localStorage.getItem("token");
               const res = await logoutUser(tempToken);
               console.log("로그아웃 응답:", res);
@@ -31,24 +33,24 @@ export default function HamburgerMenu() {
                 alert("로그아웃에 실패했습니다.");
               }
             }}>
-            로그아웃
-          </button> 
+              로그아웃
+            </button>
           </li>
-        <li>
-        <Link href="/withdraw" className="">  
-          회원탈퇴
-        </Link>
-        </li>
-        <li>
-          <Link href="/posts">
-          개발자에게 한마디
-          </Link>
-        </li>
-        <li className={styles.bottomMenu}> 만든 사람들 </li>
-      </ul>
+          <li>
+            <Link href="/withdraw" className="">
+              회원탈퇴
+            </Link>
+          </li>
+          <li>
+            <Link href="/posts">
+              개발자에게 한마디
+            </Link>
+          </li>
+          <li className={styles.bottomMenu}> 만든 사람들 </li>
+        </ul>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
 
 

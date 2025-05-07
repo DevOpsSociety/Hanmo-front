@@ -24,6 +24,12 @@ export default function AdminMatchingQueuePage(): JSX.Element {
     }
   }, []);
 
+  useEffect(() => {
+    if (tempToken) {
+      handleSearch();
+    }
+  }, [tempToken]);
+
   const handleSearch = async () => {
     try {
       const res = await adminFindMatchingQueueStatus(tempToken);
