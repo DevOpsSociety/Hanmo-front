@@ -16,7 +16,7 @@ export default function AdminUserLayout({
 }>) {
   return (
     <SignUpProviders>
-      <PageHeader title="사용자 검색" />
+      <PageHeader title="사용자 관리" />
       <MotionWrapper>
         <Toaster position="bottom-center" reverseOrder={false} />
         {children}

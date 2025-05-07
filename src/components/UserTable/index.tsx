@@ -51,8 +51,8 @@ const UserTable = ({
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.userId} className="hover:bg-gray-100">
+          {users.map((user, index) => (
+            <tr key={index} className="hover:bg-gray-100">
               <td className="border-t px-4 py-2">{user.userId}</td>
               <td className="border-t px-4 py-2">{user.nickname}</td>
               <td className="border-t px-4 py-2">{user.name}</td>
