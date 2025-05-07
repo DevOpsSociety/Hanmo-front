@@ -44,5 +44,10 @@ export const Department = {
   DESIGN_MAJOR: { id: 19, name: "디자인학부" },
 };
 
+export enum Role {
+  USER = 0,
+  ADMIN = 1,
+}
+
 // // Type for the Department object values
 // export type DepartmentValue = (typeof Department)[keyof typeof Department];

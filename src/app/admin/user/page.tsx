@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminDeleteUser, adminFindUser } from "../../../api/admin/adminUser";
+import { adminDeleteUser, adminFindUser, adminUpdateUserRole } from "../../../api/admin/adminUser";
 import UserTable from "../../../components/UserTable";
+import { Role } from "../../../enums";
 
 export default function AdminUserPage(): JSX.Element {
   const [nickname, setNickname] = useState("");
@@ -26,6 +27,8 @@ export default function AdminUserPage(): JSX.Element {
   const handleSearch = async () => {
     try {
       const res = await adminFindUser(tempToken, nickname);
+
+      console.log("사용자 조회 요청:", nickname); // 요청 확인용 로그 추가
 
       console.log("사용자 조회 응답:", res); // 응답 확인용 로그 추가 
 
@@ -62,6 +65,34 @@ export default function AdminUserPage(): JSX.Element {
     }
   };
 
+
+  const handleChangeRole = async (userId: number, newRole: keyof typeof Role) => {
+    const confirmed = window.confirm(
+      `${newRole} 권한으로 변경하시겠습니까?`
+    );
+
+    if (!confirmed) return;
+
+    // 문자열 숫자로 변환
+    const roleValue = String(Role[newRole]);
+
+    console.log("권한 변경 요청:", userId, roleValue);
+
+    try {
+      const res = await adminUpdateUserRole(tempToken, userId, roleValue);
+      if (res.status === 200) {
+        alert("권한 변경 완료");
+        await handleSearch();
+      } else {
+        alert("변경 실패");
+      }
+    } catch (err) {
+      console.error("권한 변경 에러:", err);
+      alert("에러가 발생했습니다.");
+    }
+  };
+
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard]">
       <div>
@@ -81,7 +112,8 @@ export default function AdminUserPage(): JSX.Element {
           조회
         </button>
       </div>
-      <UserTable users={userList} onDelete={handleDelete} />
+      <UserTable users={userList} onDelete={handleDelete} onChangeRole={handleChangeRole}
+      />
     </div>
   )
 };
