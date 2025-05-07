@@ -6,6 +6,7 @@ interface User {
   nickname: string;
   name: string;
   phoneNumber: string;
+  studentNumber: string;
   instagramId: string;
   userRole: string;
   userStatus: string;
@@ -42,6 +43,7 @@ const UserTable = ({
             <th className="px-4 py-2">닉네임</th>
             <th className="px-4 py-2">이름</th>
             <th className="px-4 py-2">전화번호</th>
+            <th className="px-4 py-2">학번</th>
             <th className="px-4 py-2">인스타그램</th>
             <th className="px-4 py-2">상태</th>
             <th className="px-4 py-2">매칭 타입</th>
@@ -57,6 +59,7 @@ const UserTable = ({
               <td className="border-t px-4 py-2">{user.nickname}</td>
               <td className="border-t px-4 py-2">{user.name}</td>
               <td className="border-t px-4 py-2">{user.phoneNumber}</td>
+              <td className="border-t px-4 py-2">{user.studentNumber}</td>
               <td className="border-t px-4 py-2">{user.instagramId}</td>
               <td className="border-t px-4 py-2">{user.userStatus}</td>
               <td className="border-t px-4 py-2">{user.matchingType}</td>
