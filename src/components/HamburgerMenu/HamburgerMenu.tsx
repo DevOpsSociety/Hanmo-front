@@ -34,7 +34,11 @@ export default function HamburgerMenu() {
             로그아웃
           </button> 
           </li>
-        <li> 회원탈퇴 </li>
+        <li>
+        <Link href="/withdraw" className="">  
+          회원탈퇴
+        </Link>
+        </li>
         <li>
           <Link href="/posts">
           개발자에게 한마디
