@@ -8,6 +8,9 @@ interface User {
   phoneNumber: string;
   instagramId: string;
   userRole: string;
+  userStatus: string;
+  matchingGroupId: number;
+  matchingType: string;
 }
 
 const UserTable = ({
@@ -31,33 +34,38 @@ const UserTable = ({
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border border-gray-300 text-sm text-center">
-        <thead className="bg-gray-100">
+    <div className="overflow-y-auto max-h-[70dvh] border border-gray-300 rounded">
+      <table className="min-w-full text-sm text-center border-collapse">
+        <thead className="sticky top-0 z-20 bg-white shadow-md">
           <tr>
-            <th className="border px-4 py-2">ID</th>
-            <th className="border px-4 py-2">닉네임</th>
-            <th className="border px-4 py-2">이름</th>
-            <th className="border px-4 py-2">전화번호</th>
-            <th className="border px-4 py-2">인스타그램</th>
-            <th className="border px-4 py-2">권한 수정</th>
-            <th className="border px-4 py-2">유저 삭제</th>
+            <th className="px-4 py-2">ID</th>
+            <th className="px-4 py-2">닉네임</th>
+            <th className="px-4 py-2">이름</th>
+            <th className="px-4 py-2">전화번호</th>
+            <th className="px-4 py-2">인스타그램</th>
+            <th className="px-4 py-2">상태</th>
+            <th className="px-4 py-2">매칭 타입</th>
+            <th className="px-4 py-2">매칭 그룹 ID</th>
+            <th className="px-4 py-2">권한 수정</th>
+            <th className="px-4 py-2">유저 삭제</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.userId}>
-              <td className="border px-4 py-2">{user.userId}</td>
-              <td className="border px-4 py-2">{user.nickname}</td>
-              <td className="border px-4 py-2">{user.name}</td>
-              <td className="border px-4 py-2">{user.phoneNumber}</td>
-              <td className="border px-4 py-2">{user.instagramId}</td>
-              <td className="border px-4 py-2">
+            <tr key={user.userId} className="hover:bg-gray-100">
+              <td className="border-t px-4 py-2">{user.userId}</td>
+              <td className="border-t px-4 py-2">{user.nickname}</td>
+              <td className="border-t px-4 py-2">{user.name}</td>
+              <td className="border-t px-4 py-2">{user.phoneNumber}</td>
+              <td className="border-t px-4 py-2">{user.instagramId}</td>
+              <td className="border-t px-4 py-2">{user.userStatus}</td>
+              <td className="border-t px-4 py-2">{user.matchingType}</td>
+              <td className="border-t px-4 py-2">{user.matchingGroupId}</td>
+
+              <td className="border-t px-4 py-2">
                 <select
                   value={roleMap[user.userId] || user.userRole}
-                  onChange={(e) =>
-                    handleSelectChange(user.userId, e.target.value)
-                  }
+                  onChange={(e) => handleSelectChange(user.userId, e.target.value)}
                   className="border rounded px-2 py-1"
                 >
                   <option value="USER">USER</option>
@@ -72,14 +80,13 @@ const UserTable = ({
                   변경
                 </button>
               </td>
-              <td className="border px-4 py-2 flex justify-center gap-2">
+              <td className="border-t px-4 py-2">
                 <button
                   onClick={() => onDelete(user.nickname)}
                   className="bg-red-500 text-white px-2 py-1 rounded"
                 >
                   삭제
                 </button>
-
               </td>
             </tr>
           ))}
