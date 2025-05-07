@@ -61,12 +61,18 @@ export default function AdminMainPage(): JSX.Element {
           <p className="text-gray-600">{todayMatchedGroupCount}</p>
           <p className="text-gray-600">{todaySignupCount}</p>
         </div>
-
-        <Link href="/admin/user">
-          <div className="mt-6 inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow hover:bg-blue-700 transition-colors cursor-pointer">
-            사용자 정보 조회
-          </div>
-        </Link>
+        <div className="flex flex-col gap-2">
+          <Link href="/admin/user">
+            <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow hover:bg-blue-700 transition-colors cursor-pointer">
+              사용자 정보 조회
+            </div>
+          </Link>
+          <Link href="/main">
+            <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow hover:bg-blue-700 transition-colors cursor-pointer">
+              사용자 메인 페이지로 이동
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

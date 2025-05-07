@@ -16,10 +16,10 @@ export const signupAdminUser = (payload: {
   return api.put("/admin/signup", payload);
 }
 
-export const adminFindUser = (tempToken: string, nickname: string) => {
+export const adminFindUser = (tempToken: string, keyword: string) => {
   return api.get("/admin/search", {
     params: {
-      nickname
+      keyword
     },
     headers: {
       tempToken: tempToken,
@@ -45,6 +45,14 @@ export const adminFindMatchingGroups = (tempToken: string) => {
 
 export const adminFindUserSignupCount = (tempToken: string) => {
   return api.get(`/admin/signup-count`, {
+    headers: {
+      tempToken: tempToken,
+    },
+  });
+}
+
+export const adminUpdateUserRole = (tempToken: string, userId: number, newRole: string) => {
+  return api.put(`/admin/role`, { userId, newRole }, {
     headers: {
       tempToken: tempToken,
     },
