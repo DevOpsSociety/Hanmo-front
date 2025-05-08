@@ -28,8 +28,8 @@ const QueueTable = ({
         <tbody>
           {lists.map((list, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="border-t px-4 py-2">{list.genderMatchingType}</td>
-              <td className="border-t px-4 py-2">{list.matchingType}</td>
+              <td className="border-t px-4 py-2">{list.genderMatchingType === "SAME_GENDER" ? "동성" : "이성"}</td>
+              <td className="border-t px-4 py-2">{list.matchingType === "ONE_TO_ONE" ? "1:1 매칭" : "2:2 매칭"}</td>
               <td className="border-t px-4 py-2">{list.waitingCount}</td>
             </tr>
           ))}
