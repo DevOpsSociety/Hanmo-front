@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import LogoImg from "../../../public/signUpLogo.png";
+import LogoImg from "../../../public/signUpLogo.svg";
 import { StepOneForm, stepOneSchema } from "../../schemas/stepOneSchema";
 import { useAppDispatch } from "../../store/hooks";
 import {
