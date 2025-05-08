@@ -89,18 +89,16 @@ export default function AdminMainPage(): JSX.Element {
           <p className="text-gray-600">{todaySignupCount}</p>
         </div>
         <div className="flex flex-col gap-2 w-full">
-          <div className="flex gap-4">
-            <Link href="/admin/user" className="w-full">
-              <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow cursor-pointer w-full">
-                사용자 관리 페이지
-              </div>
-            </Link>
-            <Link href="/admin/matching-queue" className="w-full">
-              <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow cursor-pointer w-full">
-                매칭 대기 인원 조회
-              </div>
-            </Link>
-          </div>
+          <Link href="/admin/user" className="w-full">
+            <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow cursor-pointer w-full">
+              사용자 관리 페이지
+            </div>
+          </Link>
+          <Link href="/admin/matching-queue" className="w-full">
+            <div className="inline-block px-6 py-3 bg-[#04447C] text-white rounded-lg shadow cursor-pointer w-full">
+              매칭 대기 인원 조회
+            </div>
+          </Link>
           <Link href="/main">
             <div className="inline-block px-6 py-3 border border-[#04447C] rounded-lg cursor-pointer w-full">
               사용자 메인 페이지로 이동
