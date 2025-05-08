@@ -8,6 +8,9 @@ import OneToOneDifferentGender from './components/OneToOneDifferentGender';
 import TwoToTwoButton from "./components/TwoToTwoButton";
 import axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
+
 
 interface MatchedUser {
   nickname: string;
@@ -50,6 +53,7 @@ export default function MatchingPage() {
       console.log("Response:", response);
       onmessage = response?.data?.message;
       alert("대기등록이 완료됐습니다!");
+      handleMoveToWaitingPage();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const dataErrorMessage = error.response?.data?.errorMessage;
@@ -61,11 +65,17 @@ export default function MatchingPage() {
     }
   };
 
+  const router = useRouter();
+  const handleMoveToWaitingPage = () => {
+    router.push("/matchingWaiting");
+  };
+
   return (
-    <div className={`${styles.container} font-[nexon]`}>
+    <div className={`${styles.container} font-[manseh]`}>
       <HanmoHeader />
       <div className={`${styles.contents} `}>
-        <div>매칭을 시작하세요!</div>
+        <div>오늘 나는... <br />
+        결정했어! </div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
@@ -80,24 +90,23 @@ export default function MatchingPage() {
           onClick={() => handleMatch("two-to-two")}
           errorMessage={errorMessage}
         />
-        <div className={`${styles.info} font-[manseh]`}>
-          *1:1 매 칭은 동성 한명과, <br /> 2:2 매칭은 남녀 각각 2명씩 <br /> 총
-          4명으로 이루어집니다. <br />
-          <br /> 매칭하시고 부스 방문하시면 <br />
-          뽑기 기회를 드려요~
-        </div>
       </div>
+      <div className={styles.down}>
+        <Image
+          className={styles.mainchar}
+          src="/images/mainchar_stand1.png"
+          alt="한모"
+          width={0}
+          height={0}
+          sizes="100vw" // 이거 없으면 화질깨짐
+        />
+      </div>
+      <div className={`${styles.info} font-[nexon]`}>
+      매칭 후 부스에 오시면 뽑기 기회를 드립니다!
+      </div>
+      <Link href="/main" className={`${styles.홈으로}`}>
+      홈으로!
+      </Link>
     </div>
   );
 }
-
-{/* <div className={styles.down}>
-<Image
-  className={styles.logo}
-  src="/images/mainchar_wink.png"
-  alt="한모"
-  width={0}
-  height={0}
-  sizes="100vw" // 이거 없으면 화질깨짐
-/>
-</div> */}

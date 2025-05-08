@@ -29,3 +29,8 @@
   cursor: pointer;
 }
 
+@media screen and (max-height: 620px) {
+  .container {
+    height: 90px;
+  }
+}
