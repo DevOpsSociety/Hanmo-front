@@ -35,7 +35,7 @@ const UserTable = ({
   };
 
   return (
-    <div className="overflow-y-auto max-h-[70dvh] border border-gray-300 rounded">
+    <div className="overflow-y-auto overflow-x-auto w-[80%] max-h-[70dvh] border border-gray-300 rounded">
       <table className="min-w-full text-sm text-center border-collapse">
         <thead className="sticky top-0 z-20 bg-white shadow-md">
           <tr>
