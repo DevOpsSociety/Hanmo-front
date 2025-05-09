@@ -9,6 +9,7 @@ import submitBtn from "../../../public/postSubmit.svg";
 import rightBtn from "../../../public/rightButton.svg";
 import MotionWrapper from "../../components/MotionWrapper";
 import usePosts from "../../hooks/usePosts";
+import { formatBackendDate } from "../../utils/formatBackendDate";
 
 const PostsPage: React.FC = () => {
   const {
@@ -57,7 +58,7 @@ const PostsPage: React.FC = () => {
                       </button>
                     </div>
                   )}
-                  <span className="text-xs text-[#a6a6a6]">2025.04.04 16:42</span>
+                  <span className="text-[10px] text-[#a6a6a6]">{formatBackendDate(post.createDate)}</span>
                 </div>
               </div>
             </div>
