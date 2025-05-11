@@ -31,7 +31,7 @@ export default function AdminMainPage(): JSX.Element {
 
 
     const checkAdmin = async () => {
-      const res = await adminFindUser(tempToken, nickname);
+      const res = await adminFindUser(tempToken, "", nickname);
       console.log("관리자 확인 응답:", res); // 응답 확인용 로그 추가
       const resUserRole = res.data.content[0].userRole;
       if (resUserRole !== "ADMIN") {
