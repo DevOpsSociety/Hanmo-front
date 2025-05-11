@@ -5,19 +5,45 @@ import {
   adminDeleteUser,
   adminFindUser,
   adminUpdateUserRole,
+  adminUserResetMatching,
 } from "../../../api/admin/adminUser";
 import UserTable from "../../../components/UserTable";
 import { Role } from "../../../enums";
 
+interface User {
+  userId: number;
+  nickname: string;
+  name: string;
+  phoneNumber: string;
+  studentNumber: string;
+  instagramId: string;
+  userRole: string;
+  userStatus: string;
+  matchingGroupId: number;
+  matchingType: string;
+  gender: string;
+  genderMatchingType: string;
+}
+
 export default function AdminUserPage(): JSX.Element {
   const [nickname, setNickname] = useState("");
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState<User[]>([]);
   const [tempToken, setTempToken] = useState("");
 
   const [pageNumber, setPageNumber] = useState(0);
   const [lastPageNumber, setLastPageNumber] = useState(0);
   const [visiblePageStart, setVisiblePageStart] = useState(0);
   const visiblePageCount = 5;
+
+  const [filterType, setFilterType] = useState<"ALL" | "MATCHED" | "PENDING">("ALL");
+
+  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+
+  const filteredUserList = userList.filter((user) => {
+    if (filterType === "ALL") return true;
+    if (!user.userStatus) return false;
+    return user.userStatus === filterType;
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,14 +61,17 @@ export default function AdminUserPage(): JSX.Element {
     if (tempToken) handleSearch();
   }, [tempToken]);
 
-  const handleSearch = async (pageNumber: number = 0) => {
+  const handleSearch = async (status: string = "", pageNumber: number = 0) => {
     try {
-      const res = await adminFindUser(tempToken, nickname, pageNumber);
-      console.log("조회 응답:", res); // 응답 확인용 로그 추가
+      const res = await adminFindUser(tempToken, nickname, status, pageNumber);
+
+      console.log("조회 결과 버튼 클릭:", res);
+
       if (res.status === 200) {
         setUserList(res.data.content);
         setPageNumber(res.data.pageNumber);
         setLastPageNumber(res.data.totalPages);
+        setSelectedUserIds([]); // 페이지 바뀔 때 선택 초기화
       } else {
         alert("사용자 조회 실패");
       }
@@ -69,10 +98,27 @@ export default function AdminUserPage(): JSX.Element {
     }
   };
 
+  const handleReset = async (userId: number) => {
+    if (!confirm("매칭 초기화 하시겠습니까?")) return;
+    // 초기화 로직 추가 가능
+    try {
+      const res = await adminUserResetMatching(tempToken, userId);
+      if (res.status === 200) {
+        alert("초기화 완료");
+        await handleSearch();
+      } else {
+        alert("초기화 실패");
+      }
+    } catch (error) {
+      console.error("초기화 오류:", error);
+      alert("초기화 중 오류 발생");
+    }
+  };
+
   const handleChangeRole = async (userId: number, newRole: keyof typeof Role) => {
     if (!confirm(`${newRole} 권한으로 변경하시겠습니까?`)) return;
-
     const roleValue = String(Role[newRole]);
+
     try {
       const res = await adminUpdateUserRole(tempToken, userId, roleValue);
       if (res.status === 200) {
@@ -87,9 +133,26 @@ export default function AdminUserPage(): JSX.Element {
     }
   };
 
+  const handleSelectUser = (userId: number) => {
+    setSelectedUserIds((prev) => {
+      if (prev.includes(userId)) {
+        return prev.filter((id) => id !== userId);
+      } else {
+        if (prev.length >= 4) {
+          alert("최대 4명까지 선택할 수 있습니다.");
+          return prev;
+        }
+        return [...prev, userId];
+      }
+    });
+  };
+  const handlePrintSelected = () => {
+    console.log("선택된 userId:", selectedUserIds);
+  };
+
   const handlePrevPage = () => {
     if (pageNumber <= 0) return;
-    handleSearch(pageNumber - 1);
+    handleSearch("", pageNumber - 1);
     if (visiblePageStart > 0) {
       setVisiblePageStart((prev) => prev - visiblePageCount);
     }
@@ -98,20 +161,20 @@ export default function AdminUserPage(): JSX.Element {
   const handleNextPage = () => {
     const nextPage = pageNumber + 1;
     if (nextPage >= lastPageNumber) return;
-    handleSearch(nextPage);
+    handleSearch("", nextPage);
     if (nextPage >= visiblePageStart + visiblePageCount) {
       setVisiblePageStart((prev) => prev + visiblePageCount);
     }
   };
 
   const handleClickPageNumber = (page: number) => {
-    handleSearch(page);
+    handleSearch("", page);
   };
 
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault(); // prevent page reload
+        e.preventDefault();
         handleSearch();
       }}
       className="flex flex-col gap-4 justify-center items-center h-[calc(100dvh-73px)] font-[pretendard] overflow-y-hidden"
@@ -134,23 +197,25 @@ export default function AdminUserPage(): JSX.Element {
         </button>
       </div>
 
+      <div className="flex gap-2 mb-2">
+        <button onClick={() => setFilterType("ALL")} className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">전체 보기</button>
+        <button onClick={() => handleSearch("MATCHED")} className="px-3 py-1 border rounded bg-blue-100 hover:bg-blue-200">MATCHED</button>
+        <button onClick={() => handleSearch("PENDING")} className="px-3 py-1 border rounded bg-yellow-100 hover:bg-yellow-200">PENDING</button>
+        <button onClick={handlePrintSelected} className="ml-4 px-3 py-1 border rounded bg-green-100 hover:bg-green-200">선택 콘솔 출력</button>
+      </div>
+
       <UserTable
-        users={userList}
+        users={filteredUserList}
         onDelete={handleDelete}
         onChangeRole={handleChangeRole}
+        onReset={handleReset}
+        selectedUserIds={selectedUserIds}
+        onSelectUser={handleSelectUser}
       />
 
       {lastPageNumber > 1 && (
         <div className="flex items-center gap-4 mt-4">
-          <button
-            type="button"
-            onClick={handlePrevPage}
-            className="px-3 py-1 border rounded disabled:opacity-50"
-            disabled={pageNumber === 0}
-          >
-            이전
-          </button>
-
+          <button type="button" onClick={handlePrevPage} className="px-3 py-1 border rounded disabled:opacity-50" disabled={pageNumber === 0}>이전</button>
           {Array.from({ length: visiblePageCount }, (_, i) => {
             const page = visiblePageStart + i;
             if (page >= lastPageNumber) return null;
@@ -159,24 +224,13 @@ export default function AdminUserPage(): JSX.Element {
                 key={page}
                 type="button"
                 onClick={() => handleClickPageNumber(page)}
-                className={`px-3 py-1 border rounded ${pageNumber === page
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700"
-                  }`}
+                className={`px-3 py-1 border rounded ${pageNumber === page ? "bg-blue-600 text-white" : "bg-white text-gray-700"}`}
               >
                 {page + 1}
               </button>
             );
           })}
-
-          <button
-            type="button"
-            onClick={handleNextPage}
-            className="px-3 py-1 border rounded disabled:opacity-50"
-            disabled={pageNumber >= lastPageNumber - 1}
-          >
-            다음
-          </button>
+          <button type="button" onClick={handleNextPage} className="px-3 py-1 border rounded disabled:opacity-50" disabled={pageNumber >= lastPageNumber - 1}>다음</button>
         </div>
       )}
     </form>
