@@ -1,13 +1,12 @@
 "use client";
 
-import styles from "./styles.module.css";
-import Image from "next/image";
+import axios from "axios";
+import { useState } from "react";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-import OneToOneSameGender from "./components/OneToOneSameGender";
 import OneToOneDifferentGender from './components/OneToOneDifferentGender';
+import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
-import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import styles from "./styles.module.css";
 
 interface MatchedUser {
   nickname: string;
@@ -22,7 +21,7 @@ interface ApiResponse {
   message: string;
 }
 
-type MatchType = 
+type MatchType =
   | "two-to-two"
   | "one-to-one/same-gender"
   | "one-to-one/different-gender";
@@ -66,18 +65,22 @@ export default function MatchingPage() {
       <HanmoHeader />
       <div className={`${styles.contents} `}>
         <div>매칭을 시작하세요!</div>
+        <div className="text-red-500 px-20">5월 13일 화요일에 매칭 서비스가 열릴 예정입니다!!!</div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          onClick={() => handleMatch("one-to-one/same-gender")}
+          // onClick={() => handleMatch("one-to-one/same-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
-          onClick={() => handleMatch("one-to-one/different-gender")}
+          // onClick={() => handleMatch("one-to-one/different-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
-          onClick={() => handleMatch("two-to-two")}
+          // onClick={() => handleMatch("two-to-two")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <div className={`${styles.info} font-[manseh]`}>
