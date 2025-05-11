@@ -76,3 +76,15 @@ export const adminUserResetMatching = (tempToken: string, userId: number) => {
     },
   });
 };
+
+export const adminUserManualMatching = (tempToken: string, payload: {
+  matchingType: string,
+  genderMatchingType: string,
+  userIds: string[],
+}) => {
+  return api.post(`/admin/manual-match`, payload, {
+    headers: {
+      tempToken: tempToken,
+    },
+  });
+};

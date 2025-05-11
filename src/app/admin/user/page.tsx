@@ -25,6 +25,12 @@ interface User {
   genderMatchingType: string;
 }
 
+interface SelectedUsersState {
+  matchingType: string;
+  genderMatchingType: string;
+  userIds: string[];
+}
+
 export default function AdminUserPage(): JSX.Element {
   const [nickname, setNickname] = useState("");
   const [userList, setUserList] = useState<User[]>([]);
@@ -35,15 +41,18 @@ export default function AdminUserPage(): JSX.Element {
   const [visiblePageStart, setVisiblePageStart] = useState(0);
   const visiblePageCount = 5;
 
-  const [filterType, setFilterType] = useState<"ALL" | "MATCHED" | "PENDING">("ALL");
+  // const [filterType, setFilterType] = useState<"ALL" | "MATCHED" | "PENDING">("ALL");
 
-  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
-
-  const filteredUserList = userList.filter((user) => {
-    if (filterType === "ALL") return true;
-    if (!user.userStatus) return false;
-    return user.userStatus === filterType;
+  const [selectedUsers, setSelectedUsers] = useState<SelectedUsersState>({
+    matchingType: "",
+    genderMatchingType: "",
+    userIds: [],
   });
+  // const filteredUserList = userList.filter((user) => {
+  //   if (filterType === "ALL") return true;
+  //   if (!user.userStatus) return false;
+  //   return user.userStatus === filterType;
+  // });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -71,7 +80,7 @@ export default function AdminUserPage(): JSX.Element {
         setUserList(res.data.content);
         setPageNumber(res.data.pageNumber);
         setLastPageNumber(res.data.totalPages);
-        setSelectedUserIds([]); // 페이지 바뀔 때 선택 초기화
+        // setSelectedUsers([]); // 페이지 바뀔 때 선택 초기화
       } else {
         alert("사용자 조회 실패");
       }
@@ -79,6 +88,60 @@ export default function AdminUserPage(): JSX.Element {
       console.error("조회 오류:", error);
       alert("조회 중 오류 발생");
     }
+  };
+
+  const handleSelectUser = (user: User) => {
+    const userIdStr = user.userId.toString();
+    const isSelected = selectedUsers.userIds.includes(userIdStr);
+
+    if (isSelected) {
+      // 선택 해제
+      const updatedIds = selectedUsers.userIds.filter((id) => id !== userIdStr);
+      if (updatedIds.length === 0) {
+        // 모두 해제되면 초기 상태로
+        setSelectedUsers({
+          matchingType: "",
+          genderMatchingType: "",
+          userIds: [],
+        });
+      } else {
+        setSelectedUsers((prev) => ({
+          ...prev,
+          userIds: updatedIds,
+        }));
+      }
+      return;
+    }
+
+    if (selectedUsers.userIds.length >= 4) {
+      alert("최대 4명까지만 선택할 수 있습니다.");
+      return;
+    }
+
+    if (selectedUsers.userIds.length === 0) {
+      // 첫 유저 선택 시 기준 설정
+      setSelectedUsers({
+        matchingType: user.matchingType,
+        genderMatchingType: user.genderMatchingType,
+        userIds: [userIdStr],
+      });
+      return;
+    }
+
+    // 조건 비교
+    if (
+      user.matchingType !== selectedUsers.matchingType ||
+      user.genderMatchingType !== selectedUsers.genderMatchingType
+    ) {
+      alert("선택된 유저와 matching 조건이 일치하지 않습니다.");
+      return;
+    }
+
+    // 정상 추가
+    setSelectedUsers((prev) => ({
+      ...prev,
+      userIds: [...prev.userIds, userIdStr],
+    }));
   };
 
   const handleDelete = async (nickname: string) => {
@@ -133,21 +196,9 @@ export default function AdminUserPage(): JSX.Element {
     }
   };
 
-  const handleSelectUser = (userId: number) => {
-    setSelectedUserIds((prev) => {
-      if (prev.includes(userId)) {
-        return prev.filter((id) => id !== userId);
-      } else {
-        if (prev.length >= 4) {
-          alert("최대 4명까지 선택할 수 있습니다.");
-          return prev;
-        }
-        return [...prev, userId];
-      }
-    });
-  };
+
   const handlePrintSelected = () => {
-    console.log("선택된 userId:", selectedUserIds);
+    console.log("선택된 userId:", selectedUsers);
   };
 
   const handlePrevPage = () => {
@@ -198,19 +249,19 @@ export default function AdminUserPage(): JSX.Element {
       </div>
 
       <div className="flex gap-2 mb-2">
-        <button onClick={() => setFilterType("ALL")} className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">전체 보기</button>
+        <button onClick={() => handleSearch()} className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">전체 보기</button>
         <button onClick={() => handleSearch("MATCHED")} className="px-3 py-1 border rounded bg-blue-100 hover:bg-blue-200">MATCHED</button>
         <button onClick={() => handleSearch("PENDING")} className="px-3 py-1 border rounded bg-yellow-100 hover:bg-yellow-200">PENDING</button>
         <button onClick={handlePrintSelected} className="ml-4 px-3 py-1 border rounded bg-green-100 hover:bg-green-200">선택 콘솔 출력</button>
       </div>
 
       <UserTable
-        users={filteredUserList}
+        users={userList}
         onDelete={handleDelete}
         onChangeRole={handleChangeRole}
-        onReset={handleReset}
-        selectedUserIds={selectedUserIds}
         onSelectUser={handleSelectUser}
+        onReset={handleReset}
+        selectedUserIds={selectedUsers.userIds}
       />
 
       {lastPageNumber > 1 && (

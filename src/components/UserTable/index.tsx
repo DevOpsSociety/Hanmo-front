@@ -16,13 +16,15 @@ interface User {
   genderMatchingType: string;
 }
 
+
+
 interface Props {
   users: User[];
   onDelete: (nickname: string) => void;
   onChangeRole: (userId: number, newRole: keyof typeof Role) => void;
   onReset: (userId: number) => void;
-  selectedUserIds: number[];
-  onSelectUser: (userId: number) => void;
+  onSelectUser: (user: User) => void;
+  selectedUserIds: string[];
 }
 
 const UserTable = ({
@@ -69,13 +71,13 @@ const UserTable = ({
           {users.map((user) => (
             <tr
               key={user.userId}
-              className={`hover:bg-gray-100 ${selectedUserIds.includes(user.userId) ? "bg-yellow-50" : ""}`}
+              className={`hover:bg-gray-100 ${selectedUserIds.includes(user.userId.toString()) ? "bg-yellow-50" : ""}`}
             >
               <td className="border-t px-2 py-2">
                 <input
                   type="checkbox"
-                  checked={selectedUserIds.includes(user.userId)}
-                  onChange={() => onSelectUser(user.userId)}
+                  checked={selectedUserIds.includes(user.userId.toString())}
+                  onChange={() => onSelectUser(user)}
                   className="w-6 h-6"
                 />
               </td>
