@@ -1,15 +1,15 @@
 "use client";
 
 import axios from "axios";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
 import OneToOneDifferentGender from './components/OneToOneDifferentGender';
 import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
-import Link from 'next/link';
-import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
-import Image from 'next/image';
 
 interface MatchedUser {
   nickname: string;
@@ -74,12 +74,12 @@ export default function MatchingPage() {
       <HanmoHeader />
       <div className={`${styles.contents} `}>
         <div>오늘 나는... <br />
-        결정했어! </div>
+          결정했어! </div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          // onClick={() => handleMatch("one-to-one/same-gender")}
-          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
+          onClick={() => handleMatch("one-to-one/same-gender")}
+          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
@@ -94,7 +94,7 @@ export default function MatchingPage() {
         />
       </div>
       <div className={styles.down}>
-      <Image
+        <Image
           className={styles.mainchar}
           src="/images/mainchar_stand1.png"
           alt="한모"
@@ -104,10 +104,10 @@ export default function MatchingPage() {
         />
       </div>
       <div className={`${styles.info} font-[nexon]`}>
-      매칭 후 부스에 오시면 뽑기 기회를 드립니다!
+        매칭 후 부스에 오시면 뽑기 기회를 드립니다!
       </div>
       <Link href="/main" className={`${styles.홈으로}`}>
-      홈으로!
+        홈으로!
       </Link>
     </div>
   );
