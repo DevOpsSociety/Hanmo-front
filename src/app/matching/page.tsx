@@ -1,12 +1,12 @@
 "use client";
 
-import styles from "./styles.module.css";
-import Image from "next/image";
+import axios from "axios";
+import { useState } from "react";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-import OneToOneButton from "./components/OneToOneButton";
+import OneToOneDifferentGender from './components/OneToOneDifferentGender';
+import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
-import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import styles from "./styles.module.css";
 
 interface MatchedUser {
   nickname: string;
@@ -16,15 +16,22 @@ interface MatchedUser {
 interface ApiResponse {
   matchedUsers: MatchedUser[];
   matchingType: "ONE_TO_ONE" | "TWO_TO_TWO";
+  genderMatchingType: "SAME_GENDER" | "DIFFERENT_GENDER";
   code: string;
   message: string;
 }
+
+type MatchType =
+  | "two-to-two"
+  | "one-to-one/same-gender"
+  | "one-to-one/different-gender";
+
 
 export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleMatch = async (type: "one-to-one" | "two-to-two") => {
+  const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
       return console.error("토큰이 없습니다.");
@@ -56,26 +63,24 @@ export default function MatchingPage() {
   return (
     <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
-      <div className={styles.down}>
-        <Image
-          className={styles.logo}
-          src="/images/mainchar_wink.png"
-          alt="한모"
-          width={0}
-          height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
-        />
-      </div>
       <div className={`${styles.contents} `}>
         <div>매칭을 시작하세요!</div>
+        <div className="text-red-500 px-20">5월 13일 화요일에 매칭 서비스가 열릴 예정입니다!!!</div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
-        <OneToOneButton
-          onClick={() => handleMatch("one-to-one")}
+        <OneToOneSameGender
+          // onClick={() => handleMatch("one-to-one/same-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
+          errorMessage={errorMessage}
+        />
+        <OneToOneDifferentGender
+          // onClick={() => handleMatch("one-to-one/different-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
-          onClick={() => handleMatch("two-to-two")}
+          // onClick={() => handleMatch("two-to-two")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <div className={`${styles.info} font-[manseh]`}>
@@ -88,3 +93,14 @@ export default function MatchingPage() {
     </div>
   );
 }
+
+{/* <div className={styles.down}>
+<Image
+  className={styles.logo}
+  src="/images/mainchar_wink.png"
+  alt="한모"
+  width={0}
+  height={0}
+  sizes="100vw" // 이거 없으면 화질깨짐
+/>
+</div> */}

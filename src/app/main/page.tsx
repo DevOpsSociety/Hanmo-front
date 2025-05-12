@@ -133,24 +133,14 @@ export default function MainPage() {
   return (
     <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
-      <div className={styles.down}>
-        <Image
-          className={styles.logo}
-          src="/images/mainchar_wink.png"
-          alt="한모"
-          width={0}
-          height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
-        />
-      </div>
-      <div className={`${styles.contents}`}>
+      <div className={`font-[manseh] ${styles.contents}`}>
         <div className={`${styles.nickname}`}>
           <div
-            className={`font-[nexonbold]`}
-          >{`"${mainPageData?.nickname}"`}</div>
+            className={`font-[manseh] font-[900]`}
+          >{`${mainPageData?.nickname}`}</div>
           님
         </div>
-        <div>좋은 하루 보내세요 </div>
+        <div>무엇을 해 볼까요?</div>
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <Link
@@ -158,55 +148,43 @@ export default function MainPage() {
             pathname: "/matching",
             query: { nickname: mainPageData?.nickname },
           }}
-          className={styles.btns}
+          className={`${styles.btns} ${styles.leftBg}`}
         >
-          매칭하러 가볼까~?
+          매칭<br />
+          진행
         </Link>
-        <button
-          onClick={handleMoveToPostPage}
-          className={`${styles.btns} ${styles.btns2}`}
-        >
-          게시판보러 가볼까~?
-        </button>
+        {errorCode === "404" && (
+                  <button
+                  onClick={handleMoveToPostPage}
+                  className={`${styles.rightBg} ${styles.btns}`}
+                >
+                  게시판
+                </button>
+        )}
         {matchingTypeData?.matchingType && (
-          <button onClick={handleMoveToResultPage} className={styles.btns}>
+          <button onClick={handleMoveToResultPage} className={`${styles.rightBg} ${styles.btns}`}>
             매칭 결과 보러가기
           </button>
         )}
         {errorCode === "400" && (
-          <button onClick={handleCancelMatching} className={`${styles.btns}`}>
-            매칭 취소
+          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.rightBg} `}>
+            매칭<br />
+            취소
           </button>
         )}
       </div>
-      <div className="w-96 h-20 flex justify-center gap-40 mt-8">
-        <Link href="/landing" className="">
-          <Image
-            src={logoutIcon}
-            alt="로그아웃"
-            width={66}
-            height={70}
-            onClick={async () => {
-              const tempToken = localStorage.getItem("token");
-              const res = await logoutUser(tempToken);
-              console.log("로그아웃 응답:", res);
-
-              if (res.status === 200) {
-                console.log("로그아웃 성공");
-                localStorage.removeItem("token");
-                localStorage.removeItem("nickname");
-                alert("로그아웃 되었습니다.");
-              } else {
-                console.log("로그아웃 실패");
-                alert("로그아웃에 실패했습니다.");
-              }
-            }}
-          />
-        </Link>
-        <Link href="/withdraw" className="">
-          <Image src={withdrawIcon} alt="회원탈퇴" width={66} height={70} />
-        </Link>
+      <div className={styles.down}>
+        <Image
+          className={styles.mainchar}
+          src="/images/mainchar_stand1.png"
+          alt="한모"
+          width={0}
+          height={0}
+          sizes="100vw" // 이거 없으면 화질깨짐
+        />
       </div>
+      <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
+      <div className={styles.adbox}> 광고자리 </div>
     </div>
   );
 }

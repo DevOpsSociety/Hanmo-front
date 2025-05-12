@@ -1,20 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LogoImg from "../../../public/signUpLogo.png";
-import { useAppDispatch } from "../../store/hooks";
-import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import LogoImg from "../../../public/signUpLogo.svg";
 import { StepOneForm, stepOneSchema } from "../../schemas/stepOneSchema";
+import { useAppDispatch } from "../../store/hooks";
 import {
   handleSendCodeLogic,
   handleVerifyCodeLogic,
 } from "../../utils/authHandlers";
-import Link from "next/link";
-import Input from "../common/Input";
 import Button from "../common/Button";
+import Input from "../common/Input";
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function SignUpStepOne(): JSX.Element {
   };
 
   return (
-    <div className="max-w-[393px] mx-auto flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard]">
+    <div className="max-w-[393px] mx-auto flex flex-col justify-center h-[calc(100vh-73px)] font-[Pretendard] ">
       <Link href="/landing">
         <Image
           src={LogoImg}

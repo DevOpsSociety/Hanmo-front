@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
+import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
-import { UseFormRegister, FieldValues, Path } from "react-hook-form";
 
 type InputProps<T extends FieldValues> = {
   label?: ReactNode;
@@ -9,6 +9,7 @@ type InputProps<T extends FieldValues> = {
   placeholder?: string;
   errorMessage?: string;
   disabled?: boolean;
+  type?: string;
 };
 
 export default function Input<T extends FieldValues>({
@@ -18,12 +19,13 @@ export default function Input<T extends FieldValues>({
   placeholder,
   errorMessage,
   disabled = false,
+  type ="text"
 }: InputProps<T>) {
   return (
     <div className="text-[15px] text-black text-opacity-70">
       <label>{label}</label>
       <input
-        type="text"
+        type={type}
         {...register(registerName)}
         placeholder={placeholder}
         className={`border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3 ${
