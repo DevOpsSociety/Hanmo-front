@@ -1,15 +1,14 @@
 "use client";
 
-import styles from "./styles.module.css";
-import Image from "next/image";
-import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-import Link from "next/link";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import logoutIcon from "../../../public/logout.png";
-import withdrawIcon from "../../../public/withdrawIcon.png";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { logoutUser } from "../../api/user";
+import { useEffect, useState } from "react";
+import ad1 from "../../../public/ad1.gif";
+import { adminFindMatchingGroups } from "../../api/admin/adminUser";
+import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import styles from "./styles.module.css";
 
 interface UserProfile {
   nickname: string;
@@ -130,6 +129,32 @@ export default function MainPage() {
     }
   };
 
+
+  const [totalMatchedGroupCount, setTotalMatchedGroupCount] = useState("");
+
+
+  useEffect(() => {
+    const temptoken = localStorage.getItem("token");
+
+    if (!temptoken) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+    const totalMatchedCount = async () => {
+      try {
+        const res = await adminFindMatchingGroups(temptoken);
+        console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
+        setTotalMatchedGroupCount(res.data.totalMatchedGroupCount);
+        return res; // 매칭된 그룹 수 반환
+      } catch (error) {
+        console.error("매칭된 그룹 수 조회 에러:", error);
+        // alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
+      }
+    };
+
+    totalMatchedCount();
+  }, []);
+
   return (
     <div className={`${styles.container} font-[nexon]`}>
       <HanmoHeader />
@@ -154,12 +179,12 @@ export default function MainPage() {
           진행
         </Link>
         {errorCode === "404" && (
-                  <button
-                  onClick={handleMoveToPostPage}
-                  className={`${styles.rightBg} ${styles.btns}`}
-                >
-                  게시판
-                </button>
+          <button
+            onClick={handleMoveToPostPage}
+            className={`${styles.rightBg} ${styles.btns}`}
+          >
+            게시판
+          </button>
         )}
         {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={`${styles.rightBg} ${styles.btns}`}>
@@ -183,8 +208,27 @@ export default function MainPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
+      <div>{totalMatchedGroupCount}</div>
       <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
-      <div className={styles.adbox}> 광고자리 </div>
+      {/* <div className={styles.adbox}> 광고자리 </div> */}
+      <div className="flex gap-6">
+        <Image
+          className={styles.ad}
+          src={ad1}
+          alt="광고"
+          width={130}
+          height={130}
+        // sizes="100vw" // 이거 없으면 화질깨짐
+        />
+        {/* <Image
+          className={styles.ad}
+          src={ad2}
+          alt="광고"
+          width={130}
+          height={130}
+        // sizes="100vw" // 이거 없으면 화질깨짐
+        /> */}
+      </div>
     </div>
   );
 }
