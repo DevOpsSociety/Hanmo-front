@@ -32,7 +32,7 @@ const PostsPage: React.FC = () => {
   } = usePosts();
 
   return (
-    <div className="max-w-[393px] h-[calc(100dvh-130px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
+    <div className="max-w-[393px] h-[calc(100dvh-90px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
       <MotionWrapper>
         <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-[calc(100dvh-270px)]">
           {posts.map((post) => (

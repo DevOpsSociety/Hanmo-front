@@ -32,6 +32,6 @@
 
 @media screen and (max-height: 620px) {
   .container {
-    height: 90px;
+    /* height: 90px; */
   }
 }
