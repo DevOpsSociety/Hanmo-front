@@ -8,7 +8,7 @@ export default function PostsLayout({
 }) {
   return (
     <div className="overflow-hidden">
-      <header className="h-[110px] w-full mt-5 flex justify-center items-center relative">
+      <header className="h-[70px] w-full mt-5 flex justify-center items-center relative">
         <HanmoHeader />
         {/* <Link href="/main">
           <Image
