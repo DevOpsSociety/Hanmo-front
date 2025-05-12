@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ad1 from "../../../public/ad1.gif";
+import ad3 from "../../../public/ad3.png";
 import { adminFindMatchingGroups } from "../../api/admin/adminUser";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
 import styles from "./styles.module.css";
@@ -220,14 +221,14 @@ export default function MainPage() {
           height={130}
         // sizes="100vw" // 이거 없으면 화질깨짐
         />
-        {/* <Image
+        <Image
           className={styles.ad}
-          src={ad2}
+          src={ad3}
           alt="광고"
           width={130}
           height={130}
         // sizes="100vw" // 이거 없으면 화질깨짐
-        /> */}
+        />
       </div>
     </div>
   );
