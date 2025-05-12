@@ -78,18 +78,18 @@ export default function MatchingPage() {
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          // onClick={() => handleMatch("one-to-one/same-gender")}
-          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
+          onClick={() => handleMatch("one-to-one/same-gender")}
+          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
-          // onClick={() => handleMatch("one-to-one/different-gender")}
-          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
+          onClick={() => handleMatch("one-to-one/different-gender")}
+          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
-          // onClick={() => handleMatch("two-to-two")}
-          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
+          onClick={() => handleMatch("two-to-two")}
+          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
       </div>
