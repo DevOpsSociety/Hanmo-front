@@ -40,7 +40,7 @@
   /* justify-content: center; */
   /* align-items: center; */
   flex-direction:row;
-  gap: 50px;
+  gap: 16px;
   font-size: 24px;
   padding-bottom: 10px;
 }
@@ -67,6 +67,10 @@
 
 .rightBg {
   background-image: url('/images/mainPage/btn_right_ver1.png');
+}
+
+.middleBg {
+  background-image: url('/images/mainPage/btn_middle_ver1.png');
 }
 
 .adbox{

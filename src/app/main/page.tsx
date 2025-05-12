@@ -179,26 +179,25 @@ export default function MainPage() {
           매칭<br />
           진행
         </Link>
-        {errorCode === "404" && (
-          <button
-            onClick={handleMoveToPostPage}
-            className={`${styles.rightBg} ${styles.btns}`}
-          >
-            게시판
-          </button>
-        )}
         {matchingTypeData?.matchingType && (
-          <button onClick={handleMoveToResultPage} className={`${styles.rightBg} ${styles.btns}`}>
+          <button onClick={handleMoveToResultPage} className={`${styles.middleBg} ${styles.btns}`}>
+
             매칭 결과 보러가기
           </button>
         )}
         {errorCode === "400" && (
-          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.rightBg} `}>
+          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.middleBg} `}>
+
             매칭<br />
             취소
           </button>
         )}
       </div>
+      <button
+        onClick={handleMoveToPostPage}
+        className={`${styles.rightBg} ${styles.btns}`}
+      > 게시판
+      </button>
       <div className={styles.down}>
         <Image
           className={styles.mainchar}
