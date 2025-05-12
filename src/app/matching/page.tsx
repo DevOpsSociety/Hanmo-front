@@ -108,9 +108,9 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <div className={`${styles.info} font-[nexon]`}>
+      {/* <div className={`${styles.info} font-[nexon]`}>
         매칭 후 부스에 오시면 뽑기 기회를 드립니다!
-      </div>
+      </div> */}
       <Link href="/main" className={`${styles.홈으로}`}>
         홈으로!
       </Link>
