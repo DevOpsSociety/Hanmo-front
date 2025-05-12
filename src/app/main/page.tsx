@@ -181,18 +181,22 @@ export default function MainPage() {
         </Link>
         {matchingTypeData?.matchingType && (
           <button onClick={handleMoveToResultPage} className={`${styles.middleBg} ${styles.btns}`}>
-
             매칭 결과 보러가기
           </button>
         )}
         {errorCode === "400" && (
-          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.middleBg} `}>
-
-            매칭<br />
+          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.middleBg} `}>;
+            매칭 < br />
             취소
-          </button>
-        )}
-      </div>
+          </button >
+        )
+        }
+        <button
+          onClick={handleMoveToPostPage}
+          className={`${styles.rightBg} ${styles.btns}`}
+        > 게시판
+        </button>
+      </div >
       <button
         onClick={handleMoveToPostPage}
         className={`${styles.rightBg} ${styles.btns}`}
@@ -209,7 +213,7 @@ export default function MainPage() {
         />
       </div>
       <div>{totalMatchedGroupCount}</div>
-      <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
+      <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>;
       {/* <div className={styles.adbox}> 광고자리 </div> */}
       <div className="flex gap-6">
         <Image
@@ -229,6 +233,6 @@ export default function MainPage() {
         // sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-    </div>
+    </div >
   );
 }

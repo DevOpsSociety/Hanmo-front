@@ -1,22 +1,25 @@
 .btns {
-  width: 280px;
-  height: 43px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 106.73px;
+  height: 120.21px;
   border-radius: 10px;
-  border: 1px #04447c solid;
-  color: #04447c;
+  color: #ffffff;
+  padding-bottom: 10px;
 }
 .btns:hover {
-  background-color: #04447c;
-  color: #ffffff;
+  font-weight: 900;
 }
 
-.btns2 {
-  background-color: #04447c;
-  color: #ffffff;
+.leftBg {
+  background-image: url('/images/matchingPage/btn_left_ver2.png');
 }
 
-.btns2:hover {
-  background-color: #ffffff;
-  color: #04447c;
-  border: 1px #04447c solid;
+.rightBg {
+  background-image: url('/images/matchingPage/btn_right_ver2.png');
+}
+
+.middleBg {
+  background-image: url('/images/matchingPage/btn_middle_ver2.png');
 }

@@ -20,7 +20,7 @@ export default function TwoToTwoButton({
     }
   }, []);
   return (
-    <button className={`${styles.btns} ${styles.btns2}`} onClick={onClick}>
+    <button className={`${styles.btns} ${styles.rightBg} `} onClick={onClick}>
       랜덤 과팅(2:2)
     </button>
   );
