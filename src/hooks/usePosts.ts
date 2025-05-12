@@ -10,6 +10,8 @@ interface Post {
   id: number;
   nickName: string;
   content: string;
+  createDate: string;
+
 }
 
 export default function usePosts() {

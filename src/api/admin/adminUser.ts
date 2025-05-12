@@ -16,10 +16,11 @@ export const signupAdminUser = (payload: {
   return api.put("/admin/signup", payload);
 };
 
-export const adminFindUser = (tempToken: string, keyword: string, page: number = 0) => {
+export const adminFindUser = (tempToken: string, keyword: string, status: string, page: number = 0) => {
   return api.get("/admin/search", {
     params: {
       keyword,
+      status,
       page
     },
     headers: {
@@ -62,6 +63,26 @@ export const adminUpdateUserRole = (tempToken: string, userId: number, newRole: 
 
 export const adminFindMatchingQueueStatus = (tempToken: string) => {
   return api.get(`/admin/queue-status`, {
+    headers: {
+      tempToken: tempToken,
+    },
+  });
+};
+
+export const adminUserResetMatching = (tempToken: string, userId: number) => {
+  return api.patch(`/admin/reset-matching/${userId}`, {}, {
+    headers: {
+      tempToken: tempToken,
+    },
+  });
+};
+
+export const adminUserManualMatching = (tempToken: string, payload: {
+  matchingType: string,
+  genderMatchingType: string,
+  userIds: string[],
+}) => {
+  return api.post(`/admin/manual-match`, payload, {
     headers: {
       tempToken: tempToken,
     },

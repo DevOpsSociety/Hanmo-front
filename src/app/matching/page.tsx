@@ -1,16 +1,15 @@
 "use client";
 
-import styles from "./styles.module.css";
-import Image from "next/image";
+import axios from "axios";
+import { useState } from "react";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-import OneToOneSameGender from "./components/OneToOneSameGender";
 import OneToOneDifferentGender from './components/OneToOneDifferentGender';
+import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
-import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
-
+import styles from "./styles.module.css";
+import Image from 'next/image';
 
 interface MatchedUser {
   nickname: string;
@@ -25,7 +24,7 @@ interface ApiResponse {
   message: string;
 }
 
-type MatchType = 
+type MatchType =
   | "two-to-two"
   | "one-to-one/same-gender"
   | "one-to-one/different-gender";
@@ -79,20 +78,23 @@ export default function MatchingPage() {
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          onClick={() => handleMatch("one-to-one/same-gender")}
+          // onClick={() => handleMatch("one-to-one/same-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
-          onClick={() => handleMatch("one-to-one/different-gender")}
+          // onClick={() => handleMatch("one-to-one/different-gender")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
-          onClick={() => handleMatch("two-to-two")}
+          // onClick={() => handleMatch("two-to-two")}
+          onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
       </div>
       <div className={styles.down}>
-        <Image
+      <Image
           className={styles.mainchar}
           src="/images/mainchar_stand1.png"
           alt="한모"
