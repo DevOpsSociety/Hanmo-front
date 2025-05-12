@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ad1 from "../../../public/ad1.gif";
-import ad3 from "../../../public/ad3.png";
+import ad3 from "../../../public/ad3.jpg";
 import { adminFindMatchingGroups } from "../../api/admin/adminUser";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
 import styles from "./styles.module.css";
