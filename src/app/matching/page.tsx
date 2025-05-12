@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 import OneToOneDifferentGender from './components/OneToOneDifferentGender';
 import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
@@ -68,6 +69,10 @@ export default function MatchingPage() {
   const handleMoveToWaitingPage = () => {
     router.push("/matchingWaiting");
   };
+
+
+  useAuthGuard();
+
 
   return (
     <div className={`${styles.container} font-[manseh]`}>

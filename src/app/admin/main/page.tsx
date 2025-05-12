@@ -36,7 +36,7 @@ export default function AdminMainPage(): JSX.Element {
       const resUserRole = res.data.content[0].userRole;
       if (resUserRole !== "ADMIN") {
         console.error("관리자 권한이 없습니다.");
-        window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
+        window.location.href = "/login"; // 관리자 로그인 페이지로 리다이렉트
       }
     };
 
@@ -50,8 +50,7 @@ export default function AdminMainPage(): JSX.Element {
       } catch (error) {
         console.error("매칭된 그룹 수 조회 에러:", error);
         // alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
-        window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
-
+        // window.location.href = "/admin/login"; // 관리자 로그인 페이지로 리다이렉트
       }
     };
 

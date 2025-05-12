@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ad1 from "../../../public/ad1.gif";
 import ad3 from "../../../public/ad3.png";
+import ad4 from "../../../public/ad4.jpg";
 import { adminFindMatchingGroups } from "../../api/admin/adminUser";
 import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 import styles from "./styles.module.css";
 
 interface UserProfile {
@@ -26,6 +27,8 @@ export default function MainPage() {
     null
   );
   const [errorCode, setErrorCode] = useState<string | null>(null);
+
+  useAuthGuard();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -211,14 +214,16 @@ export default function MainPage() {
       <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
       {/* <div className={styles.adbox}> 광고자리 </div> */}
       <div className="flex gap-6 w-[300px] h-[130px]">
-        <Image
-          className={styles.ad}
-          src={ad1}
-          alt="광고"
-          width={130}
-          height={130}
-        // sizes="100vw" // 이거 없으면 화질깨짐
-        />
+        <Link href="https://vision.hansei.ac.kr/vision/2433/subview.do">
+          <Image
+            className={styles.ad}
+            src={ad4}
+            alt="광고"
+            width={130}
+            height={130}
+          // sizes="100vw" // 이거 없으면 화질깨짐
+          />
+        </Link>
         <Image
           className={styles.ad}
           src={ad3}
