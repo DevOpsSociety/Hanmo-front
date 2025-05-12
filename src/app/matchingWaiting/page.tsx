@@ -5,15 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
-import ad4 from "../../../public/ad4.jpg";
+import ad1 from "../../../public/ad1.gif";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 import styles from "./styles.module.css";
 
 export default function MatchingWaitingPage() {
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const router = useRouter();
+
+  useAuthGuard();
+
   const handleMoveToMainPage = () => {
     router.push("/main");
   };
+
   const handleCancelMatching = async () => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
@@ -39,9 +44,7 @@ export default function MatchingWaitingPage() {
   return (
     <div className={`${styles.container} font-[manseh]`}>
       <div className={styles.adBox}>
-        <Link href="https://vision.hansei.ac.kr/vision/2433/subview.do">
-          <Image src={ad4} alt="광고" className="w-[262px] h-[262px]" />
-        </Link>
+        <Image src={ad1} alt="광고" className="w-[262px] h-[262px]" />
       </div>
       <div className={`${styles.comment}`}>
         매칭 등록이 완료되었습니다! <br />

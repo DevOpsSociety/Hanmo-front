@@ -1,10 +1,11 @@
 "use client";
 
-import styles from "./styled.module.css";
-import Image from "next/image";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./styled.module.css";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -20,6 +21,9 @@ interface MatchedUser {
 export default function MatchingResultPage() {
   const [matchedUser, setMatchedUser] = useState<MatchResponse | null>(null);
   const router = useRouter();
+
+  useAuthGuard();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +59,8 @@ export default function MatchingResultPage() {
     };
     fetchData();
   }, []);
+
+
 
   return (
     <div className={`${styles.wrapper} ${styles.pretendardFont}`}>
