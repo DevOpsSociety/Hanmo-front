@@ -211,8 +211,8 @@ export default function MainPage() {
         />
       </div>
       <div>{totalMatchedGroupCount}</div>
-      {/* <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div> */}
-      <div className='font-bold'>금일 15시 30분에 매칭이 초기화 될 예정입니다!🚨</div>
+      <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
+
       {/* <div className={styles.adbox}> 광고자리 </div> */}
       <div className="flex gap-6 w-[300px] h-[130px]">
         <Link href="https://vision.hansei.ac.kr/vision/2433/subview.do">
