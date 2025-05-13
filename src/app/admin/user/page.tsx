@@ -22,12 +22,12 @@ interface User {
   matchingGroupId: number;
   matchingType: string;
   gender: string;
-  genderMatchingType: string;
+  matchingGenderType: string;
 }
 
 interface SelectedUsersState {
   matchingType: string;
-  genderMatchingType: string;
+  matchingGenderType: string;
   userIds: string[];
 }
 
@@ -45,7 +45,7 @@ export default function AdminUserPage(): JSX.Element {
 
   const [selectedUsers, setSelectedUsers] = useState<SelectedUsersState>({
     matchingType: "",
-    genderMatchingType: "",
+    matchingGenderType: "",
     userIds: [],
   });
   // const filteredUserList = userList.filter((user) => {
@@ -122,7 +122,7 @@ export default function AdminUserPage(): JSX.Element {
       // 첫 유저 선택 시 기준 설정
       setSelectedUsers({
         matchingType: user.matchingType,
-        genderMatchingType: user.genderMatchingType,
+        matchingGenderType: user.matchingGenderType,
         userIds: [userIdStr],
       });
       return;
@@ -131,7 +131,7 @@ export default function AdminUserPage(): JSX.Element {
     // 조건 비교
     if (
       user.matchingType !== selectedUsers.matchingType ||
-      user.genderMatchingType !== selectedUsers.genderMatchingType
+      user.matchingGenderType !== selectedUsers.matchingGenderType
     ) {
       alert("선택된 유저와 matching 조건이 일치하지 않습니다.");
       return;
