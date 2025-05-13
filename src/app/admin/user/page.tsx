@@ -101,7 +101,7 @@ export default function AdminUserPage(): JSX.Element {
         // 모두 해제되면 초기 상태로
         setSelectedUsers({
           matchingType: "",
-          genderMatchingType: "",
+          matchingGenderType: "",
           userIds: [],
         });
       } else {
