@@ -4,8 +4,8 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import styles from "./styled.module.css";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
+import styles from "./styled.module.css";
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -136,10 +136,10 @@ export default function MatchingResultPage() {
         <div className={`font-[manseh] ${styles.캡쳐}`}>화면을 캡쳐하세요!</div>
         <div className={styles.messageBox}>
           상대방에게 dm을 보내주세요~
-          <br />
+          {/* <br />
           상대와 함께 부스를 방문하시고
           <br />
-          화면을 보여주시고 상품추첨하세요!
+          화면을 보여주시고 상품추첨하세요! */}
         </div>
         <div className={styles.boxWrapper}>
           <button>

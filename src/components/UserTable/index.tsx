@@ -13,7 +13,7 @@ interface User {
   matchingGroupId: number;
   matchingType: string;
   gender: string;
-  genderMatchingType: string;
+  matchingGenderType: string;
 }
 
 
@@ -62,6 +62,7 @@ const UserTable = ({
             <th className="px-4 py-2">매칭 타입</th>
             <th className="px-2 py-1">매칭 그룹 ID</th>
             <th className="px-4 py-2">성별</th>
+            <th className="px-4 py-2">매칭 성별 타입</th>
             <th className="px-4 py-2 w-[90px]">매칭 초기화</th>
             <th className="px-4 py-2">권한 수정</th>
             <th className="px-4 py-2">유저 삭제</th>
@@ -87,10 +88,12 @@ const UserTable = ({
               <td className="border-t px-4 py-2">{user.phoneNumber}</td>
               <td className="border-t px-4 py-2">{user.studentNumber}</td>
               <td className="border-t px-4 py-2">{user.instagramId}</td>
-              <td className="border-t px-4 py-2">{user.userStatus}</td>
-              <td className="border-t px-4 py-2">{user.matchingType}</td>
+              <td className="border-t px-4 py-2">{user.userStatus && (user.userStatus === "MATCHED" ? "매칭완료" : "대기중")}</td>
+              <td className="border-t px-4 py-2">{user.matchingType && (user.matchingType === "ONE_TO_ONE" ? "1:1" : "2:2")}</td>
               <td className="border-t px-4 py-2">{user.matchingGroupId}</td>
-              <td className="border-t px-4 py-2">{user.gender}</td>
+              <td className="border-t px-4 py-2">{user.gender === "M" ? "남" : "여"}</td>
+              {/* <td className="border-t px-4 py-2">{user.matchingGenderType}</td> */}
+              <td className="border-t px-4 py-2">{user.matchingGenderType && (user.matchingGenderType === "DIFFERENT_GENDER" ? "이성" : "동성")}</td>
               <td className="border-t px-4 py-2">
                 <button
                   onClick={() => {
