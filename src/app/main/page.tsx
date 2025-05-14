@@ -148,7 +148,10 @@ export default function MainPage() {
       try {
         const res = await adminFindMatchingGroups(temptoken);
         console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
-        setTotalMatchedGroupCount(res.data.totalMatchedGroupCount);
+        const countString = res.data.totalMatchedGroupCount;
+        const modifiedString = ["축제기간동안", ...countString.split(" ").slice(1)].join(" ");
+        // console.log("countString", modifiedString);
+        setTotalMatchedGroupCount(modifiedString);
         return res; // 매칭된 그룹 수 반환
       } catch (error) {
         console.error("매칭된 그룹 수 조회 에러:", error);
