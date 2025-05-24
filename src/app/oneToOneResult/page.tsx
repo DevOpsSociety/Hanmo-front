@@ -1,11 +1,11 @@
 "use client";
 
-import styles from "./styled.module.css";
-import Image from "next/image";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { symbol } from "zod";
+import { useEffect, useState } from "react";
+import styles from "./styled.module.css";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -20,6 +20,9 @@ interface MatchedUser {
 export default function OneToOneResultPage() {
   const [matchedUser, setMatchedUser] = useState<MatchResponse | null>();
   const router = useRouter();
+
+  useAuthGuard();
+
 
   useEffect(() => {
     const fetchData = async () => {

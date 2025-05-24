@@ -22,7 +22,7 @@ export default function OneToOneSameGender({
   }, [errorMessage]);
 
   return (
-    <button className={`${styles.btns} ${styles.oneToOne}`} onClick={onClick}>
+    <button className={`${styles.btns} ${styles.oneToOne} ${styles.leftBg}`} onClick={onClick}>
       친구 뽑기(1:1 동성)
     </button>
   );

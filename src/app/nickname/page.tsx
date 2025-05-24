@@ -1,11 +1,12 @@
 "use client";
-import Image from "next/image";
 import HanmoHeader from "@/components/HanmoHeader/HanmoHeader";
-import styles from "./styles.module.css";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./styles.module.css";
+import { useAuthGuard } from "../../hooks/useAuthGuard";
 
 type UserProfile = {
   nickname: string;
@@ -15,6 +16,10 @@ export default function NicknamePage() {
   const [nicknamePageData, setNicknamePageData] = useState<UserProfile | null>(
     null
   );
+
+  useAuthGuard();
+
+
   useEffect(() => {
     const fetchData = async () => {
       const temptoken = localStorage.getItem("token");
