@@ -9,12 +9,10 @@ import { StepTwoForm, stepTwoSchema } from "../../schemas/stepTwoSchema";
 import { RootState } from "../../store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { handleSignUpLogic } from "../../utils/authHandlers";
-import { borderClass, labelClass } from "../../utils/classNames";
 import { enumToOptions, objectEnumToOptions } from "../../utils/enumToOptions";
 import Button from "../common/Button";
-import Input from "../common/Input";
 import Option from "../common/Option";
-import ErrorMessage from "../ErrorMessage";
+import InputField from "../InputField";
 
 export default function SignUpStepTwo() {
   const router = useRouter();
@@ -27,13 +25,13 @@ export default function SignUpStepTwo() {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm<StepTwoForm>({
     resolver: zodResolver(stepTwoSchema),
   });
 
-  const selectedGender = watch("gender");
+  // const selectedGender = watch("gender");
 
   const handleSignup = async (data: StepTwoForm) => {
     await handleSignUpLogic(data, formData, dispatch, router, setLoading);
@@ -46,82 +44,61 @@ export default function SignUpStepTwo() {
   return (
     <form
       onSubmit={handleSubmit(handleSignup)}
-      className={`flex flex-col gap-5 w-[200px] mx-auto justify-center mt-10 ${labelClass}`}
+      className="flex flex-col gap-2 w-full max-w-[393px] mx-auto justify-center mt-6 px-3 font-[manSeh]"
     >
-      <Input
-        label="학번"
-        register={register}
-        registerName="studentNumber"
-        placeholder="202512345"
+      <InputField<StepTwoForm>
+        name="studentNumber"
+        placeholder="학번을 입력해 주세요"
         errorMessage={errors.studentNumber?.message}
-      />
-      <div className="text-[red] text-[9px] text-center">
-        학번은 아이디로 사용되니 정확히 입력해주세요.
-      </div>
-
-      <div className="w-full flex flex-col">
-        <label>성별</label>
-        <div className="flex justify-between gap-5">
-          {enumToOptions(Gender).map((opt) => {
-            const isSelected = selectedGender === String(opt.id);
-
-            return (
-              <label
-                key={opt.id}
-                className={`flex-1 text-[24px] text-center border cursor-pointer font-[manSeh] ${borderClass}
-        ${
-          isSelected
-            ? "bg-[#04447C] bg-opacity-90 text-white border-none"
-            : "text-[#2D2D2D] text-opacity-70"
-        }
-      `}
-              >
-                <input
-                  type="radio"
-                  value={opt.id}
-                  {...register("gender")}
-                  className="hidden"
-                />
-                {opt.label === "MALE" ? "남" : "여"}
-              </label>
-            );
-          })}
-        </div>
-        <ErrorMessage message={errors.gender?.message} />
-      </div>
-
-      <Option
-        label="MBTI"
         register={register}
-        registerName="mbti"
-        enumOptions={enumToOptions(MBTI)}
-        errorMessage={errors.mbti?.message}
       />
 
+      <div className="text-[#4AA0E8] text-[15px] text-left mb-2 ml-1">
+        학번은 아이디로 사용되오니 정확히 입력해 주세요!
+      </div>
+
       <Option
-        label="학과"
+        label="나의 학과는?"
         register={register}
         registerName="department"
         enumOptions={objectEnumToOptions(Department)}
         errorMessage={errors.department?.message}
       />
 
-      <Input
-        label="인스타"
+      <Option
+        label="나의 성별은?"
         register={register}
-        registerName="instagramId"
-        placeholder="hsu_it_zzang"
+        registerName="gender"
+        enumOptions={enumToOptions(Gender)}
+        errorMessage={errors.gender?.message}
+      />
+
+      <Option
+        label="나의 MBTI는?"
+        register={register}
+        registerName="mbti"
+        enumOptions={enumToOptions(MBTI)}
+        errorMessage={errors.mbti?.message}
+      />
+
+      <InputField<StepTwoForm>
+        name="instagramId"
+        placeholder="인스타그램 ID를 입력해 주세요"
         errorMessage={errors.instagramId?.message}
+        register={register}
       />
 
       <Button
-        name={loading ? "가입 중..." : "가입하고 별명짓기"}
-        className={loading ? "opacity-50 cursor-not-allowed" : "" + "mt-5"}
+        name={loading ? "가입 중..." : "가입하고 별명 짓기"}
+        className={
+          "mt-10 w-full h-14 bg-[#17406D] text-white text-[26px] font-[manSeh] rounded-xl"
+          + (loading ? " opacity-50 cursor-not-allowed" : "")
+        }
       />
 
-      {/* <p className="text-[10px] font-extrabold">
-        ※ 회원정보는 일주일 후에 자동 삭제됩니다.
-      </p> */}
+      <p className="text-[#BDBDBD] text-[16px] text-center mt-4 font-[pretendard]">
+        입력하신 정보는 가입 일주일 후 자동 폐기됩니다
+      </p>
     </form>
   );
 }

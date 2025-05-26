@@ -1,12 +1,10 @@
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
-import ErrorMessage from '../ErrorMessage';
 
 type OptionProps<T extends FieldValues> = {
   label?: string;
   register: UseFormRegister<T>;
   registerName: Path<T>;
-  //   enumOptions: Record<string, string | number> | object[];
-  enumOptions: object | Record<string, { id: number; name: string }>;
+  enumOptions: object | Record<string, { id: number; name: string; }>;
   errorMessage?: string;
 };
 
@@ -18,21 +16,26 @@ export default function Option<T extends FieldValues>({
   errorMessage,
 }: OptionProps<T>) {
   return (
-    <div className='w-full flex flex-col'>
-      <label>{label}</label>
+    <div className="w-full flex flex-col">
+      {/* label은 placeholder처럼 사용 */}
       <select
-        className='border-[1.5px] border-solid border-[rgba(0,0,0,0.5)] rounded-[10px] w-full h-11 px-3'
+        className="w-full border-0 border-b border-gray-300 bg-transparent text-[17px] placeholder:text-gray-400 focus:outline-none focus:border-[#3B5B7A] py-3 appearance-none"
         {...register(registerName)}
+        defaultValue=""
       >
-        <option value=''>선택</option>
+        <option value="" disabled hidden>
+          {label || "선택"}
+        </option>
         {Array.isArray(enumOptions) &&
           enumOptions.map((opt) => (
             <option key={opt.id} value={opt.id}>
-              {opt.label}
+              {opt.label || opt.name}
             </option>
           ))}
       </select>
-      <ErrorMessage message={errorMessage} />
+      {errorMessage && (
+        <p className="text-xs text-red-500 mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 }
