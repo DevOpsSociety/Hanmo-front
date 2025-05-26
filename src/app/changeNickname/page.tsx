@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import HanmoHeader from "@/components/HanmoHeader/HanmoHeader";
 import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -51,31 +50,25 @@ export default function ChangeNicknamePage() {
 
   return (
     <>
-      <HanmoHeader />
-      <div className={styles.container}>
-        <div className={styles.charContainer}>
-          <Image
-            className={styles.speechBubble}
-            src="/images/nicknamePage1.png"
-            alt="바꿀 기회는 1번입니다."
-            width={0}
-            height={0}
-            sizes="100vw" // 이거 없으면 화질깨짐
-          />
-          <Image
-            className={styles.mainchar}
-            src="/images/mainchar_smile.png"
-            alt="한모"
-            width={0}
-            height={0}
-            sizes="100vw" // 이거 없으면 화질깨짐
-          />
-        </div>
-        <div className={`${styles.userNickname} font-[nexon]`}>
+      {/* <HanmoHeader /> */}
+      <div className={`${styles.container} font-[manseh]`}>
+        <div className={styles.userNicknameWrapper}>
+        <div className={`${styles.userNickname}`}>
           {changeNicknamePageData?.nickname || "닉네임을 불러오는중..."}
         </div>
+        </div>
+        <div className={styles.maincharWrapper}>
+        <Image
+          className={styles.mainchar}
+          src="/images/mainchar_stand2.png"
+          alt="한모"
+          width={0}
+          height={0}
+          sizes="100vw" // 이거 없으면 화질깨짐
+        /> 
+        </div>
         <div className={`${styles.btnContainer} `}>
-          <Link href="/main" className={`font-[manseh] ${styles.btn}`}>
+          <Link href="/main" className={`${styles.btn}`}>
             완전좋아
           </Link>
         </div>
@@ -83,3 +76,12 @@ export default function ChangeNicknamePage() {
     </>
   );
 }
+
+{/* <Image
+className={styles.mainchar}
+src="/images/mainchar_smile.png"
+alt="한모"
+width={0}
+height={0}
+sizes="100vw" // 이거 없으면 화질깨짐
+/> */}
