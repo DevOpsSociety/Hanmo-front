@@ -82,6 +82,7 @@ export default function NicknamePage() {
         <div className={`${styles.userNickname}`}>
           {`${nicknamePageData?.nickname}`}
         </div>
+        <div className={styles.flexSpacer}></div>
         <div className={styles.maincharWrapper}>
         <Image
           className={styles.mainchar}
