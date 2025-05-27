@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { s } from 'framer-motion/client';
 
 type ChangeNicknamePageData = {
   nickname: string;
@@ -50,29 +51,29 @@ export default function ChangeNicknamePage() {
 
   return (
     <>
-      {/* <HanmoHeader /> */}
       <div className={`${styles.container} font-[manseh]`}>
-        <div className={styles.userNicknameWrapper}>
         <div className={`${styles.userNickname}`}>
           {changeNicknamePageData?.nickname || "닉네임을 불러오는중..."}
         </div>
+        <div className={styles.flexSpacer}></div> {/* 중간여백용 */}
+        
+          <div className={styles.maincharWrapper}>
+          <Image
+            className={styles.mainchar}
+            src="/images/mainchar_stand2.png"
+            alt="한모"
+            width={0}
+            height={0}
+            sizes="100vw" // 이거 없으면 화질깨짐
+          />
+          </div>
+          <div className={`${styles.btnContainer} `}>
+            <Link href="/main" className={`${styles.btn}`}>
+              완전좋아
+            </Link>
+          </div>
         </div>
-        <div className={styles.maincharWrapper}>
-        <Image
-          className={styles.mainchar}
-          src="/images/mainchar_stand2.png"
-          alt="한모"
-          width={0}
-          height={0}
-          sizes="100vw" // 이거 없으면 화질깨짐
-        /> 
-        </div>
-        <div className={`${styles.btnContainer} `}>
-          <Link href="/main" className={`${styles.btn}`}>
-            완전좋아
-          </Link>
-        </div>
-      </div>
+
     </>
   );
 }

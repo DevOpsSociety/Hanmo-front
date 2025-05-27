@@ -78,39 +78,30 @@ export default function NicknamePage() {
 
   return (
     <>
-      <HanmoHeader />
-      <div className={styles.container}>
-        <div className={styles.charContainer}>
-          <Image
-            className={styles.speechBubble}
-            src="/images/nicknamePage1.png"
-            alt="바꿀 기회는 1번입니다."
-            width={0}
-            height={0}
-            sizes="100vw" // 이거 없으면 화질깨짐
-          />
-          <Image
-            className={styles.mainchar}
-            src="/images/mainchar_smile.png"
-            alt="한모"
-            width={0}
-            height={0}
-            sizes="100vw" // 이거 없으면 화질깨짐
-          />
-        </div>
-        <div className={`${styles.userNickname} font-[nexonbold]`}>
+      <div className={`${styles.container} font-[manseh]`}>
+        <div className={`${styles.userNickname}`}>
           {`${nicknamePageData?.nickname}`}
         </div>
-        <div className={`${styles.btnsContainer} font-[manseh]`}>
-          <button
-            onClick={handleNicknameChange}
-            className={`${styles.btns} ${styles.btn_l}`}
-          >
-            변경
-          </button>
-          <Link href="/main" className={`${styles.btns} ${styles.btn_r}`}>
+        <div className={styles.maincharWrapper}>
+        <Image
+          className={styles.mainchar}
+          src="/images/mainchar_stand3.png"
+          alt="한모"
+          width={0}
+          height={0}
+          sizes="100vw" 
+        />
+        </div>
+        <div className={`${styles.btnsContainer} `}>
+          <Link href="/main" className={`${styles.btns} ${styles.btn_top}`}>
             좋아
           </Link>
+          <button
+            onClick={handleNicknameChange}
+            className={`${styles.btns} ${styles.btn_btm}`}
+          >
+            다시 짓기(1회 제한)
+          </button>
         </div>
       </div>
     </>
