@@ -1,7 +1,7 @@
 {
   "name": "Hanmo App",
   "short_name": "Hanmo",
-  "start_url": "/",
+  "start_url": "/landing",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#134D80",
