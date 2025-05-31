@@ -1,39 +1,42 @@
 .container {
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  padding-top: 110px;
+  background-color: #ffffff;
+  color: #134D80;
+  padding-top: 50px;
 }
-.charContainer {
+
+.userNicknameWrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 2rem;
-  padding-top: 100px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 20px;
+  padding-bottom: 20px;
 }
-
-.speechBubble {
-  width: 351px;
-  height: 114px;
-}
-
-.mainchar {
-  width: 144px;
-  height: 114px;
-}
-
 .userNickname {
-  font-size: 25px;
-  margin-top: 25px;
+  font-size: 80px;
+  width: 230px;
+}
+
+.maincharWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-right: 20px;
+}
+.mainchar {
+  width: 170px;
+  height: 143px;
 }
 
 .btnContainer {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 150px;
 }
 
 .btn {
@@ -49,11 +52,14 @@
   align-items: center;
 }
 
-/* 폰트 */
-.pretendardFont {
-  font-family: var(--font-pretendard);
-  font-weight: 700;
-}
-.mansehFont {
-  font-family: var(--font-manseh);
+/* 소형 화면 대응 (ipone se 기준) */
+@media screen and (max-width: 378px) {
+  .mainchar {
+    width: 120px;
+    height: 110px;
+  }
+  .userNickname {
+    font-size: 65px;
+    width: 200px;
+  }
 }
