@@ -18,7 +18,7 @@ export default function AdminMainLayout({
     <SignUpProviders>
       <PageHeader title="관리자 페이지" />
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </SignUpProviders>

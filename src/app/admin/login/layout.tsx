@@ -17,7 +17,7 @@ export default function AdminLoginLayout({
     <div>
       <PageHeader title="관리자 로그인" />
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </div>

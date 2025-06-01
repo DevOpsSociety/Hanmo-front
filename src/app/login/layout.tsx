@@ -17,7 +17,7 @@ export default function LoginLayout({
     <SignUpProviders>
       {/* <PageHeader title="로그인" /> */}
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </SignUpProviders>

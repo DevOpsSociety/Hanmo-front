@@ -1,23 +1,15 @@
-type ButtonProps = {
-  name?: string;
-  verificationVisible?: boolean;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
   className?: string;
-};
+}
 
-export default function Button({
-  name,
-  verificationVisible,
-  className,
-}: ButtonProps) {
+export default function Button({ children, className = "", ...props }: ButtonProps) {
   return (
     <button
-      type='submit'
-      className={`bg-[#04447C] bg-opacity-90 text-white rounded-[10px] h-[43px] text-[24px] font-[manSeh] cursor-pointer ${
-        verificationVisible && 'bg-gray-400'
-      } ${className}`}
-      disabled={verificationVisible}
+      className={`w-full h-[50px] rounded-xl bg-[#134D80] text-white text-[22px] font-[manseh] tracking-wider ${className}`}
+      {...props}
     >
-      {name}
+      {children}
     </button>
   );
 }

@@ -8,6 +8,7 @@ import leftBtn from "../../../public/leftButton.svg";
 import submitBtn from "../../../public/postSubmit.svg";
 import rightBtn from "../../../public/rightButton.svg";
 import MotionWrapper from "../../components/MotionWrapper";
+import { useAuthRedirect } from "../../hooks/useAuthRedirect";
 import usePosts from "../../hooks/usePosts";
 import { formatBackendDate } from "../../utils/formatBackendDate";
 
@@ -30,6 +31,8 @@ const PostsPage: React.FC = () => {
     handleEditPost,
     handleDeletePost,
   } = usePosts();
+
+  useAuthRedirect(undefined, "/login", "/login");
 
   return (
     <div className="max-w-[393px] h-[calc(100dvh-90px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
