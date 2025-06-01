@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
-import PageHeader from "../../components/PageHeader";
 import MotionWrapper from "../../components/MotionWrapper";
+import PageHeader from "../../components/PageHeader";
 
 export const metadata: Metadata = {
   title: "한모 회원탈퇴",
@@ -17,7 +17,7 @@ export default function withdrawLayout({
     <div>
       <PageHeader title="회원탈퇴" />
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </div>

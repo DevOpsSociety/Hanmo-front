@@ -18,7 +18,7 @@ export default function SignupLayout({
     <SignUpProviders>
       <PageHeader title="탈퇴복원" />
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </SignUpProviders>

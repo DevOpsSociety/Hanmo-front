@@ -1,10 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPost, deletePost, editPost, getPosts } from "../api/post";
-import { findUser } from "../api/user";
 
 interface Post {
   id: number;
@@ -15,8 +13,6 @@ interface Post {
 }
 
 export default function usePosts() {
-  const router = useRouter();
-
   const [content, setContent] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -32,6 +28,21 @@ export default function usePosts() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 닉네임과 토큰을 로컬스토리지에서 불러와 상태로 저장
+  useEffect(() => {
+    const nickname = localStorage.getItem("nickname");
+    const token = localStorage.getItem("token");
+    if (nickname) {
+      setUserNickName(nickname);
+    }
+    if (token) {
+      setTempToken(token);
+      fetchPosts(token); // 페이지 로드 시 게시글 가져오기
+    } else {
+      console.error("토큰이 없습니다.");
+    }
+  }, []);
+
   const fetchPosts = async (token: string, page = pageNumber) => {
     try {
       const res = await getPosts(token, page);
@@ -45,34 +56,6 @@ export default function usePosts() {
     }
   };
 
-  const checkAuth = () => {
-    const nickname = localStorage.getItem("nickname");
-    const token = localStorage.getItem("token");
-
-    if (nickname) setUserNickName(nickname);
-    if (token) setTempToken(token);
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
-    findUser(token)
-      .then((res) => {
-        if (res.status !== 200) {
-          router.push("/main");
-        }
-      })
-      .catch(() => {
-        router.push("/login");
-      });
-
-    fetchPosts(token);
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   const handlePrevPage = async () => {
     if (!tempToken || pageNumber <= 0) return;
