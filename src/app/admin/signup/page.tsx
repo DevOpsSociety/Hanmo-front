@@ -2,13 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Button from "../../../components/common/Button";
 import Input from "../../../components/common/Input";
 
 import { useRouter } from "next/navigation";
 import { AdminSignupForm, adminSignupSchema } from "../../../schemas/admin/adminSignupSchema";
 import { handleAdminSignupLogic } from "../../../utils/adminAuthHandlers";
 import { labelClass } from "../../../utils/classNames";
+import Button from "../../../components/common/Button";
 
 export default function AdminSignupPage(): JSX.Element {
   const router = useRouter();
@@ -51,12 +51,12 @@ export default function AdminSignupPage(): JSX.Element {
     >
       <div className="max-w-[393px] px-[56px] flex flex-col gap-4 mx-auto">
         <Input
-            label="전화번호"
-            register={register}
-            registerName="phoneNumber"
-            placeholder="01012345678"
-            errorMessage={errors.phoneNumber?.message}
-          />
+          label="전화번호"
+          register={register}
+          registerName="phoneNumber"
+          placeholder="01012345678"
+          errorMessage={errors.phoneNumber?.message}
+        />
 
         <Input
           label="관리자 아이디"
@@ -85,7 +85,9 @@ export default function AdminSignupPage(): JSX.Element {
         />
 
         <div className={`flex flex-col gap-3 mt-4 font-[manSeh]`}>
-          <Button name="관리자 계정 가입하기" className="mt-2" />
+          <Button type="submit">
+            관리자 계정 가입하기
+          </Button>
         </div>
         {(errors.loginId?.message || errors.loginPw?.message) && (
           <p className="text-red-500 font-[manSeh] text-[20px] ">
