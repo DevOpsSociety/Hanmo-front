@@ -88,7 +88,7 @@ export default function SignUpStepOne(): JSX.Element {
             className={verificationVisible ? "" : "bg-gray-300"}
             disabled={!verificationVisible}
           >
-            {verificationVisible ? "인증 확인" : "상단의 인증 버튼을 눌러주세요"}
+            {verificationVisible ? "다음" : "상단의 인증 버튼을 눌러주세요"}
           </Button>
 
           <div className="text-center text-xs text-gray-400 mt-3 underline font-[Pretendard]">

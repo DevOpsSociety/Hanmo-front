@@ -48,7 +48,7 @@ export default function SignUpStepTwo() {
     <FormContainer>
       <form
         onSubmit={handleSubmit(handleSignup)}
-        className="flex flex-col gap-2 pt-2 px-3 h-[calc(100vh-73px)]"
+        className="flex flex-col pt-2 px-3 h-[calc(100vh-73px)]"
       >
         <InputField<StepTwoForm>
           name="studentNumber"
@@ -59,41 +59,48 @@ export default function SignUpStepTwo() {
 
         <InfoMessage>학번은 아이디로 사용되오니 정확히 입력해 주세요!</InfoMessage>
 
-        <Option
-          label="나의 학과는?"
-          register={register}
-          registerName="department"
-          enumOptions={objectEnumToOptions(Department)}
-          errorMessage={errors.department?.message}
-        />
-        <Option
-          label="나의 성별은?"
-          register={register}
-          registerName="gender"
-          enumOptions={enumToOptions(Gender)}
-          errorMessage={errors.gender?.message}
-        />
-        <Option
-          label="나의 MBTI는?"
-          register={register}
-          registerName="mbti"
-          enumOptions={enumToOptions(MBTI)}
-          errorMessage={errors.mbti?.message}
-        />
+        <div className="mt-auto flex flex-col gap-2">
 
-        <InputField<StepTwoForm>
-          name="instagramId"
-          placeholder="인스타그램 ID를 입력해 주세요"
-          errorMessage={errors.instagramId?.message}
-          register={register}
-        />
-        <div className="mt-auto pb-8 pt-16">
-          <Button type="submit">
-            가입하고 별명 짓기
-          </Button>
+        </div>
+        <div className="mt-auto pb-8 pt-16 flex flex-col gap-20">
+          <div className="flex flex-col gap-2">
+            <Option
+              label="나의 학과는?"
+              register={register}
+              registerName="department"
+              enumOptions={objectEnumToOptions(Department)}
+              errorMessage={errors.department?.message}
+            />
+            <Option
+              label="나의 성별은?"
+              register={register}
+              registerName="gender"
+              enumOptions={enumToOptions(Gender)}
+              errorMessage={errors.gender?.message}
+            />
+            <Option
+              label="나의 MBTI는?"
+              register={register}
+              registerName="mbti"
+              enumOptions={enumToOptions(MBTI)}
+              errorMessage={errors.mbti?.message}
+            />
 
-          <div className="text-center text-xs text-gray-400 mt-3 font-[Pretendard]">
-            입력하신 정보는 가입 일주일 후 자동 폐기됩니다
+            <InputField<StepTwoForm>
+              name="instagramId"
+              placeholder="인스타그램 ID를 입력해 주세요"
+              errorMessage={errors.instagramId?.message}
+              register={register}
+            />
+          </div>
+          <div>
+            <Button type="submit">
+              가입하고 별명 짓기
+            </Button>
+
+            <div className="text-center text-xs text-gray-400 mt-3 font-[Pretendard]">
+              입력하신 정보는 가입 일주일 후 자동 폐기됩니다
+            </div>
           </div>
         </div>
       </form>
