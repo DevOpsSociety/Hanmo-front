@@ -46,7 +46,7 @@ export default function ReportModal({ open, onClose, onSubmit, reason, setReason
             </div>
             {/* 제출 버튼 */}
             <div className="flex justify-end">
-              <Button type="submit" className="w-20">
+              <Button type="submit" className="!w-20">
                 제출
               </Button>
             </div>
