@@ -18,7 +18,7 @@ export default function AdminMatchingQueueLayout({
     <SignUpProviders>
       <PageHeader title="매칭 대기열 조회" />
       <MotionWrapper>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </MotionWrapper>
     </SignUpProviders>

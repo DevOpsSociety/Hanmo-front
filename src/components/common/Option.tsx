@@ -19,7 +19,7 @@ export default function Option<T extends FieldValues>({
     <div className="w-full flex flex-col">
       {/* label은 placeholder처럼 사용 */}
       <select
-        className="w-full border-0 border-b border-gray-300 bg-transparent text-[17px] placeholder:text-gray-400 focus:outline-none focus:border-[#3B5B7A] px-2 py-3 appearance-none"
+        className="w-full border-0 border-b border-gray-300 bg-transparent text-[17px] placeholder:text-gray-400 focus:outline-none focus:border-[#3B5B7A] px-2 py-3 appearance-none text-[#134D80]"
         {...register(registerName)}
         defaultValue=""
       >

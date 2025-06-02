@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import deleteBtn from "../../../public/deleteButton.svg";
 import editBtn from "../../../public/edit.svg";
 import leftBtn from "../../../public/leftButton.svg";
 import submitBtn from "../../../public/postSubmit.svg";
 import rightBtn from "../../../public/rightButton.svg";
 import MotionWrapper from "../../components/MotionWrapper";
+import ReportModal from "../../components/ReportModal";
+import { useAuthRedirect } from "../../hooks/useAuthRedirect";
 import usePosts from "../../hooks/usePosts";
 import { formatBackendDate } from "../../utils/formatBackendDate";
 
@@ -30,6 +32,11 @@ const PostsPage: React.FC = () => {
     handleEditPost,
     handleDeletePost,
   } = usePosts();
+
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+
+  useAuthRedirect(undefined, "/login", "/login");
 
   return (
     <div className="max-w-[393px] h-[calc(100dvh-90px)] mx-auto flex flex-col gap-4 font-[Pretendard] relative">
@@ -65,6 +72,29 @@ const PostsPage: React.FC = () => {
           ))}
         </div>
       </MotionWrapper>
+
+      <div>
+        {/* ...채팅 UI... */}
+        <button
+          className="text-[#17406D] font-bold"
+          onClick={() => setReportOpen(true)}
+        >
+          신고하기
+        </button>
+
+        <ReportModal
+          open={reportOpen}
+          onClose={() => setReportOpen(false)}
+          onSubmit={() => {
+            // 신고 처리 로직
+            alert("신고가 접수되었습니다.");
+            setReportOpen(false);
+          }}
+          reason={reportReason}
+          setReason={setReportReason}
+        />
+      </div>
+
 
       <div className="flex flex-col w-full gap-3 absolute bottom-0">
         <div className="flex justify-center gap-10 items-center font-[manseh] text-xl font-bold px-6 mb-4">

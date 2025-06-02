@@ -12,6 +12,9 @@ import {
   handleVerifyCodeLogic,
 } from "../../utils/authHandlers";
 import InputField from "../InputField";
+import Button from "../common/Button";
+import FormContainer from "../common/FormContainer";
+import InfoMessage from "../common/InfoMessage";
 
 export default function SignUpStepOne(): JSX.Element {
   const router = useRouter();
@@ -35,13 +38,11 @@ export default function SignUpStepOne(): JSX.Element {
   };
 
   return (
-    <div className="max-w-[393px] mx-auto flex flex-col h-[calc(100vh-73px)] bg-white font-[manseh]">
-      {/* 입력 폼 */}
+    <FormContainer>
       <form
         className="flex flex-col gap-6 px-8 mt-8 h-[calc(100vh-73px)]"
         onSubmit={handleSubmit(verificationVisible ? verifyCode : sendCode)}
       >
-        {/* 이름 */}
         <InputField<StepOneForm>
           name="name"
           placeholder="이름을 입력해 주세요"
@@ -50,7 +51,6 @@ export default function SignUpStepOne(): JSX.Element {
           register={register}
         />
 
-        {/* 전화번호 + 인증 버튼 */}
         <div className="flex gap-2">
           <div className="flex-1">
             <InputField<StepOneForm>
@@ -70,7 +70,6 @@ export default function SignUpStepOne(): JSX.Element {
           </button>
         </div>
 
-        {/* 인증번호 입력 */}
         {verificationVisible && (
           <div>
             <InputField<StepOneForm>
@@ -79,18 +78,18 @@ export default function SignUpStepOne(): JSX.Element {
               errorMessage={errors.authNumber?.message}
               register={register}
             />
-            <p className="text-xs text-[#9ECCF3] mt-2 font-[Pretendard]">인증번호가 전송되었습니다</p>
+            <InfoMessage>인증번호가 전송되었습니다</InfoMessage>
           </div>
         )}
         {/* 하단 버튼 */}
         <div className="mt-auto pb-8 pt-16">
-          <button
+          <Button
             type="submit"
-            className={`w-full h-[56px] rounded-xl bg-[#19446C] text-white text-[22px] font-[manseh] tracking-wider ${verificationVisible ? "" : "bg-gray-300"}`}
+            className={verificationVisible ? "" : "bg-gray-300"}
             disabled={!verificationVisible}
           >
-            {verificationVisible ? "인증 확인" : "인증 요청"}
-          </button>
+            {verificationVisible ? "다음" : "상단의 인증 버튼을 눌러주세요"}
+          </Button>
 
           <div className="text-center text-xs text-gray-400 mt-3 underline font-[Pretendard]">
             <Link href="/restore">
@@ -99,6 +98,6 @@ export default function SignUpStepOne(): JSX.Element {
           </div>
         </div>
       </form>
-    </div>
+    </FormContainer>
   );
 }
