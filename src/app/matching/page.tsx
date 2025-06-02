@@ -11,6 +11,7 @@ import OneToOneDifferentGender from './components/OneToOneDifferentGender';
 import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
 import styles from "./styles.module.css";
+import SlideUpPanel from './components/SlideUpPanel';
 
 interface MatchedUser {
   nickname: string;
@@ -34,6 +35,11 @@ type MatchType =
 export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [firstValue, setFirstValue] = useState('18학번');
+  const [firstOpen, setFirstOpen] = useState(false);
+  const firstOptions = ['18학번', '19학번', '20학번', '21학번'];
+
 
   const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
@@ -108,11 +114,11 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      {/* <div className={`${styles.info} font-[nexon]`}>
-        매칭 후 부스에 오시면 뽑기 기회를 드립니다!
-      </div> */}
-      <Link href="/main" className={`${styles.홈으로}`}>
-        홈으로!
+      <SlideUpPanel />
+
+
+      <Link href="/main" className={`${styles.출발}`}>
+        출발!
       </Link>
     </div>
   );

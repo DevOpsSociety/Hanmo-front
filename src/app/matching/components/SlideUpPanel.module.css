@@ -1,0 +1,97 @@
+/* 슬라이드업 패널 부분 */
+.slideUpDiv {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.toggleBtn {
+  padding: 0.5rem 1rem;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: underline;
+}
+
+.panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background: #ffffff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+  z-index: 1000;
+  padding-top: 10px;
+  border-radius: 10px;
+}
+.panel.open {
+  transform: translateY(0);
+}
+
+.panelContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+}
+
+.closeBtn {
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* row */
+.rowContainer {
+  position: relative;
+  margin-bottom: 0.5rem;
+  width: 90%;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+
+.label {
+  font-size: 1rem;
+  color: #000;
+}
+
+.arrow {
+  font-size: 1rem;
+  color: #999;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;    /* .row 바로 아래에서 시작 */
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+}
+
+.option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.option:hover {
+  background: #f0f0f0;
+}
