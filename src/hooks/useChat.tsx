@@ -4,10 +4,11 @@ import SockJS from "sockjs-client";
 
 // 채팅 메시지 타입 정의
 interface ChatMessage {
-  id?: string;
+  roomId: string;
+  senderId: number;
+  senderNickname: string;
   content: string;
-  sender: string;
-  timestamp?: string;
+  sentAt: string;
 }
 
 // 채팅 WebSocket 커스텀 훅
@@ -15,8 +16,79 @@ export default function useChat(
   wsUrl = process.env.NEXT_PUBLIC_WS_URL || ""
 ) {
   // 채팅 내역 상태
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  // STOMP 클라이언트 인스턴스 저장용 ref
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
+    {
+      roomId: "77",
+      senderId: 2,
+      senderNickname: "Bob",
+      content: "안녕하세요!",
+      sentAt: "2025-06-03T17:17:13.913Z",
+    },
+    {
+      roomId: "77",
+      senderId: 1,
+      senderNickname: "신학의 귀여운 토토로",
+      content: "오늘 날씨가 참 좋아요.",
+      sentAt: "2025-06-03T17:18:00.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 4,
+      senderNickname: "Diana",
+      content: "다들 점심 뭐 드셨나요?",
+      sentAt: "2025-06-03T17:19:10.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 3,
+      senderNickname: "Charlie",
+      content: "저는 김치찌개 먹었어요.",
+      sentAt: "2025-06-03T17:20:20.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 1,
+      senderNickname: "신학의 귀여운 토토로",
+      content: "맛있겠네요!",
+      sentAt: "2025-06-03T17:21:30.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 4,
+      senderNickname: "Diana",
+      content: "저는 샐러드 먹었어요.",
+      sentAt: "2025-06-03T17:22:10.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 2,
+      senderNickname: "Bob",
+      content: "오늘 회의는 몇 시에 시작하나요?",
+      sentAt: "2025-06-03T17:23:05.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 3,
+      senderNickname: "Charlie",
+      content: "3시에 시작합니다.",
+      sentAt: "2025-06-03T17:24:00.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 1,
+      senderNickname: "신학의 귀여운 토토로",
+      content: "알겠습니다. 감사합니다!",
+      sentAt: "2025-06-03T17:25:10.000Z",
+    },
+    {
+      roomId: "77",
+      senderId: 2,
+      senderNickname: "Bob",
+      content: "모두 화이팅입니다!",
+      sentAt: "2025-06-03T17:26:00.000Z",
+    },
+  ]);
+  // ...existing code...
   const clientRef = useRef<Client | null>(null);
 
   useEffect(() => {
