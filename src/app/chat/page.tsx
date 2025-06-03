@@ -1,16 +1,15 @@
 "use client";
 
-import { useChat } from "@/hooks/useChat";
 import { useEffect, useState } from "react";
 import ChatInput from "../../components/ChatInput";
 import ChatList from "../../components/ChatList";
-import { useAuthRedirect } from "../../hooks/useAuthRedirect";
+import useChat from "../../hooks/useChat";
 
 const ChatPage = () => {
-  const { chatHistory, handleSendMessage } = useChat(/* wsUrl 필요시 전달 */);
+  const { chatHistory, handleSendMessage } = useChat(); // wsUrl 필요시 전달
   const [nickname, setNickname] = useState("");
 
-  useAuthRedirect(undefined, "/login", "/login");
+  // useAuthRedirect(undefined, "/login", "/login");
 
   useEffect(() => {
     const nicknameFromStorage = localStorage.getItem("nickname");

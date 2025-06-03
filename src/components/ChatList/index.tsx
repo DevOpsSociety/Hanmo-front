@@ -1,8 +1,10 @@
 interface ChatMessage {
-  senderNickname: string;
+  id?: string;
   content: string;
-  sentAt: string;
+  sender: string;
+  timestamp?: string;
 }
+
 
 interface ChatListProps {
   chatHistory: ChatMessage[];
@@ -13,7 +15,7 @@ export default function ChatList({ chatHistory, nickname }: ChatListProps) {
   return (
     <>
       {chatHistory.map((msg, idx) => {
-        const isMine = msg.senderNickname === nickname;
+        const isMine = msg.sender === nickname;
         return (
           <div
             key={idx}
@@ -24,7 +26,7 @@ export default function ChatList({ chatHistory, nickname }: ChatListProps) {
               className={`font-bold text-[#134D80] mb-1 ${isMine ? "text-right" : "text-left"
                 }`}
             >
-              {msg.senderNickname}
+              {msg.sender}
             </div>
             {/* 메시지 + 시간 */}
             <div
@@ -44,7 +46,7 @@ export default function ChatList({ chatHistory, nickname }: ChatListProps) {
                 className={`text-[10px] text-[#a6a6a6] ${isMine ? "order-2 mr-2" : ""
                   }`}
               >
-                {msg.sentAt}
+                {msg.timestamp}
               </span>
             </div>
           </div>
