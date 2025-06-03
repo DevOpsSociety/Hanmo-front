@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 interface OneToOneButtonProps {
   onClick: () => void;
   errorMessage?: string | null;
+  className?: string;
 }
 
 export default function OneToOneDifferentGender({
   onClick,
   errorMessage,
+  className,
 }: OneToOneButtonProps) {
   const router = useRouter();
 
@@ -19,10 +21,16 @@ export default function OneToOneDifferentGender({
       alert(errorMessage); // 모달로 수정하기
       router.back();
     }
-  }, [errorMessage]);
+  },[errorMessage]);
 
   return (
-    <button className={`${styles.btns} ${styles.oneToOne} ${styles.middleBg}`} onClick={onClick}>
+    <button onClick={onClick} 
+    className={`
+      ${styles.btns} 
+      ${styles.oneToOne} 
+      ${styles.middleBg}
+      ${className ?? ''}
+      `} >
       친구 뽑기(1:1 이성)
     </button>
   );

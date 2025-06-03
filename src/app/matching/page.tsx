@@ -36,11 +36,6 @@ export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [firstValue, setFirstValue] = useState('18학번');
-  const [firstOpen, setFirstOpen] = useState(false);
-  const firstOptions = ['18학번', '19학번', '20학번', '21학번'];
-
-
   const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
@@ -75,10 +70,7 @@ export default function MatchingPage() {
   const handleMoveToWaitingPage = () => {
     router.push("/matchingWaiting");
   };
-
-
   useAuthGuard();
-
 
   return (
     <div className={`${styles.container} font-[manseh]`}>
@@ -90,17 +82,15 @@ export default function MatchingPage() {
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
           onClick={() => handleMatch("one-to-one/same-gender")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
+          className={styles.raised}
           onClick={() => handleMatch("one-to-one/different-gender")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
           onClick={() => handleMatch("two-to-two")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
       </div>
@@ -115,8 +105,6 @@ export default function MatchingPage() {
         />
       </div>
       <SlideUpPanel />
-
-
       <Link href="/main" className={`${styles.출발}`}>
         출발!
       </Link>

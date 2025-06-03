@@ -23,7 +23,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50vh;
+  height: 45vh;
   background: #ffffff;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
   transform: translateY(100%);
@@ -46,7 +46,9 @@
 .closeBtn {
   cursor: pointer;
   padding: 0.25rem 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  text-decoration: underline;
+  color: #04447C;
 }
 
 /* row */
@@ -54,6 +56,7 @@
   position: relative;
   margin-bottom: 0.5rem;
   width: 90%;
+  padding: 10px 0px 10px 0px;
 }
 
 .row {
@@ -71,21 +74,24 @@
 }
 
 .arrow {
-  font-size: 1rem;
-  color: #999;
+  font-size: 1.3rem;
+  color: #04447C;
 }
 
 .dropdown {
   position: absolute;
-  top: 100%;    /* .row 바로 아래에서 시작 */
+  top: 86%; 
   left: 0;
   width: 100%;
   background: #fff;
   border: 1px solid #e0e0e0;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0px;
   z-index: 10;
+
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .option {
