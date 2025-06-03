@@ -21,7 +21,7 @@ export default function SignUpStepTwo() {
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state: RootState) => state.signUp.formData);
 
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   console.log();
 

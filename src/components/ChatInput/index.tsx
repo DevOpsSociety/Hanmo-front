@@ -3,7 +3,7 @@ import { useState } from "react";
 import submitBtn from "../../../public/postSubmit.svg";
 
 interface ChatInputProps {
-  onSend: (content: string) => void;
+  onSend: (content: object) => void;
 }
 
 export default function ChatInput({ onSend }: ChatInputProps) {
@@ -20,7 +20,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
       />
       <button
         onClick={() => {
-          onSend(input);
+          onSend({ input });
           setInput("");
         }}
         className="col-span-1 h-full rounded-2xl font-[manseh] text-xl"

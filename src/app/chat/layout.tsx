@@ -1,6 +1,5 @@
 import React from "react";
-import HanmoHeader from "../../components/HanmoHeader/HanmoHeader";
-
+import PageHeader from "../../components/PageHeader";
 export default function ChatLayout({
   children,
 }: {
@@ -8,9 +7,7 @@ export default function ChatLayout({
 }) {
   return (
     <div className="overflow-hidden">
-      <header className="h-[70px] w-full mt-5 flex justify-center items-center relative">
-        <HanmoHeader />
-      </header>
+      <PageHeader title={"23:59"} />
       {children}
     </div>
   );

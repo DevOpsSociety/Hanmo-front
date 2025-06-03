@@ -1,84 +1,60 @@
+import { Client, IMessage } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react";
-import { connectChatSocket, getChatHistory, getRoomId, joinChatRoom, sendMessage } from "../api/chat";
+import SockJS from "sockjs-client";
 
-
+// 채팅 메시지 타입 정의
 interface ChatMessage {
-  roomId: string;
-  senderId: number;
-  senderNickname: string;
+  id?: string;
   content: string;
-  sentAt: string;
+  sender: string;
+  timestamp?: string;
 }
 
-export function useChat(wsUrl?: string) {
-  const [token, setToken] = useState<string>("");
-  const [roomId, setRoomId] = useState<string>("");
-  const socketRef = useRef<WebSocket | null>(null);
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-    {
-      roomId: "77",
-      senderId: 205,
-      senderNickname: "신학의 귀여운 토토로",
-      content: "하이",
-      sentAt: "2025-05-31T16:56:20.080109037"
-    },
-    {
-      roomId: "77",
-      senderId: 205,
-      senderNickname: "컴공의 귀여운 토토로",
-      content: "반가워용",
-      sentAt: "2025-05-31T16:56:20.080109037"
-    },
-  ]);
+// 채팅 WebSocket 커스텀 훅
+export default function useChat(
+  wsUrl = process.env.NEXT_PUBLIC_WS_URL || ""
+) {
+  // 채팅 내역 상태
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  // STOMP 클라이언트 인스턴스 저장용 ref
+  const clientRef = useRef<Client | null>(null);
 
-  // 토큰 및 채팅방 초기화
   useEffect(() => {
-    const temptoken = localStorage.getItem("token");
-    if (temptoken) setToken(temptoken);
+    // STOMP 클라이언트 생성 및 설정
+    const client = new Client({
+      // SockJS를 이용해 WebSocket 연결 생성
+      webSocketFactory: () => new SockJS(wsUrl),
+      // 연결이 끊겼을 때 5초 후 재연결 시도
+      reconnectDelay: 5000,
+      // 연결 성공 시 실행되는 콜백
+      onConnect: () => {
+        // 채팅방 구독: 메시지 수신 시 chatHistory에 추가
+        client.subscribe("/topic/chat/1", (message: IMessage) => {
+          const msg = JSON.parse(message.body);
+          setChatHistory((prev) => [...prev, msg]);
+        });
+      },
+    });
 
-    async function fetchRoomIdAndJoin() {
-      if (!temptoken) return;
-      try {
-        const res = await getRoomId(temptoken);
-        const roomId = res.data;
-        setRoomId(roomId);
-        await joinChatRoom(temptoken, roomId);
-        const historyRes = await getChatHistory(temptoken, roomId);
-        setChatHistory(historyRes.data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchRoomIdAndJoin();
-  }, []);
+    // WebSocket 연결 시작
+    client.activate();
+    // 클라이언트 인스턴스 ref에 저장
+    clientRef.current = client;
 
-  // WebSocket 연결 (실시간 채팅이 필요할 때)
-  useEffect(() => {
-    if (!wsUrl || !roomId) return;
-    socketRef.current = connectChatSocket(wsUrl);
-
-    socketRef.current.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      setChatHistory((prev) => [...prev, msg]);
-    };
-
+    // 컴포넌트 언마운트 시 연결 해제
     return () => {
-      socketRef.current?.close();
+      client.deactivate();
     };
-  }, [wsUrl, roomId]);
+  }, [wsUrl]);
 
-  // 메시지 전송
-  const handleSendMessage = async (content: string) => {
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      // WebSocket 실시간 전송
-      socketRef.current.send(JSON.stringify({ roomId, content, token }));
-    } else if (token && roomId) {
-      // REST API 전송
-      await sendMessage(token, roomId, content);
-      const historyRes = await getChatHistory(token, roomId);
-      setChatHistory(historyRes.data);
-    }
+  // 메시지 전송 함수
+  const handleSendMessage = (msg: object) => {
+    clientRef.current?.publish({
+      destination: "/app/chat.send/1", // 서버로 메시지 전송 경로
+      body: JSON.stringify(msg),
+    });
   };
 
-  return { roomId, chatHistory, handleSendMessage };
+  // 채팅 내역과 메시지 전송 함수 반환
+  return { chatHistory, handleSendMessage };
 }
