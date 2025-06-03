@@ -65,7 +65,30 @@ const PostsPage: React.FC = () => {
                       </button>
                     </div>
                   )}
-                  <span className="text-[10px] text-[#a6a6a6]">{formatBackendDate(post.createDate)}</span>
+                  <div className="text-[10px] text-[#a6a6a6]">
+                    <span>{formatBackendDate(post.createDate)}</span>
+                    <span> | </span>
+                    <span>
+                      {/* ...채팅 UI... */}
+                      <button
+                        onClick={() => setReportOpen(true)}
+                      >
+                        신고
+                      </button>
+
+                      <ReportModal
+                        open={reportOpen}
+                        onClose={() => setReportOpen(false)}
+                        onSubmit={() => {
+                          // 신고 처리 로직
+                          alert("신고가 접수되었습니다.");
+                          setReportOpen(false);
+                        }}
+                        reason={reportReason}
+                        setReason={setReportReason}
+                      />
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -73,27 +96,7 @@ const PostsPage: React.FC = () => {
         </div>
       </MotionWrapper>
 
-      <div>
-        {/* ...채팅 UI... */}
-        <button
-          className="text-[#17406D] font-bold"
-          onClick={() => setReportOpen(true)}
-        >
-          신고하기
-        </button>
 
-        <ReportModal
-          open={reportOpen}
-          onClose={() => setReportOpen(false)}
-          onSubmit={() => {
-            // 신고 처리 로직
-            alert("신고가 접수되었습니다.");
-            setReportOpen(false);
-          }}
-          reason={reportReason}
-          setReason={setReportReason}
-        />
-      </div>
 
 
       <div className="flex flex-col w-full gap-3 absolute bottom-0">
