@@ -1,6 +1,7 @@
 import { Client, IMessage } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
+import { getChatHistory, sendMessage } from "../api/chat";
 
 // 채팅 메시지 타입 정의
 interface ChatMessage {
@@ -12,119 +13,65 @@ interface ChatMessage {
 }
 
 // 채팅 WebSocket 커스텀 훅
-export default function useChat(
-  wsUrl = process.env.NEXT_PUBLIC_WS_URL || ""
-) {
-  // 채팅 내역 상태
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-    {
-      roomId: "77",
-      senderId: 2,
-      senderNickname: "컴공의 강하늘 김태남",
-      content: "안녕하세요!",
-      sentAt: "2025-06-03T17:17:13.913Z",
-    },
-    {
-      roomId: "77",
-      senderId: 1,
-      senderNickname: "신학의 귀여운 토토로",
-      content: "오늘 날씨가 참 좋아요.",
-      sentAt: "2025-06-03T17:18:00.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 4,
-      senderNickname: "디자인과의 천재 디자이너",
-      content: "다들 점심 뭐 드셨나요?",
-      sentAt: "2025-06-03T17:19:10.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 3,
-      senderNickname: "백엔드 초고수 박지훈",
-      content: "저는 김치찌개 먹었어요.",
-      sentAt: "2025-06-03T17:20:20.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 1,
-      senderNickname: "신학의 귀여운 토토로",
-      content: "맛있겠네요!",
-      sentAt: "2025-06-03T17:21:30.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 4,
-      senderNickname: "디자인과의 천재 디자이너",
-      content: "저는 샐러드 먹었어요.",
-      sentAt: "2025-06-03T17:22:10.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 2,
-      senderNickname: "컴공의 강하늘 김태남",
-      content: "오늘 회의는 몇 시에 시작하나요?",
-      sentAt: "2025-06-03T17:23:05.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 3,
-      senderNickname: "백엔드 초고수 박지훈",
-      content: "3시에 시작합니다.",
-      sentAt: "2025-06-03T17:24:00.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 1,
-      senderNickname: "신학의 귀여운 토토로",
-      content: "알겠습니다. 감사합니다!",
-      sentAt: "2025-06-03T17:25:10.000Z",
-    },
-    {
-      roomId: "77",
-      senderId: 2,
-      senderNickname: "컴공의 강하늘 김태남",
-      content: "모두 화이팅입니다!",
-      sentAt: "2025-06-03T17:26:00.000Z",
-    },
-  ]);
-  // ...existing code...
+export default function useChat(roomId: string) {
+  const wsUrl = process.env.NEXT_PUBLIC_API_WS_URL || "";
+
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const clientRef = useRef<Client | null>(null);
 
+  // 1. 채팅 기록 불러오기
   useEffect(() => {
-    // STOMP 클라이언트 생성 및 설정
+    if (!roomId) return;
+    const tempToken = localStorage.getItem("token");
+    if (!tempToken) return;
+
+    getChatHistory(tempToken, roomId)
+      .then(res => {
+        console.log("채팅 기록 불러오기 응답:", res);
+        setChatHistory(res.data); // 백엔드 응답 구조에 따라 res.data.messages 등으로 수정
+      })
+      .catch(() => setChatHistory([]));
+  }, [roomId]);
+
+
+  useEffect(() => {
+    if (!roomId) return; // roomId 없으면 연결하지 않음
+
     const client = new Client({
-      // SockJS를 이용해 WebSocket 연결 생성
       webSocketFactory: () => new SockJS(wsUrl),
-      // 연결이 끊겼을 때 5초 후 재연결 시도
       reconnectDelay: 5000,
-      // 연결 성공 시 실행되는 콜백
       onConnect: () => {
-        // 채팅방 구독: 메시지 수신 시 chatHistory에 추가
-        client.subscribe("/topic/chat/1", (message: IMessage) => {
+        client.subscribe(`/topic/chat/${roomId}`, (message: IMessage) => {
           const msg = JSON.parse(message.body);
           setChatHistory((prev) => [...prev, msg]);
         });
       },
     });
 
-    // WebSocket 연결 시작
     client.activate();
-    // 클라이언트 인스턴스 ref에 저장
     clientRef.current = client;
 
-    // 컴포넌트 언마운트 시 연결 해제
     return () => {
       client.deactivate();
     };
-  }, [wsUrl]);
+  }, [roomId, wsUrl]);
 
   // 메시지 전송 함수
-  const handleSendMessage = (msg: object) => {
-    clientRef.current?.publish({
-      destination: "/app/chat.send/1", // 서버로 메시지 전송 경로
-      body: JSON.stringify(msg),
-    });
+  const handleSendMessage = async (msg: object) => {
+    // console.log("Sending message:", msg);
+
+    const tempToken = localStorage.getItem("token");
+    if (!tempToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    try {
+      await sendMessage(tempToken, roomId, msg);
+      // 필요하다면 전송 후 채팅 내역을 새로고침하거나, 낙관적 업데이트 가능
+    } catch {
+      alert("메시지 전송에 실패했습니다.");
+    }
+
   };
 
   // 채팅 내역과 메시지 전송 함수 반환

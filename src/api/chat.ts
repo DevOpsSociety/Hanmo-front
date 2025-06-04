@@ -43,11 +43,11 @@ export const joinChatRoom = (
 export const sendMessage = (
   tempToken: string,
   roomId: string,
-  msg: string
+  msg: object
 ) => {
   return api.post(
     `/chat/rooms/${roomId}/send-message`,
-    { msg },
+    msg,
     {
       headers: {
         tempToken: tempToken,
