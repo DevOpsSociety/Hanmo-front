@@ -156,7 +156,7 @@ export default function MainPage() {
         const res = await adminFindMatchingGroups(temptoken);
         console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
         const countString = res.data.totalMatchedGroupCount;
-        const modifiedString = ["축제기간동안", ...countString.split(" ").slice(1)].join(" ");
+        const modifiedString = ["지금까지 ", ...countString.split(" ").slice(1)].join(" ");
         // console.log("countString", modifiedString);
         setTotalMatchedGroupCount(modifiedString);
         return res; // 매칭된 그룹 수 반환
@@ -198,7 +198,7 @@ export default function MainPage() {
           </button>
         )}
         {errorCode === "400" && (
-          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.middleBg} `}>
+          <button onClick={handleCancelMatching} className={`${styles.middleBg} ${styles.btns}`}>
             매칭 < br />
             취소
           </button >
@@ -223,7 +223,6 @@ export default function MainPage() {
       <div>{totalMatchedGroupCount}</div>
       <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
       <AdCarousel images={ads}/>
-
     </div >
   );
 }

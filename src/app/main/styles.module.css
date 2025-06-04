@@ -37,12 +37,11 @@
 
 .btns묶음 {
   display: flex;
-  /* justify-content: center; */
-  /* align-items: center; */
+  justify-content: center;
+  align-items: center;
   flex-direction:row;
   gap: 16px;
   font-size: 24px;
-  padding-bottom: 10px;
 }
 .btns {
   background-size: contain;
@@ -71,6 +70,8 @@
 
 .middleBg {
   background-image: url('/images/matchingPage/btn_middle_ver4.png');
+  align-self: flex-start;
+  margin-bottom: 30px;
 }
 
 .adCarousel {
