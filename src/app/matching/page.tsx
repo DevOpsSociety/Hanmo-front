@@ -36,6 +36,10 @@ export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const [eiMbti, setEiMbti] = useState<"E" | "I">("E");
+  const [ftMbti, setFtMbti] = useState<"F" | "T">("T");
+  const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
+
   const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
@@ -43,8 +47,15 @@ export default function MatchingPage() {
     }
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
     console.log("URL:", url);
+
+    const body = {
+      eiMbti,               
+      ftMbti,               
+      preferredStudentYear, 
+    };
+  
     try {
-      const response = await axios.post(url, null, {
+      const response = await axios.post(url, body, {
         headers: {
           tempToken: temptoken,
         },
