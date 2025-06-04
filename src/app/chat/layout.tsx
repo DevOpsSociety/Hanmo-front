@@ -1,14 +1,15 @@
-import React from "react";
-import PageHeader from "../../components/PageHeader";
-export default function ChatLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+"use client";
+
+import { Provider } from "react-redux";
+import ChatLayoutClient from "../../components/ChatLayoutClient/intex";
+import { store } from "../../store";
+
+export default function ChatLayout({ children }: { children: React.ReactNode; }) {
   return (
-    <div className="overflow-hidden">
-      <PageHeader title={"23:59"} />
-      {children}
-    </div>
+    <Provider store={store}>
+      <ChatLayoutClient>
+        {children}
+      </ChatLayoutClient>
+    </Provider>
   );
 }
