@@ -13,9 +13,10 @@ interface ChatMessage {
 interface ChatListProps {
   chatHistory: ChatMessage[];
   nickname: string;
+  participants: number;
 }
 
-export default function ChatList({ chatHistory, nickname }: ChatListProps) {
+export default function ChatList({ chatHistory, nickname, participants }: ChatListProps) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -24,14 +25,15 @@ export default function ChatList({ chatHistory, nickname }: ChatListProps) {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "auto" });
-  }, [chatHistory]);
+    console.log("participants", participants);
+  }, [chatHistory, participants]);
 
   return (
     <div>
       <div>
         <div className="flex flex-col text-center text-[13px] items-center">
           <div className="text-[#A6A6A6] py-8">
-            4인 채팅이 시작되었어요! <br />
+            {participants.toString()}인 채팅이 시작되었어요! <br />
             남은 시간에 유의하세요.
           </div>
           <div className="w-[100px] h-8 rounded-[20px] bg-[#134D80] text-white flex items-center justify-center">
