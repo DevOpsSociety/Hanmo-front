@@ -13,13 +13,23 @@
 }
 
 .leftBg {
-  background-image: url('/images/matchingPage/btn_left_ver2.png');
+  background-image: url('/images/matchingPage/btn_left_ver3.png');
+}
+.leftBg:hover {
+  background-image: url('/images/matchingPage/btn_left_ver4.png');
 }
 
 .rightBg {
-  background-image: url('/images/matchingPage/btn_right_ver2.png');
+  background-image: url('/images/matchingPage/btn_right_ver3.png');
+}
+.rightBg:hover {
+  background-image: url('/images/matchingPage/btn_right_ver4.png');
 }
 
 .middleBg {
-  background-image: url('/images/matchingPage/btn_middle_ver2.png');
+  background-image: url('/images/matchingPage/btn_middle_ver3.png');
+}
+
+.middleBg:hover {
+  background-image: url('/images/matchingPage/btn_middle_ver4.png');
 }

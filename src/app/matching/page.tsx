@@ -11,6 +11,7 @@ import OneToOneDifferentGender from './components/OneToOneDifferentGender';
 import OneToOneSameGender from "./components/OneToOneSameGender";
 import TwoToTwoButton from "./components/TwoToTwoButton";
 import styles from "./styles.module.css";
+import SlideUpPanel from './components/SlideUpPanel';
 
 interface MatchedUser {
   nickname: string;
@@ -35,6 +36,10 @@ export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const [eiMbti, setEiMbti] = useState<"E" | "I">("E");
+  const [ftMbti, setFtMbti] = useState<"F" | "T">("T");
+  const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
+
   const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
@@ -42,8 +47,15 @@ export default function MatchingPage() {
     }
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
     console.log("URL:", url);
+
+    const body = {
+      eiMbti,               
+      ftMbti,               
+      preferredStudentYear, 
+    };
+  
     try {
-      const response = await axios.post(url, null, {
+      const response = await axios.post(url, body, {
         headers: {
           tempToken: temptoken,
         },
@@ -69,10 +81,7 @@ export default function MatchingPage() {
   const handleMoveToWaitingPage = () => {
     router.push("/matchingWaiting");
   };
-
-
   useAuthGuard();
-
 
   return (
     <div className={`${styles.container} font-[manseh]`}>
@@ -84,17 +93,15 @@ export default function MatchingPage() {
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
           onClick={() => handleMatch("one-to-one/same-gender")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
+          className={styles.raised}
           onClick={() => handleMatch("one-to-one/different-gender")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
         <TwoToTwoButton
           onClick={() => handleMatch("two-to-two")}
-          // onClick={() => alert("5월 13일 화요일에 열릴 예정입니다!!!")}
           errorMessage={errorMessage}
         />
       </div>
@@ -108,11 +115,9 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      {/* <div className={`${styles.info} font-[nexon]`}>
-        매칭 후 부스에 오시면 뽑기 기회를 드립니다!
-      </div> */}
-      <Link href="/main" className={`${styles.홈으로}`}>
-        홈으로!
+      <SlideUpPanel />
+      <Link href="/main" className={`${styles.출발}`}>
+        출발!
       </Link>
     </div>
   );

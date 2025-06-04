@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { geistMono, geistSans, Manseh, Nexon, Pretendard } from "../font";
 import "./globals.css";
+import "slick-carousel/slick/slick.css";     
+import "slick-carousel/slick/slick-theme.css";
 
 export const metadata: Metadata = {
   title: "한모",

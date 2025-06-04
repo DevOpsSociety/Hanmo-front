@@ -1,0 +1,29 @@
+.wrapper {
+  width: 100%;
+  height: 150px;          /* 캐러셀 전체 높이 */
+  position: relative;
+  overflow: visible;     
+  background-color: #f0f0f0;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;          /* wrapper와 동일 높이 */
+  margin: 0;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* 가로세로 비율 유지하면서 꽉 채우기 */
+}
+
+.wrapper :global(.slick-dots li button:before) {
+  color: #888888;       /* 비활성 도트 색 */
+}
+
+.wrapper :global(.slick-dots li.slick-active button:before) {
+  color: #134D80;       /* 활성 도트 색 */
+}
