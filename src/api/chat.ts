@@ -2,7 +2,7 @@ import api from "./axiosInstance";
 
 // 1. 채팅방 ID 조회
 export const getRoomInfo = (tempToken: string) => {
-  return api.get("/chat/chat/room-info", {
+  return api.get("/chat/rooms/info", {
     headers: {
       tempToken: tempToken,
     },
