@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import HeaderBackButton from "../HeaderBackButton";
 
 // 일(day)에 1을 더하고, 월/년 넘김도 자동 처리
@@ -17,25 +18,25 @@ function addOneDay(isoString: string) {
   };
 }
 
-// 현재 UTC 시간 가져오기
-function getCurrentKSTTime() {
+// 현재 UTC 시간 가져오기 (KST 변환 제거)
+function getCurrentUTCTime() {
   const now = new Date();
-  // 한국 시간으로 변환 (UTC+9)
-  const kstOffset = 9 * 60; // 9시간을 분으로 변환
-  const kstTime = new Date(now.getTime() + (kstOffset * 60 * 1000));
 
   return {
-    year: kstTime.getUTCFullYear(), // UTC 메서드를 사용하지만 실제로는 KST 시간
-    month: kstTime.getUTCMonth() + 1,
-    day: kstTime.getUTCDate(),
-    hour: kstTime.getUTCHours(),
-    minute: kstTime.getUTCMinutes(),
+    year: now.getUTCFullYear(),
+    month: now.getUTCMonth() + 1,
+    day: now.getUTCDate(),
+    hour: now.getUTCHours(), // UTC 시간 그대로 사용
+    minute: now.getUTCMinutes(),
   };
 }
 
 // 남은 시간 계산 (시:분 형식) - 수정된 버전
 function calculateRemainTime(targetDateTime: { year: number; month: number; day: number; hour: number; minute: number; }) {
-  const currentTime = getCurrentKSTTime(); // UTC 대신 KST 사용
+  const currentTime = getCurrentUTCTime(); // KST 대신 UTC 사용
+
+  console.log("현재 UTC 시간:", currentTime);
+  console.log("목표 UTC 시간:", targetDateTime);
 
   // Date 객체로 변환 (UTC 기준)
   const target = new Date(Date.UTC(targetDateTime.year, targetDateTime.month - 1, targetDateTime.day, targetDateTime.hour, targetDateTime.minute));
@@ -62,20 +63,35 @@ function isISOString(str: string) {
 }
 
 export default function PageHeader({ title }: { title: string; }) {
-  let displayTitle = title;
+  const [displayTitle, setDisplayTitle] = useState(title);
 
-  // title이 ISO 문자열이면 남은 시간을 계산해서 표시
-  if (isISOString(title)) {
-    // 일에 1을 더한 값 계산
-    const nextDay = addOneDay(title);
+  // title이 ISO 문자열일 때 1분마다 업데이트
+  useEffect(() => {
+    if (!isISOString(title)) {
+      setDisplayTitle(title);
+      return;
+    }
 
-    // 현재 시간과 비교해서 남은 시간 계산
-    const remainTime = calculateRemainTime(nextDay);
-    console.log("남은 시간:", remainTime);
+    // 즉시 한 번 계산
+    const updateRemainTime = () => {
+      const nextDay = addOneDay(title);
+      console.log("다음 날:", nextDay);
 
-    // 남은 시간을 title로 사용
-    displayTitle = remainTime;
-  }
+      const remainTime = calculateRemainTime(nextDay);
+      console.log("남은 시간:", remainTime);
+
+      setDisplayTitle(remainTime);
+    };
+
+    // 첫 번째 업데이트
+    updateRemainTime();
+
+    // 1분(60초)마다 업데이트
+    const timer = setInterval(updateRemainTime, 60 * 1000);
+
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => clearInterval(timer);
+  }, [title]);
 
   return (
     <header className="relative text-center border-b border-solid border-[#E7E7E7] h-[73px] flex items-center justify-center">

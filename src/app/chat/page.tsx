@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getRoomInfo, joinChatRoom } from "../../api/chat";
+import { getRoomInfo } from "../../api/chat";
 import ChatInput from "../../components/ChatInput";
 import ChatList from "../../components/ChatList";
 import useChat from "../../hooks/useChat";
@@ -39,7 +39,7 @@ const ChatPage = () => {
         dispatch(setCreatedAt(createdAt));
         setParticipants(participantCount);
 
-        return joinChatRoom(tempToken, roomId);
+        // return joinChatRoom(tempToken, roomId);
       })
       .then(() => {
         setLoading(false);
