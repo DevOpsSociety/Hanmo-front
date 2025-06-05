@@ -48,12 +48,9 @@ const ChatPage = () => {
         console.error("백엔드 에러:", err);
         setLoading(false);
 
-        // 500 에러 처리 추가
-        if (err?.response?.status === 500) {
-          setErrorCode("SERVER_ERROR");
+        if (err?.response?.data.errorCode) {
+          setErrorCode(err?.response?.data.errorCode);
           console.error("서버 내부 오류 발생");
-        } else if (err?.response?.data?.code) {
-          setErrorCode(err.response.data.code);
         } else {
           setErrorCode("UNKNOWN");
         }
@@ -80,6 +77,8 @@ const ChatPage = () => {
   }, []);
 
   const { chatHistory, handleSendMessage } = useChat(roomId || "");
+
+  console.log("에러 코드 :", errorCode);
 
   if (loading) return <div>로딩중...</div>;
   if (errorCode === "SERVER_ERROR") return <div>서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>;
