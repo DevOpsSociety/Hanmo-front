@@ -36,9 +36,11 @@ export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [eiMbti, setEiMbti] = useState<"E" | "I">("E");
-  const [ftMbti, setFtMbti] = useState<"F" | "T">("T");
-  const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
+  const [studentYear, setStudentYear] = useState<string>("상관없음");
+  const [mbtiEI, setMbtiEI]         = useState<"E"|"I">("E");
+  const [mbtiFT, setMbtiFT]         = useState<"F"|"T">("F");
+  // const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
+
 
   const handleMatch = async (type: MatchType) => {
     const temptoken = localStorage.getItem("token");
@@ -48,10 +50,15 @@ export default function MatchingPage() {
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
     console.log("URL:", url);
 
+    const preferredStudentYear =
+      studentYear === "상관없음"
+        ? null
+        : Number(studentYear.replace("학번", "")) + 2000; 
+
     const body = {
-      eiMbti,               
-      ftMbti,               
-      preferredStudentYear, 
+      eiMbti: mbtiEI,               
+      ftMbti: mbtiFT,               
+      preferredStudentYear: preferredStudentYear, 
     };
   
     try {
@@ -65,7 +72,8 @@ export default function MatchingPage() {
       console.log("Response:", response);
       onmessage = response?.data?.message;
       alert("대기등록이 완료됐습니다!");
-      handleMoveToWaitingPage();
+      // handleMoveToWaitingPage();
+      router.push("/matchingWaiting");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const dataErrorMessage = error.response?.data?.errorMessage;
@@ -78,9 +86,6 @@ export default function MatchingPage() {
   };
 
   const router = useRouter();
-  const handleMoveToWaitingPage = () => {
-    router.push("/matchingWaiting");
-  };
   useAuthGuard();
 
   return (
@@ -96,9 +101,9 @@ export default function MatchingPage() {
           errorMessage={errorMessage}
         />
         <OneToOneDifferentGender
-          className={styles.raised}
           onClick={() => handleMatch("one-to-one/different-gender")}
           errorMessage={errorMessage}
+          className={styles.raised}
         />
         <TwoToTwoButton
           onClick={() => handleMatch("two-to-two")}
@@ -115,7 +120,14 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <SlideUpPanel />
+      <SlideUpPanel 
+        studentYear={studentYear}
+        setStudentYear={setStudentYear}
+        mbtiEI={mbtiEI}
+        setMbtiEI={setMbtiEI}
+        mbtiFT={mbtiFT}
+        setMbtiFT={setMbtiFT}
+        />
       <Link href="/main" className={`${styles.출발}`}>
         출발!
       </Link>
