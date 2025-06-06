@@ -1,8 +1,8 @@
 import api from "./axiosInstance";
 
 // 1. 채팅방 ID 조회
-export const getRoomId = (tempToken: string) => {
-  return api.get("/chat/rooms/my-room", {
+export const getRoomInfo = (tempToken: string) => {
+  return api.get("/chat/rooms/info", {
     headers: {
       tempToken: tempToken,
     },
@@ -43,11 +43,11 @@ export const joinChatRoom = (
 export const sendMessage = (
   tempToken: string,
   roomId: string,
-  msg: string
+  msg: object
 ) => {
   return api.post(
     `/chat/rooms/${roomId}/send-message`,
-    { msg },
+    msg,
     {
       headers: {
         tempToken: tempToken,

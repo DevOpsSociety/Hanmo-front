@@ -20,7 +20,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
       />
       <button
         onClick={() => {
-          onSend({ input });
+          onSend({ content: input });
           setInput("");
         }}
         className="col-span-1 h-full rounded-2xl font-[manseh] text-xl"

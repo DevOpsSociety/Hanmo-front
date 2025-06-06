@@ -45,6 +45,11 @@ export default function HamburgerMenu() {
               개발자에게 한마디
             </Link>
           </li>
+          <li>
+            <Link href="/chat">
+              임시 채팅방 바로가기
+            </Link>
+          </li>
           <li className={styles.bottomMenu}> 만든 사람들 </li>
         </ul>
       </div>
