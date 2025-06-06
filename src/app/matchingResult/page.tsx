@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
-import styles from "./styled.module.css";
+import styles from "./styled.module.css"
+import HeaderBackButton from '@/components/HeaderBackButton';
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -64,6 +65,9 @@ export default function MatchingResultPage() {
 
   return (
     <div className={`${styles.wrapper} ${styles.pretendardFont}`}>
+      <div className={styles.backButton}>
+        <HeaderBackButton />
+      </div>
       <div className={styles.topMiddleWrapper}>
         <div className={styles.top}>
           <div className={`${styles.매칭완료} ${styles.mansehFont}`}>
