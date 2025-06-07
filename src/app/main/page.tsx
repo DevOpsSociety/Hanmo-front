@@ -13,6 +13,7 @@ import AdCarousel from "./components/AdCarousel"
 
 interface UserProfile {
   nickname: string;
+  role: number;
 }
 
 interface MatchingType {
@@ -48,8 +49,6 @@ export default function MainPage() {
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
       console.log("API URL:", url);
-      console.log("토큰:", temptoken);
-
       try {
         const response = await axios.get(url, {
           headers: {
@@ -164,14 +163,14 @@ export default function MainPage() {
         console.error("매칭된 그룹 수 조회 에러:", error);
         // alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
       }
-    };
+    }; 
 
     totalMatchedCount();
   }, []);
 
   return (
     <div className={`${styles.container} font-[nexon]`}>
-      <HanmoHeader />
+      <HanmoHeader mainPageData={mainPageData}/>
       <div className={`font-[manseh] ${styles.contents}`}>
         <div className={`${styles.nickname}`}>
           <div
