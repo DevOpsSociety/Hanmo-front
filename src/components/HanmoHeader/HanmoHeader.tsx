@@ -8,7 +8,7 @@ interface UserProfile {
 }
 
 interface HanmoHeaderProps {
-  mainPageData: UserProfile | null;
+  mainPageData?: UserProfile | null;
 }
 
 
