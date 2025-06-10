@@ -6,10 +6,10 @@ import { useState } from 'react';
 interface SlideUpPanelProps {
   studentYear: string;
   setStudentYear: React.Dispatch<React.SetStateAction<string>>;
-  mbtiEI: "E" | "I";
-  setMbtiEI: React.Dispatch<React.SetStateAction<"E" | "I">>;
-  mbtiFT: "F" | "T";
-  setMbtiFT: React.Dispatch<React.SetStateAction<"F" | "T">>;
+  mbtiEI: "E" | "I" | "상관없음";
+  setMbtiEI: React.Dispatch<React.SetStateAction<"E" | "I" | "상관없음">>;
+  mbtiFT: "F" | "T" | "상관없음";
+  setMbtiFT: React.Dispatch<React.SetStateAction<"F" | "T" | "상관없음">>;
 }
 
 export default function SlideUpPanel(
@@ -23,8 +23,8 @@ export default function SlideUpPanel(
   }:SlideUpPanelProps) {
   // 옵션 리스트
   const firstOptions = ['상관없음','18학번', '19학번', '20학번', '21학번', '22학번', '23학번', '24학번', '25학번'];
-  const secondOptions = ['E', 'I'] as const; 
-  const thirdOptions = ['F', 'T'] as const;
+  const secondOptions = ['상관없음','E', 'I'] as const; 
+  const thirdOptions = ['상관없음','F', 'T'] as const;
 
   const [isOpen, setIsOpen] = useState(false); // 패널용
   const [firstOpen, setFirstOpen] = useState(false);

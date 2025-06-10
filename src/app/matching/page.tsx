@@ -35,30 +35,35 @@ type MatchType =
 export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [selectedMatchType, setSelectedMatchType] = useState<string | null>(null);
   const [studentYear, setStudentYear] = useState<string>("상관없음");
-  const [mbtiEI, setMbtiEI]         = useState<"E"|"I">("E");
-  const [mbtiFT, setMbtiFT]         = useState<"F"|"T">("F");
+  const [mbtiEI, setMbtiEI]         = useState<"상관없음"|"E"|"I">("상관없음");
+  const [mbtiFT, setMbtiFT]         = useState<"상관없음"|"F"|"T">("상관없음");
   // const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
 
 
-  const handleMatch = async (type: MatchType) => {
+  const handleStart = async () => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
       return console.error("토큰이 없습니다.");
     }
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
-    console.log("URL:", url);
+    if (!selectedMatchType) {
+      return setErrorMessage("매칭 방식을 선택해주세요.");
+    }
 
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${selectedMatchType}`;
+
+    const eiMbtiToSend = mbtiEI === "상관없음" ? "" : mbtiEI;
+    const ftMbtiToSend = mbtiFT === "상관없음" ? "" : mbtiFT;
     const preferredStudentYear =
       studentYear === "상관없음"
         ? null
         : Number(studentYear.replace("학번", "")) + 2000; 
 
     const body = {
-      eiMbti: mbtiEI,               
-      ftMbti: mbtiFT,               
-      preferredStudentYear: preferredStudentYear, 
+      eiMbti: eiMbtiToSend,               
+      ftMbti: ftMbtiToSend,               
+      preferredStudentYear, 
     };
   
     try {
@@ -72,7 +77,6 @@ export default function MatchingPage() {
       console.log("Response:", response);
       onmessage = response?.data?.message;
       alert("대기등록이 완료됐습니다!");
-      // handleMoveToWaitingPage();
       router.push("/matchingWaiting");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -97,16 +101,29 @@ export default function MatchingPage() {
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          onClick={() => handleMatch("one-to-one/same-gender")}
+          onClick={() => {
+            setSelectedMatchType("one-to-one/same-gender");
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "one-to-one/same-gender"}
           errorMessage={errorMessage}
         />
+        
         <OneToOneDifferentGender
-          onClick={() => handleMatch("one-to-one/different-gender")}
+          onClick={() => {
+            setSelectedMatchType("one-to-one/different-gender");
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "one-to-one/different-gender"}
           errorMessage={errorMessage}
           className={styles.raised}
         />
         <TwoToTwoButton
-          onClick={() => handleMatch("two-to-two")}
+          onClick={() => {
+            setSelectedMatchType("two-to-two")
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "two-to-two"}
           errorMessage={errorMessage}
         />
       </div>
@@ -128,9 +145,14 @@ export default function MatchingPage() {
         mbtiFT={mbtiFT}
         setMbtiFT={setMbtiFT}
         />
-      <Link href="/main" className={`${styles.출발}`}>
+      {/* <Link href="/main" className={`${styles.출발}`}>
         출발!
-      </Link>
+      </Link> */}
+      <button 
+        className={styles.출발}
+        onClick={handleStart}>
+        출발!
+      </button>
     </div>
   );
 }
