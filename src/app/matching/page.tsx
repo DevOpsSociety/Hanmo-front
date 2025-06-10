@@ -57,7 +57,7 @@ export default function MatchingPage() {
     const ftMbtiToSend = mbtiFT === "상관없음" ? "" : mbtiFT;
     const preferredStudentYear =
       studentYear === "상관없음"
-        ? null
+        ? ""
         : Number(studentYear.replace("학번", "")) + 2000; 
 
     const body = {
@@ -65,7 +65,7 @@ export default function MatchingPage() {
       ftMbti: ftMbtiToSend,               
       preferredStudentYear, 
     };
-  
+
     try {
       const response = await axios.post(url, body, {
         headers: {
