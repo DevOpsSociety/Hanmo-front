@@ -53,11 +53,11 @@ export default function MatchingPage() {
 
     const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${selectedMatchType}`;
 
-    const eiMbtiToSend = mbtiEI === "상관없음" ? "" : mbtiEI;
-    const ftMbtiToSend = mbtiFT === "상관없음" ? "" : mbtiFT;
+    const eiMbtiToSend = mbtiEI === "상관없음" ? null : mbtiEI;
+    const ftMbtiToSend = mbtiFT === "상관없음" ? null : mbtiFT;
     const preferredStudentYear =
       studentYear === "상관없음"
-        ? ""
+        ? null
         : Number(studentYear.replace("학번", "")) + 2000; 
 
     const body = {
