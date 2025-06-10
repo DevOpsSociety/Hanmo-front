@@ -7,12 +7,14 @@ interface OneToOneButtonProps {
   onClick: () => void;
   errorMessage?: string | null;
   className?: string;
+  isSelected?: boolean;
 }
 
 export default function OneToOneDifferentGender({
   onClick,
   errorMessage,
   className,
+  isSelected,
 }: OneToOneButtonProps) {
   const router = useRouter();
 
@@ -30,6 +32,7 @@ export default function OneToOneDifferentGender({
       ${styles.oneToOne} 
       ${styles.middleBg}
       ${className ?? ''}
+      ${isSelected ? styles.selected : ""}
       `} >
       친구 뽑기(1:1 이성)
     </button>
