@@ -21,9 +21,15 @@
   flex-direction: column;
 }
 
-.매칭완료 {
+.backButton {
+  position: fixed;
+  left: 20px;  
+  top: 20px;
+}
+
+.matchComplete {
   font-size: 40px;
-  padding: 1rem;
+  padding: 1rem;  
 }
 
 .nicknameWrapper {

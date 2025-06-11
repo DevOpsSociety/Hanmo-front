@@ -35,25 +35,37 @@ type MatchType =
 export default function MatchingPage() {
   const [matchingData, setMatchingData] = useState<ApiResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [selectedMatchType, setSelectedMatchType] = useState<string | null>(null);
+  const [studentYear, setStudentYear] = useState<string>("상관없음");
+  const [mbtiEI, setMbtiEI]         = useState<"상관없음"|"E"|"I">("상관없음");
+  const [mbtiFT, setMbtiFT]         = useState<"상관없음"|"F"|"T">("상관없음");
+  // const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
 
-  const [eiMbti, setEiMbti] = useState<"E" | "I">("E");
-  const [ftMbti, setFtMbti] = useState<"F" | "T">("T");
-  const [preferredStudentYear, setPreferredStudentYear] = useState<number>(2020);
 
-  const handleMatch = async (type: MatchType) => {
+  const handleStart = async () => {
     const temptoken = localStorage.getItem("token");
     if (!temptoken) {
       return console.error("토큰이 없습니다.");
     }
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${type}`;
-    console.log("URL:", url);
+    if (!selectedMatchType) {
+      return setErrorMessage("매칭 방식을 선택해주세요.");
+    }
+
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/matching/${selectedMatchType}`;
+
+    const eiMbtiToSend = mbtiEI === "상관없음" ? null : mbtiEI;
+    const ftMbtiToSend = mbtiFT === "상관없음" ? null : mbtiFT;
+    const preferredStudentYear =
+      studentYear === "상관없음"
+        ? null
+        : Number(studentYear.replace("학번", "")) + 2000; 
 
     const body = {
-      eiMbti,               
-      ftMbti,               
+      eiMbti: eiMbtiToSend,               
+      ftMbti: ftMbtiToSend,               
       preferredStudentYear, 
     };
-  
+
     try {
       const response = await axios.post(url, body, {
         headers: {
@@ -65,7 +77,7 @@ export default function MatchingPage() {
       console.log("Response:", response);
       onmessage = response?.data?.message;
       alert("대기등록이 완료됐습니다!");
-      handleMoveToWaitingPage();
+      router.push("/matchingWaiting");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const dataErrorMessage = error.response?.data?.errorMessage;
@@ -78,9 +90,6 @@ export default function MatchingPage() {
   };
 
   const router = useRouter();
-  const handleMoveToWaitingPage = () => {
-    router.push("/matchingWaiting");
-  };
   useAuthGuard();
 
   return (
@@ -92,16 +101,29 @@ export default function MatchingPage() {
       </div>
       <div className={`${styles.btns묶음} font-[manseh]`}>
         <OneToOneSameGender
-          onClick={() => handleMatch("one-to-one/same-gender")}
+          onClick={() => {
+            setSelectedMatchType("one-to-one/same-gender");
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "one-to-one/same-gender"}
           errorMessage={errorMessage}
         />
+        
         <OneToOneDifferentGender
-          className={styles.raised}
-          onClick={() => handleMatch("one-to-one/different-gender")}
+          onClick={() => {
+            setSelectedMatchType("one-to-one/different-gender");
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "one-to-one/different-gender"}
           errorMessage={errorMessage}
+          className={styles.raised}
         />
         <TwoToTwoButton
-          onClick={() => handleMatch("two-to-two")}
+          onClick={() => {
+            setSelectedMatchType("two-to-two")
+            setErrorMessage(null);
+          }}
+          isSelected={selectedMatchType === "two-to-two"}
           errorMessage={errorMessage}
         />
       </div>
@@ -115,10 +137,22 @@ export default function MatchingPage() {
           sizes="100vw" // 이거 없으면 화질깨짐
         />
       </div>
-      <SlideUpPanel />
-      <Link href="/main" className={`${styles.출발}`}>
+      <SlideUpPanel 
+        studentYear={studentYear}
+        setStudentYear={setStudentYear}
+        mbtiEI={mbtiEI}
+        setMbtiEI={setMbtiEI}
+        mbtiFT={mbtiFT}
+        setMbtiFT={setMbtiFT}
+        />
+      {/* <Link href="/main" className={`${styles.출발}`}>
         출발!
-      </Link>
+      </Link> */}
+      <button 
+        className={styles.출발}
+        onClick={handleStart}>
+        출발!
+      </button>
     </div>
   );
 }

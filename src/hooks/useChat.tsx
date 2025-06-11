@@ -42,6 +42,7 @@ export default function useChat(roomId: string) {
       reconnectDelay: 5000,
       onConnect: () => {
         client.subscribe(`/topic/chat/${roomId}`, (message: IMessage) => {
+          console.log("Received message:", message);
           const msg = JSON.parse(message.body);
           setChatHistory((prev) => [...prev, msg]);
         });

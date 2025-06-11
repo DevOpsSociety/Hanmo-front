@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./styled.module.css";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
+import HeaderBackButton from '@/components/HeaderBackButton';
+import { s } from 'framer-motion/client';
 
 interface MatchResponse {
   matchingType: "ONE_TO_ONE";
@@ -61,9 +63,12 @@ export default function OneToOneResultPage() {
 
   return (
     <div className={`${styles.wrapper} font-[nexon]`}>
+      <div className={styles.backButton}>
+        <HeaderBackButton />
+      </div>
       <div className={styles.topMiddleWrapper}>
         <div className={styles.top}>
-          <div className={`${styles.매칭완료} font-[manseh]`}>매칭완료!</div>
+          <div className={`${styles.matchComplete} font-[manseh]`}>매칭완료!</div>
           <div className={styles.nicknameWrapper}>
             <div className={`${styles.nickname} font-[nexonbold]`}>
               {matchedUser?.users?.[0].nickname}

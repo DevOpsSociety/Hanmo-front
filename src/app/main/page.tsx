@@ -13,6 +13,7 @@ import AdCarousel from "./components/AdCarousel"
 
 interface UserProfile {
   nickname: string;
+  role: number;
 }
 
 interface MatchingType {
@@ -48,8 +49,6 @@ export default function MainPage() {
 
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`;
       console.log("API URL:", url);
-      console.log("토큰:", temptoken);
-
       try {
         const response = await axios.get(url, {
           headers: {
@@ -156,7 +155,7 @@ export default function MainPage() {
         const res = await adminFindMatchingGroups(temptoken);
         console.log("매칭된 그룹 수:", res); // API 응답 형태에 따라 조정
         const countString = res.data.totalMatchedGroupCount;
-        const modifiedString = ["축제기간동안", ...countString.split(" ").slice(1)].join(" ");
+        const modifiedString = ["지금까지 ", ...countString.split(" ").slice(1)].join(" ");
         // console.log("countString", modifiedString);
         setTotalMatchedGroupCount(modifiedString);
         return res; // 매칭된 그룹 수 반환
@@ -164,14 +163,14 @@ export default function MainPage() {
         console.error("매칭된 그룹 수 조회 에러:", error);
         // alert("매칭된 그룹 수 조회 중 오류가 발생했습니다.");
       }
-    };
+    }; 
 
     totalMatchedCount();
   }, []);
 
   return (
     <div className={`${styles.container} font-[nexon]`}>
-      <HanmoHeader />
+      <HanmoHeader mainPageData={mainPageData}/>
       <div className={`font-[manseh] ${styles.contents}`}>
         <div className={`${styles.nickname}`}>
           <div
@@ -198,7 +197,7 @@ export default function MainPage() {
           </button>
         )}
         {errorCode === "400" && (
-          <button onClick={handleCancelMatching} className={`${styles.btns} ${styles.middleBg} `}>
+          <button onClick={handleCancelMatching} className={`${styles.middleBg} ${styles.btns}`}>
             매칭 < br />
             취소
           </button >
@@ -223,7 +222,6 @@ export default function MainPage() {
       <div>{totalMatchedGroupCount}</div>
       <div>매칭이 성사되지 않는다면 다시 시도해 보세요!</div>
       <AdCarousel images={ads}/>
-
     </div >
   );
 }

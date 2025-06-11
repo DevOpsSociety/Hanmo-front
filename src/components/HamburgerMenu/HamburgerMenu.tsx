@@ -4,12 +4,27 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from "./styles.module.css";
 
-export default function HamburgerMenu() {
+interface UserProfile {
+  role: number;
+}
+
+interface HanmoHeaderProps {
+  mainPageData?: UserProfile | null;
+}
+
+export default function HamburgerMenu({
+  mainPageData,
+}:HanmoHeaderProps) {
   const router = useRouter();
+  console.log("role:", mainPageData?.role);
+
   return (
+    
     <div className={`font-[manseh] ${styles.container}`}>
+      
       <input type="checkbox" id="menuicon" className={styles.menuIcon}></input>
       <label htmlFor="menuicon" className={styles.label}>
+        
         <span></span>
         <span></span>
         <span></span>
@@ -50,6 +65,13 @@ export default function HamburgerMenu() {
               임시 채팅방 바로가기
             </Link>
           </li>
+          {mainPageData?.role === 1 && (
+          <li>
+            <Link href="admin/main">
+              관리자 페이지 
+            </Link>
+          </li>
+          )}
           <li className={styles.bottomMenu}> 만든 사람들 </li>
         </ul>
       </div>

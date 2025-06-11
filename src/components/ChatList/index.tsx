@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import ReportModal from "../ReportModal";
 
 interface ChatMessage {
@@ -17,6 +19,8 @@ interface ChatListProps {
 }
 
 export default function ChatList({ chatHistory, nickname, participants }: ChatListProps) {
+  const createdAt = useSelector((state: RootState) => state.chat.createdAt);
+
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -37,7 +41,7 @@ export default function ChatList({ chatHistory, nickname, participants }: ChatLi
             남은 시간에 유의하세요.
           </div>
           <div className="w-[100px] h-8 rounded-[20px] bg-[#134D80] text-white flex items-center justify-center">
-            2025. 06. 03
+            {createdAt?.split("T")[0] || "24:00"}
           </div>
         </div>
         {chatHistory.map((msg, idx) => {

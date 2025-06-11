@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 interface TwoToTwoButtonProps {
   onClick: () => void;
   errorMessage?: string | null;
+  isSelected?: boolean;
 }
 
 export default function TwoToTwoButton({
   onClick,
   errorMessage,
+  isSelected,
 }: TwoToTwoButtonProps) {
   const router = useRouter();
   useEffect(() => {
@@ -20,7 +22,11 @@ export default function TwoToTwoButton({
     }
   }, []);
   return (
-    <button className={`${styles.btns} ${styles.rightBg} `} onClick={onClick}>
+    <button className={`
+    ${styles.btns}
+    ${styles.rightBg}
+    ${isSelected ? styles.selected : ""}
+    `} onClick={onClick}>
       랜덤 과팅(2:2)
     </button>
   );

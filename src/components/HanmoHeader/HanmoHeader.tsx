@@ -3,10 +3,21 @@ import styles from "./styles.module.css";
 import Link from "next/link";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu"
 
-export default function HanmoHeader() {
+interface UserProfile {
+  role: number;
+}
+
+interface HanmoHeaderProps {
+  mainPageData?: UserProfile | null;
+}
+
+
+export default function HanmoHeader({
+  mainPageData,
+}: HanmoHeaderProps) {
   return (
     <div className={styles.container}>
-      <HamburgerMenu />
+      <HamburgerMenu mainPageData={mainPageData}/>
       <div className={styles.hanmologoWrapper}>
       <Link href="/main">
         <Image
