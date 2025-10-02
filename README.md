@@ -1,5 +1,9 @@
 # Hanmo 한세 과팅/친구 사귀기 어플
 
+<img width="1194" height="699" alt="495443273-44aef66b-2934-43d7-a78e-3ddf59dbdaf4" src="https://github.com/user-attachments/assets/6c8939f4-1418-43e2-bc1a-ad850ad2cc95" />
+
+
+
 ## 💁 조원
 * Frontend: 유상진, 이경환
 * Backend: 김예람, 김태남, 박다혜, 박지훈
